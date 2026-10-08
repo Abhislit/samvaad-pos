@@ -781,23 +781,27 @@ select.input { cursor: pointer; }
   font-family: var(--stencil); font-weight: 700; font-size: var(--t-lead);
   letter-spacing: 0.05em; color: var(--ink);
   background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
-  white-space: nowrap; flex: 0 1 auto; min-width: 0;
-  overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; flex: none;
 }
 .row-lot:hover { color: var(--jute-edge); text-decoration: underline; }
 .row-total { margin-left: auto; display: flex; align-items: baseline; gap: 0.1em; color: var(--india); }
 .row-total i { font-style: normal; font-family: var(--ui); font-weight: 700; font-size: var(--t-label); }
 .row-total b { font-family: var(--stencil); font-weight: 700; font-size: var(--t-mark); line-height: 1; }
 
-.row-bot { display: flex; align-items: center; gap: 0.5rem; }
+/* Two actions can out-run the name. Rather than clip it, let the actions wrap
+   to a third line: the name is never the thing that gives way. */
+.row-bot { display: flex; align-items: center; justify-content: flex-end; gap: 0.5rem; flex-wrap: wrap; }
 .row-who {
-  flex: 1; min-width: 0;
+  flex: 1 1 8.5rem; min-width: 8.5rem;
   background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
   font: inherit; color: var(--ink-soft);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .row-who:hover { color: var(--ink); text-decoration: underline; }
-.row-when { color: var(--ink-faint); font-size: var(--micro); flex: none; }
+.row-when {
+  color: var(--ink-faint); font-size: var(--micro);
+  flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+}
 .row-bot .btn { flex: none; }
 
 /* The full card: the lot number and the customer are the two things that
@@ -862,3 +866,8 @@ select.input { cursor: pointer; }
   .tally-n { order: 1; min-width: 4.5rem; }
   .tally-off { flex-wrap: wrap; }
 }
+
+/* The bill is a secondary press on a row: ghost, counter-sized, and it never
+   takes the room the customer name needs. */
+.row-bill { flex: none; padding-inline: 0.5rem; }
+.row-bot .row-bill + .btn { flex: none; }

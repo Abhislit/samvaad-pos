@@ -118,15 +118,19 @@ window.SV = window.SV || {};
           '<button class="row-who" data-ticket-open="' + e(order.id) + '">' +
             e(order.customerName) +
           '</button>' +
+/* A row carries the state change, and the bill beside it once the
+             order is billable. An accepted ticket can be billed, and reaching
+             that bill should not cost a detour through the detail view. */
           (order.billNo
             ? '<span class="tag" title="Billed ' + e(order.billNo) + '">' + e(order.billNo) + '</span>'
-            : next
-              ? '<button class="btn btn-seal btn-sm" data-ticket-advance="' + e(order.id) + '">' +
-                e(next.label) + '<span class="chev" aria-hidden="true"></span></button>'
-              : /* Billable and unbilled: the bill is the action. A completed
-                     ticket always lands here, so there is nothing left to
-                     confirm — the plate already says Settled. */
-                '<button class="btn btn-seal btn-sm" data-bill-open="' + e(order.id) + '">Generate bill</button>') +
+            : (SV.orders.canBill(order)
+                ? '<button class="btn btn-ghost btn-sm row-bill" data-bill-open="' + e(order.id) + '">Bill</button>'
+                : '') +
+              (next
+                ? '<button class="btn btn-seal btn-sm" data-ticket-advance="' + e(order.id) + '">' +
+                  e(next.label) + '<span class="chev" aria-hidden="true"></span></button>'
+                : /* Completed and unbilled: the bill is the only action left. */
+                  '<button class="btn btn-seal btn-sm" data-bill-open="' + e(order.id) + '">Generate bill</button>')) +
         '</div>' +
       '</article>'
     );
