@@ -95,6 +95,91 @@ window.SV = window.SV || {};
   /* Build a fresh order payload the way the cloud would send it. Paise on the
      wire, because a WhatsApp bill that disagrees with the bill book is worse
      than no bill at all. */
+  /* ── the seed ─────────────────────────────────────────────────────────
+     A shop part way through the day: some orders waiting, some already
+     printed. Authored here rather than in app.js so the printed window can
+     open the same day as the counter instead of inventing a second one. */
+  SV.data.seed = function () {
+    const d = SV.data;
+    /* The seed is a shop part way through the day. If the real clock is in the
+       small hours, `mins` ago spills the printed half into yesterday and the
+       day's line reads "nothing printed yet today" directly under a screen full
+       of printed tickets. Anchor to 11:40 today unless the real clock is later. */
+    const anchor = SV.todayStart() + 11 * 3600e3 + 40 * 60e3;
+    const now = Date.now() < anchor ? anchor : Date.now();
+    const state = {
+      schema: 1,
+      shop: JSON.parse(JSON.stringify(d.shop)),
+      products: JSON.parse(JSON.stringify(d.products)),
+      orders: [],
+      seq: 10293,
+      billSeq: 0,
+      ui: { sound: false, demo: false, demoGap: 25, paper: '80', connectorOn: false },
+      conn: { online: true, lastSync: now }
+    };
+
+    const byName = (n) => state.products.length && d.customers.find((c) => c.name === n);
+    const item = (id, qty) => {
+      const prod = d.products.find((x) => x.id === id);
+      return { product_id: prod.id, name: prod.name, quantity: qty, unit_price: prod.price / 100, gst: prod.gst };
+    };
+
+    const script = [
+      { mins: 1, printed: false, c: 'Rahul Sharma', d: 'delivery', p: 'UPI', n: 'Please send fresh items.',
+        i: [item('MILK001', 2), item('BREAD001', 1), item('BIS001', 3)] },
+      { mins: 4, printed: false, c: 'Kavita Menon', d: 'delivery', p: 'UPI', n: 'Ring the bell twice, I am on the second floor.',
+        i: [item('MILK003', 2), item('TEA001', 1), item('BIS002', 1)] },
+      { mins: 7, printed: false, c: 'Suresh Kadam', d: 'pickup', p: 'Cash', n: '',
+        i: [item('TOM001', 2), item('ONI001', 1), item('POT001', 3)] },
+      { mins: 9, printed: false, c: 'Imran Sheikh', d: 'delivery', p: 'WhatsApp Pay', n: 'Keep the change ready.',
+        i: [{ product_id: 'UNMAPPED772', name: 'Amul ghee', quantity: 1, unit_price: 0, gst: 0 }, item('EGG001', 1)] },
+      { mins: 12, printed: false, c: 'Sunita Deshmukh', d: 'delivery', p: 'UPI', n: '',
+        i: [item('BUT001', 1), item('BREAD001', 2)] },
+      { mins: 22, printed: true, c: 'Arvind Patil', d: 'pickup', p: 'Cash', n: 'Send before 6 PM.',
+        i: [item('OIL001', 1), item('ATA001', 1), item('SAL001', 2)] },
+      { mins: 31, printed: true, c: 'Meera Joshi', d: 'delivery', p: 'UPI', n: 'Please check the expiry on the milk.',
+        i: [item('MILK001', 4), item('CHE001', 1), item('COC001', 2)] },
+      { mins: 44, printed: true, c: 'Deepak Rao', d: 'delivery', p: 'Card', n: '',
+        i: [item('HOM001', 1), item('COL001', 1), item('MST001', 2)] },
+      { mins: 63, printed: true, c: 'Anita Bhatt', d: 'pickup', p: 'UPI', n: 'Leave it with the watchman if I am out.',
+        i: [item('SOAP001', 1), item('DET001', 2)] },
+      { mins: 95, printed: true, c: 'Fatima Ansari', d: 'delivery', p: 'UPI', n: '',
+        i: [item('RAJ001', 1), item('SOY001', 1), item('SUG001', 1)] },
+      { mins: 140, printed: true, c: 'Rahul Sharma', d: 'delivery', p: 'UPI', n: '',
+        i: [item('MILK001', 3), item('BIS001', 2), item('MAG001', 2)] },
+      { mins: 210, printed: true, c: 'Kavita Menon', d: 'pickup', p: 'Cash', n: '',
+        i: [item('BAN001', 2), item('TEA001', 1)] }
+    ];
+
+    script.forEach((row, n) => {
+      const cust = byName(row.c);
+      state.orders.push({
+        id: 'SAM-' + (10293 - n),
+        source: 'whatsapp',
+        customerName: cust.name,
+        phone: cust.phone,
+        address: row.d === 'delivery' ? cust.address : '',
+        items: row.i.map((raw) => SV.products.resolve(raw, state.products)),
+        payment: row.p,
+        delivery: row.d,
+        notes: row.n,
+        createdAt: now - row.mins * 60000,
+        printedAt: row.printed ? now - (row.mins - 3) * 60000 : null,
+        billNo: null
+      });
+    });
+
+    state.seq = 10293 + script.length;
+    state.orders.filter((o) => o.printedAt)
+      .sort((a, b) => a.printedAt - b.printedAt)
+      .forEach((o) => {
+        state.billSeq += 1;
+        o.billNo = 'B-' + String(state.billSeq).padStart(5, '0');
+      });
+    return state;
+  }
+
+
   SV.data.makeIncoming = function (state, rnd) {
     const r = rnd || Math.random;
     const pick = (arr) => arr[Math.floor(r() * arr.length)];

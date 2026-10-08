@@ -77,6 +77,13 @@ table { border-collapse: collapse; width: 100%; }
 .rail-say { flex: 1; font-size: var(--t-body); color: var(--rail-ink); }
 .rail-say b { font-weight: 600; }
 .rail-tools { display: flex; align-items: center; gap: 0.5rem; flex: none; }
+/* .btn-ghost is ink-on-paper. On the rail the ground is dark, so it inverts:
+   dark-on-dark measured 1.86:1 and the label simply vanished. */
+.rail-tools .btn-ghost {
+  color: var(--rail-ink); border-color: var(--rail-hair); background: var(--rail-soft);
+}
+.rail-tools .btn-ghost:hover { background: oklch(100% 0 0 / 0.12); }
+.rail-tools .btn-ghost .chev { border-left-color: var(--rail-ink); }
 
 .icon-btn {
   width: 2rem; height: 2rem; display: grid; place-items: center; cursor: pointer;
@@ -111,9 +118,11 @@ table { border-collapse: collapse; width: 100%; }
 main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 
 .board-head {
+  position: sticky; top: var(--rail-h); z-index: 3;
   display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
   padding: 0.9rem var(--gutter) 0.6rem;
   border-bottom: 1px solid var(--rule-hair);
+  background: linear-gradient(oklch(94.6% 0.006 84) 88%, transparent), var(--desk);
 }
 .board-title {
   font-family: var(--stencil); font-size: var(--t-lead); font-weight: 700;
@@ -125,15 +134,14 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
    screen told you nothing when you were half way down a long printed pile, so
    the section names live up here instead: where you are, how much is in each,
    and one click back to the queue. */
+/* It lives in the header row now, so it is no longer its own sticky band: the
+   header itself sticks, which is the same promise without a second bar. */
 .section-bar {
-  position: sticky; top: var(--rail-h); z-index: 3;
   display: flex; align-items: center; gap: 0.35rem;
-  width: max-content; max-width: 100%;
-  margin: 0 var(--gutter);
-  padding: 0.3rem 0.3rem 0.3rem 0.35rem;
+  padding: 0.25rem;
   border: 1px solid var(--rule); border-radius: var(--radius-cut);
   background: var(--stock);
-  box-shadow: 0 1px 0 var(--rule), var(--shadow-lift);
+  box-shadow: var(--shadow-lift);
 }
 .section-tab {
   display: inline-flex; align-items: center; gap: 0.45rem;
@@ -157,6 +165,21 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 }
 .section-tab.is-current .section-n { background: var(--stock); color: var(--graphite); }
 .section-all { margin-left: 0.2rem; }
+
+/* Printed opens its own window, so it says so. The mark is drawn, like every
+   other mark here: a box with an arrow leaving the top right corner. */
+.tab-go {
+  width: 0.62rem; height: 0.62rem; margin-left: 0.05rem;
+  border: 1.5px solid currentColor; border-radius: 1.5px;
+  opacity: 0.55; position: relative;
+}
+.tab-go::after {
+  content: ''; position: absolute; top: -0.28rem; right: -0.28rem;
+  width: 0.42rem; height: 0.42rem;
+  border-top: 1.5px solid currentColor; border-right: 1.5px solid currentColor;
+  background: inherit; rotate: 45deg;
+}
+.section-tab:hover .tab-go, .section-tab:focus-visible .tab-go { opacity: 1; }
 
 /* Two trays, stacked. The queue is what the operator works; the printed pile is
    what they check, and reprinting needs a home, so the finished orders are a
@@ -185,8 +208,10 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 }
 .tray-empty b { color: var(--ink); }
 .board-empty {
+  /* --ink-faint is 4.05:1 on the desk. The empty state is the one screen an
+     operator reads alone with nothing else on it. */
   padding: 3rem 1rem; text-align: center;
-  display: grid; gap: 0.4rem; justify-items: center; color: var(--ink-faint);
+  display: grid; gap: 0.4rem; justify-items: center; color: var(--ink-soft);
 }
 .board-empty b { font-family: var(--stencil); font-size: var(--t-mark); letter-spacing: 0.1em; color: var(--ink); }
 .board-empty p { font-size: var(--t-body); max-width: 28rem; }
@@ -528,6 +553,12 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 
 /* ── responsive ────────────────────────────────────────────────────── */
 @media (max-width: 720px) {
+  /* The header fits one line on a desk. On a phone it wraps to three, and a
+     148px header pinned to the top of an 844px screen is a fifth of the shop
+     gone before the first ticket. So on a phone it scrolls away and the rail
+     stays put: the queue is what needs the height, and the tabs are one flick
+     up the way. */
+  .board-head { position: static; }
   .rail { flex-wrap: wrap; padding-block: 0.5rem; row-gap: 0.4rem; }
   .rail-say { order: 3; flex-basis: 100%; }
   .tray-body { grid-template-columns: minmax(0, 1fr); }

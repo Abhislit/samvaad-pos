@@ -189,6 +189,11 @@ window.SV = window.SV || {};
 
     /* The arrival is the machine's own movement: a new ticket comes out of
        the slot rather than fading in. */
+    /* The printed window renders its own page, but a ticket must look and
+       behave identically wherever it appears, so the rows come from here
+       rather than being written twice. */
+    rowsOf(orders) { return orders.map(rowHTML).join(''); },
+
     arriving(id) { arrivingId = id; },
 
     /* The print runs before the ticket leaves the board, so the paper warms

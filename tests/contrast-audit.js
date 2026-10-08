@@ -129,17 +129,41 @@ const AUDIT = `
     ['mobile-nav', async (p) => { await p.click('#demo-btn'); }]
   ];
   const all = [];
-  for (const [name, setup] of states) {
-    const ctx = await b.newContext({ viewport: { width: 1366, height: 900 }, reducedMotion: 'reduce' });
-    const p = await ctx.newPage();
-    await p.goto('http://127.0.0.1:8123/', { waitUntil: 'domcontentloaded' });
-    await p.evaluate(() => document.fonts.ready);
-    await p.waitForTimeout(250);
-    await setup(p);
-    await p.waitForTimeout(350);
-    const rows = await p.evaluate(AUDIT);
-    rows.forEach((r) => all.push(Object.assign({ state: name }, r)));
-    await ctx.close();
+
+  /* Every page in the app, or a new window ships unmeasured. `printed.html` is
+     a page an operator reads all day; its empty state is the one nobody looks
+     at and the one that goes wrong. */
+  const pages = [
+    ['index.html', states],
+    ['printed.html', [
+      ['printed-list', async () => {}],
+      ['printed-empty', async (p) => {
+        /* Drain it the honest way: print everything at the counter first. */
+        await p.evaluate(() => SV.store.update((s) => {
+          s.orders.forEach((o) => { o.printedAt = null; o.billNo = null; });
+        }));
+        await p.waitForTimeout(200);
+      }],
+      ['printed-drawer', async (p) => { await p.click('.row [data-open]'); }]
+    ]]
+  ];
+
+  for (const [page, pageStates] of pages) {
+    for (const [name, setup] of pageStates) {
+      const ctx = await b.newContext({ viewport: { width: 1366, height: 900 }, reducedMotion: 'reduce' });
+      const p = await ctx.newPage();
+      const errs = [];
+      p.on('pageerror', (e) => errs.push(page + '/' + name + ': ' + e.message));
+      await p.goto('http://127.0.0.1:8123/' + page, { waitUntil: 'domcontentloaded' });
+      await p.evaluate(() => document.fonts.ready);
+      await p.waitForTimeout(250);
+      await setup(p);
+      await p.waitForTimeout(350);
+      const rows = await p.evaluate(AUDIT);
+      rows.forEach((r) => all.push(Object.assign({ state: page + '/' + name }, r)));
+      await ctx.close();
+      if (errs.length) { console.log('JS ERRORS'); errs.forEach((e) => console.log('  ' + e)); }
+    }
   }
   // and the same at 390
   const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });

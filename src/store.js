@@ -51,6 +51,10 @@ window.SV = window.SV || {};
   }
 
   SV.store = {
+    /* The key, so the printed window can listen for this store specifically
+       instead of guessing at string prefixes. */
+    KEY,
+
     get volatile() { return !!disk.volatile; },
 
     init(seedFn) {

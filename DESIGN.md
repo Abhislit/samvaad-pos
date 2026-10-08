@@ -121,8 +121,14 @@ and held long enough to read, and no animation runs at all.
   plate, stencil lot number, clock, stencil total, customer name and item count, and one
   arrow-led action: **Approve**, then **Print bill**. `APPROVED` is filled ledger green,
   `PRINTED` is outlined, never filled — spent ink does not shout.
-- **One bar on top, two sections under it.** `To print` and `Printed`, named in a single bar
-  pinned under the rail. Two sticky headers was the first attempt and it was worse: the top of
+- **One header row, two sections in it.** `To print` and `Printed` sit in the header beside the
+  title and the tools, so the whole screen has one band of controls instead of two. The header
+  itself pins under the rail on a desk. It stops pinning on a phone: there it wraps to three
+  lines, and 148px of a 844px screen is a worse trade than making the tabs one flick up the way.
+- **Printed opens a window.** The printed pile is reference material. `window.open` with a fixed
+  name, so a second click focuses the window already open instead of stacking another, and a
+  `storage` listener so it follows the counter — press Print all and the list grows as you watch.
+  A window showing seven bills while the till printed five more would be worse than no window. Two sticky headers was the first attempt and it was worse: the top of
   the screen told you nothing once you were half way down a printed pile. One bar carries the
   current section, both counts, and the jump back. It tracks the reader as they scroll, and at
   the foot of a short page the last section wins, because a page too short to scroll cannot

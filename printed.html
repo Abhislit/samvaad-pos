@@ -3,16 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SAMVAAD POS — counter</title>
-<meta name="description" content="SAMVAAD POS — WhatsApp orders arrive here and print. Demonstration build; all data is synthetic.">
+<title>SAMVAAD POS — printed</title>
+<meta name="description" content="Every bill this counter has printed today. Demonstration build; all data is synthetic.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231d1d1b'/%3E%3Ctext x='16' y='24' font-family='Georgia,serif' font-size='22' font-weight='700' fill='%23e0a326' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles/tokens.css">
 <link rel="stylesheet" href="styles/app.css">
 <link rel="stylesheet" href="styles/print.css">
 </head>
-<body>
-<a class="skip-link" href="#orders">Skip to orders</a>
-
+<body data-page="printed">
 <header class="rail">
   <div class="rail-brand">
     <span class="wordmark">SAMVAAD</span>
@@ -23,20 +21,15 @@
   <p class="rail-say" data-say role="status"></p>
 
   <div class="rail-tools">
-    <button class="icon-btn" id="sound-toggle" aria-pressed="false" title="Arrival sound (M)">
-      <span class="icon-mute" aria-hidden="true"></span><span class="sr">Unmute arrival sound</span>
-    </button>
-    <button class="demo-btn" id="demo-btn" aria-pressed="false">Demo mode</button>
+    <button class="btn btn-ghost btn-sm" id="tray-btn">Tray: 80 mm</button>
   </div>
 </header>
 
 <main>
   <section class="board-head">
-    <h1 class="board-title">Orders from WhatsApp</h1>
-    <nav class="section-bar" id="section-bar" aria-label="Order sections"></nav>
+    <h1 class="board-title">Printed bills</h1>
     <div class="board-tools">
-      <button class="btn btn-ghost btn-sm" id="simulate-btn">Simulate order<span class="chev" aria-hidden="true"></span></button>
-      <button class="btn btn-ghost btn-sm" id="tray-btn">Tray: 80 mm</button>
+      <button class="btn btn-ghost btn-sm" id="counter-btn">Back to the counter<span class="chev" aria-hidden="true"></span></button>
     </div>
   </section>
 
@@ -47,8 +40,6 @@
 
 <aside class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-labelledby="drawer-title"></aside>
 
-<!-- the machine. Paper comes out of here, and this is the only thing that
-     ever reaches paper. -->
 <div class="outlet" id="outlet" hidden aria-hidden="true">
   <div class="outlet-mouth"></div>
   <div class="paper" id="paper"></div>
@@ -57,8 +48,6 @@
 
 <div class="toaster" id="toaster" role="status" aria-live="polite"></div>
 
-<!-- Order matters: each file adds to window.SV. Plain scripts so the shop can
-     open index.html off the disk with no server and no build step. -->
 <script src="src/dom.js"></script>
 <script src="src/store.js"></script>
 <script src="src/data.js"></script>
@@ -70,6 +59,6 @@
 <script src="src/notifications.js"></script>
 <script src="src/ui-board.js"></script>
 <script src="src/ui-drawer.js"></script>
-<script src="src/app.js"></script>
+<script src="src/printed-page.js"></script>
 </body>
 </html>
