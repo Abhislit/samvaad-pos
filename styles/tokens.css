@@ -105,6 +105,28 @@
   --focus: 0 0 0 2px var(--stock), 0 0 0 4px color-mix(in oklch, var(--india) 85%, transparent);
   --lift: 0 1px 0 oklch(17.5% 0.008 62 / 0.10), 0 2px 4px oklch(17.5% 0.008 62 / 0.06);
   --lift-up: 0 1px 0 oklch(17.5% 0.008 62 / 0.12), 0 6px 16px oklch(17.5% 0.008 62 / 0.13);
+  /* Paper still half out of the slot: the same ticket, lit from the machine and
+     held closer to it. Released to --lift the instant it lands. */
+  --lift-feed: 0 -2px 5px oklch(17.5% 0.008 62 / 0.16), 0 8px 14px oklch(17.5% 0.008 62 / 0.10);
+
+  /* Every arrival decelerates out of the same curve. Nothing in this machine
+     overshoots; the platen does not bounce. */
+  --ease-platen: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Paper leaving the slot. Heavier in than the platen: it starts moving
+     immediately and only releases at the end. */
+  --ease-feed: cubic-bezier(0.32, 0.72, 0.24, 1);
+
+  /* How long the hot head takes to cross a ticket. The keyframe is timed by
+     this token and the print sequence waits on it, so it is read from here
+     rather than restated in script. */
+  --head-ms: 460ms;
+
+  /* Stock fibre. Laid lines across, chain lines down — the grain is what stops
+     a ticket reading as a white rectangle. */
+  --fibre:
+    repeating-linear-gradient(91deg, oklch(17.5% 0.008 62 / 0.014) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(3deg, oklch(17.5% 0.008 62 / 0.009) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(0deg, oklch(100% 0 0 / 0.5) 0 1px, transparent 1px 7px);
 
   --print-ink: #000;
   --print-ground: #fff;

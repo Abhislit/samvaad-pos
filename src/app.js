@@ -119,13 +119,38 @@ window.SV = window.SV || {};
     SV.orders.receiveNewOrder(SV.data.makeIncoming(SV.store.state));
   }
 
+  const calm = () => window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* How long the hot head takes to cross a ticket. Read from the same token the
+     keyframe is timed by, so retiming the animation cannot leave the print
+     sequence waiting on a number that no longer exists. */
+  const headMs = () => parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue('--head-ms')) || 460;
+
   function printOrder(id) {
     const order = SV.orders.byId(id);
     if (!order || order.printedAt) return;
+
+    /* The print happens in two beats. First the head runs down the ticket
+       while it is still unprinted; then the ticket is marked printed and
+       travels down into the printed pile. Printing it first and animating
+       second shows the press landing on a ticket that has already left.
+
+       The drawer closes up front: it is the end of the operator's look at
+       this order, and leaving it open for the pass would hide the machine
+       behind it. */
+    SV.drawer.close();
+    if (calm().matches) return finishPrint(id);
+
+    SV.board.printing(id);
+    render();
+    setTimeout(() => finishPrint(id), headMs());
+  }
+
+  function finishPrint(id) {
     SV.orders.markPrinted(id);
     const printed = SV.orders.byId(id);
     SV.printer.print(printed);
-    SV.drawer.close();
     SV.notifications.say(
       printed.billNo + ' printed · ' + printed.customerName + ' · ' +
       SV.money(SV.orders.money(printed).totals.grand)
@@ -143,7 +168,9 @@ window.SV = window.SV || {};
 
   /* ── events ────────────────────────────────────────────────────────── */
   function wire() {
-    document.addEventListener('samvaad:order', () => {
+    document.addEventListener('samvaad:order', (ev) => {
+      /* Marked before the render, because render() consumes the mark. */
+      if (ev.detail && ev.detail.order) SV.board.arriving(ev.detail.order.id);
       render();
       SV.notifications.play();
     });

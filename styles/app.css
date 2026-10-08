@@ -15,6 +15,20 @@ body {
 h1, h2, p, dl, dd, figure, table { margin: 0; }
 button { font: inherit; color: inherit; }
 table { border-collapse: collapse; width: 100%; }
+
+/* The browser surfaces this design system would otherwise have left at
+   Chrome's defaults: a blue selection, a grey scrollbar, a text cursor.
+   All three are stock colours that belong to no machine. */
+::selection { background: var(--jute); color: var(--on-jute); }
+:root { caret-color: var(--india); }
+* { scrollbar-width: thin; scrollbar-color: var(--rule-mid) transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--rule-mid); border-radius: var(--radius-pill);
+  border: 3px solid transparent; background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--ink-faint); background-clip: content-box; }
 .mono { font-family: var(--mono); font-size: 0.8125em; letter-spacing: -0.01em; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 :focus-visible { outline: none; box-shadow: var(--focus); border-radius: var(--radius); }
@@ -37,7 +51,18 @@ table { border-collapse: collapse; width: 100%; }
     linear-gradient(oklch(100% 0 0 / 0.05), transparent 40%),
     var(--rail);
   color: var(--rail-ink);
-  box-shadow: inset 0 -1px 0 var(--edge);
+  box-shadow:
+    inset 0 -1px 0 var(--edge),
+    0 1px 0 oklch(100% 0 0 / 0.05),
+    0 4px 10px oklch(17.5% 0.008 62 / 0.10);
+}
+/* The slot. A ticket leaves the machine at this seam, so the seam has to be
+   there: a dark cut with the stock's own light on its lower lip. */
+.rail::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 3px;
+  pointer-events: none;
+  background: linear-gradient(oklch(0% 0 0 / 0.16), oklch(0% 0 0 / 0.05));
+  box-shadow: 0 1px 0 oklch(100% 0 0 / 0.30);
 }
 .rail-brand { display: flex; align-items: center; gap: 0.5rem; flex: none; }
 .wordmark {
@@ -126,7 +151,70 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
   box-shadow: var(--lift);
   padding: 0.6rem 0.7rem 0.55rem;
   display: flex; flex-direction: column; gap: 0.35rem;
+  /* will-change is held only while a ticket is actually moving — see
+     .row.is-moving below — so the board never parks layers it is not using. */
 }
+/* Fibre only reads on the stock, never on the desk or the printed rail. */
+.row { background-image: var(--fibre); }
+
+/* A ticket the machine is still holding: lit from the slot above it, sitting
+   closer to the platen than the ones already on the counter. */
+/* The platen pushes the ticket out; it does not drop it. So the feed keeps
+   moving for most of its length and releases at the end, rather than snapping
+   in on an expo curve the way an overlay does. */
+.row.is-arriving { animation: feed 0.66s var(--ease-feed) both; }
+@keyframes feed {
+  0% {
+    opacity: 0;
+    transform: translateY(-2.2rem) scale(0.97);
+    box-shadow: var(--lift-feed);
+  }
+  70% { opacity: 1; box-shadow: var(--lift-feed); }
+  100% {
+    opacity: 1;
+    transform: none;
+    box-shadow: var(--lift);
+  }
+}
+
+/* The hot head. A lit bar runs down the face of the ticket while the print
+   happens, and the paper warms to its printed tone behind it. Painted as a
+   masked band so nothing on the ticket is ever obscured at rest. */
+.row.is-printing { background: var(--stock-warm); }
+.row.is-printing::before {
+  /* The head needs the whole face of the ticket; the perforation is drawn
+     into the same box rather than given a second pseudo-element, which the
+     torn stub already owns. */
+  inset: -1px;
+  height: auto;
+  background-image:
+    linear-gradient(var(--rule-mid), var(--rule-mid)),
+    radial-gradient(circle at 3.6px -1px, var(--desk) 3.7px, transparent 3.9px),
+    /* Above the head the paper is untouched; at the head the element is hot and
+     lit; below it a faint smear of what the head laid down. */
+    linear-gradient(180deg,
+      oklch(0% 0 0 / 0) 0%,
+      oklch(0% 0 0 / 0.07) 62%,
+      oklch(0% 0 0 / 0.19) 88%,
+      oklch(84% 0.163 84 / 0.9) 94%,
+      oklch(52% 0.14 74 / 0.22) 97%,
+      oklch(0% 0 0 / 0) 100%);
+  /* The head is a bar, not a full-height wipe: at 45% of the ticket it should
+     read as a bar crossing the face, with paper above and paper below it. */
+  background-size: 100% 1px, 9px 7px, 100% 45%;
+  background-position: 0 7px, 0 0, 0 -45%;
+  background-repeat: no-repeat, repeat-x, no-repeat;
+  animation: head var(--head-ms) linear both;
+}
+@keyframes head {
+  from { background-position: 0 7px, 0 0, 0 -45%; }
+  to   { background-position: 0 7px, 0 0, 0 100%; }
+}
+
+/* Held only for the length of a move. */
+.row.is-moving { will-change: transform; z-index: 2; }
+.row.is-sliding { animation: slide 0.42s var(--ease-platen) both; }
+@keyframes slide { to { transform: none; } }
 /* perforation punched along the head of the ticket */
 .row::before {
   content: ""; position: absolute; inset: -1px -1px auto -1px; height: 8px;
@@ -192,6 +280,15 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 .plate[data-ink="whatsapp"] { background: var(--jute); color: var(--on-jute); box-shadow: inset 0 0 0 1.5px var(--jute-deep); }
 .plate[data-ink="counter"]  { background: var(--rail); color: var(--stock); }
 .plate[data-ink="printed"]  { background: transparent; color: var(--ink-faint); box-shadow: inset 0 0 0 1.5px var(--rule-mid); }
+
+/* The stamp comes off the paper. The plate is the one thing that changes ink
+   on this ticket, so it is the one thing that gets the press. */
+.row.is-printing .plate { animation: press 0.3s var(--ease-platen) both; }
+@keyframes press {
+  0%   { transform: rotate(-1.5deg) scale(1); }
+  35%  { transform: rotate(-1.5deg) scale(0.9); }
+  100% { transform: rotate(-1.5deg) scale(1); }
+}
 
 /* ── drop open ─────────────────────────────────────────────────────── */
 .caret {

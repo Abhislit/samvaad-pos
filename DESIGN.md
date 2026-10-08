@@ -78,7 +78,13 @@ corner, `--radius: 3px` the ticket itself. A stamp plate is rotated −1.5°, ne
 
 **The Hairline Rule.** Separation is a hairline rule. Depth is either `--lift` for paper lying
 on the counter or `--lift-up` for paper picked up, plus the one shadow on a pinned action bar
-that tells the operator the pane runs on underneath it. Nothing glows.
+that tells the operator the pane runs on underneath it. Nothing glows. A third shadow,
+`--lift-feed`, belongs to paper still held by the machine — lit from the slot above it and
+sitting closer to the platen than the tickets already on the counter.
+
+**The Fibre Rule.** `--fibre` is three gradients at three angles and three periods, laid over
+the stock only. It is what stops a ticket reading as a white rectangle, at 1.4% and 0.9% ink —
+visible at arm's length under bad light, invisible as a pattern on screen.
 
 ## Components
 
@@ -94,6 +100,27 @@ that tells the operator the pane runs on underneath it. Nothing glows.
 - **The drop.** A caret opens the line items in place. One row's DOM is touched, never the
   list's: rebuilding it would destroy the pressed button, drop focus to the body and replay
   every caret's rotation — which reads as a blink.
+
+## Motion
+
+The machine is the only thing that moves on its own. Nothing loops, nothing animates on
+load, and no effect runs that does not report a state change the operator has to see.
+
+**The board hands tickets back.** `render()` rebuilds the list with `innerHTML`, which
+teleports every ticket whenever the sort changes. So the board measures each ticket's
+position first, rebuilds, then writes the inverse transform onto every ticket that moved and
+releases them on one shared class. A ticket with no previous position was not there a moment
+ago — that is the arrival, and it comes out of the slot instead of fading in.
+
+**The print happens in two beats.** The head runs down the face of the ticket while it is
+still unprinted, then the ticket is marked printed and travels down into the printed pile.
+Printing first and animating second puts the press on a ticket that has already left. The
+drawer closes up front so the pass is never hidden behind it. `HEAD_MS` in `app.js` and the
+`head` keyframe in `app.css` are the same 460ms in two files, and they must move together.
+
+Under `prefers-reduced-motion` the board is not measured at all: `snapshot()` returns empty,
+so no transform is ever written, no arrival class is rendered, and `printOrder` skips the
+delay and prints immediately. The state still changes; only the movement is gone.
 - **Drawn marks only.** The warning triangle is borders and a knocked-out bar, like the
   chevron, the caret and the mute speaker. It is `display: inline-block` because `width` and
   `height` are ignored on an inline box — a bug that hid it at 0×0 until it was stated.
@@ -109,10 +136,18 @@ never prints A4-sized headings.
 
 `--print-ink` and `--print-ground` are device colours, not screen inks. Do not retint them.
 
+## Browser surfaces
+
+Selection, scrollbars and the caret are themed from the palette. `::selection` is jute on
+`--on-jute`, scrollbars are `--rule-mid` with a `--ink-faint` hover, and the caret is
+`--india` — the one colour in this system that means "you are here". These are the parts of
+a page that ship as Chrome defaults and belong to no design system.
+
 ## Deliberate exemptions from the mechanical detector
 
-- The rail's brushed grain reads as a repeating stripe pattern. A brushed-metal grain *is*
-  hairline repetition; the heuristic cannot tell a material from a decoration.
+- The rail's brushed grain and `--fibre` read as repeating stripe patterns. A brushed-metal
+  grain *is* hairline repetition, and laid paper *is* laid lines; the heuristic cannot tell a
+  material from a decoration.
 - `--mask-solid` is `#000` because a CSS mask key must be fully opaque and cannot be a
   palette ink.
 

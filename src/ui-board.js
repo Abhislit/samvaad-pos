@@ -14,6 +14,62 @@ window.SV = window.SV || {};
   /* Which rows are dropped open. View state, never persisted. */
   const dropped = new Set();
 
+  /* An order the machine is still holding, and a ticket whose print is running.
+     One-shot, not persisted: the class is added, the animation runs once, and
+     the element leaves the DOM on the next render. */
+  let arrivingId = null;
+  let printingId = null;
+
+  const calm = () => window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ── the machine ──────────────────────────────────────────────────────
+     The board reorders itself constantly: an arrival pushes everything down,
+     a print drops one ticket out of the waiting pile and into the printed one.
+     Rebuilding innerHTML teleports all of it. So the board measures where
+     each ticket was, rebuilds, then puts each ticket back where it came from
+     and lets it travel. A ticket with no previous position was not there a
+     moment ago, and that is the arrival — it comes out of the slot instead. */
+  function snapshot(host) {
+    const map = new Map();
+    if (calm().matches) return map;
+    SV.$$('.row[data-order]', host).forEach((row) => {
+      const r = row.getBoundingClientRect();
+      if (r.width || r.height) map.set(row.dataset.order, { top: r.top, left: r.left });
+    });
+    return map;
+  }
+
+  function settle(host, before) {
+    if (!before.size) return;
+    const moved = [];
+    SV.$$('.row[data-order]', host).forEach((row) => {
+      const prev = before.get(row.dataset.order);
+      if (!prev) return;
+      const r = row.getBoundingClientRect();
+      const dy = prev.top - r.top;
+      const dx = prev.left - r.left;
+      if (Math.abs(dy) < 0.5 && Math.abs(dx) < 0.5) return;
+      row.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+      moved.push(row);
+    });
+    if (!moved.length) return;
+    /* One commit, then release together: a class beats writing a style per
+       node, and every ticket keeps the same curve. */
+    moved.forEach((row) => row.classList.add('is-moving'));
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        moved.forEach((row) => { row.classList.add('is-sliding'); });
+        moved.forEach((row) => row.addEventListener('animationend', (ev) => {
+          /* Only our own slide counts. The stamp press on .plate and the
+             drop-in on .row-detail also finish and bubble up here. */
+          if (ev.target !== row || ev.animationName !== 'slide') return;
+          row.classList.remove('is-moving', 'is-sliding');
+          row.style.transform = '';
+        }));
+      });
+    });
+  }
+
   function detailHTML(order) {
     const { lines } = SV.orders.money(order);
     return '<div class="row-detail">' +
@@ -37,6 +93,11 @@ window.SV = window.SV || {};
     const printed = SV.orders.printed(order);
     const open = dropped.has(order.id);
 
+    /* The two one-shot machine states. Rendered into the ticket that is
+       mid-motion and into nothing else. */
+    const arriving = !printed && !calm().matches && order.id === arrivingId;
+    const printing = !printed && !calm().matches && order.id === printingId;
+
     const flag = unmatched
       ? '<span class="row-flag" title="SAMVAAD could not price ' + unmatched + ' item' +
         (unmatched > 1 ? 's' : '') + ' on this order.">' + WARN +
@@ -44,6 +105,7 @@ window.SV = window.SV || {};
       : '';
 
     return '<article class="row' + (printed ? ' is-printed' : '') + (open ? ' is-dropped' : '') +
+      (arriving ? ' is-arriving' : '') + (printing ? ' is-printing' : '') +
       '" data-order="' + e(order.id) + '" tabindex="-1">' +
       '<div class="row-top">' +
         '<span class="plate" data-ink="' + (printed ? 'printed' : order.source) + '">' +
@@ -79,6 +141,10 @@ window.SV = window.SV || {};
       });
       const waiting = orders.filter((o) => !o.printedAt);
 
+      /* The board is about to be torn down and rebuilt. Remember where every
+         ticket sat so it can be handed back to where it came from. */
+      const before = snapshot(host);
+
       if (!orders.length) {
         host.innerHTML = '<div class="board-empty">' +
           '<b>No orders yet</b>' +
@@ -91,7 +157,23 @@ window.SV = window.SV || {};
         ? ''
         : '<p class="board-clear"><b>All clear.</b> Every order has been printed.</p>') +
         orders.map(rowHTML).join('');
+
+      /* Hand the tickets back to where they were and let them travel. */
+      settle(host, before);
+
+      /* One shot each. The next render — or the animationend on the row —
+         clears them; nothing here survives to be read twice. */
+      arrivingId = null;
+      printingId = null;
     },
+
+    /* The arrival is the machine's own movement: a new ticket comes out of
+       the slot rather than fading in. */
+    arriving(id) { arrivingId = id; },
+
+    /* The print runs before the ticket leaves the board, so the paper warms
+       and the head passes while it is still the operator's to look at. */
+    printing(id) { printingId = id; },
 
     /* Drop one row open or shut, in place. Rebuilding the list here would
        destroy the button you just pressed and drop focus to the body. */
