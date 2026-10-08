@@ -1,0 +1,1237 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-08T09:49:22Z",
+  "title": "Design System: SAMVAAD POS",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(17.5% 0.008 62)",
+        "tonalRamp": [
+          "oklch(15% 0.005 62.0)",
+          "oklch(27% 0.006 62.0)",
+          "oklch(39% 0.007 62.0)",
+          "oklch(51% 0.008 62.0)",
+          "oklch(63% 0.007 62.0)",
+          "oklch(75% 0.006 62.0)",
+          "oklch(87% 0.005 62.0)",
+          "oklch(95% 0.005 62.0)"
+        ],
+        "purpose": "Primary text, and the fill for the ACCEPTED plate and the ink button. One warm black."
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Soft Ink",
+        "canonical": "oklch(39% 0.009 62)",
+        "tonalRamp": [
+          "oklch(15% 0.005 62.0)",
+          "oklch(27% 0.006 62.0)",
+          "oklch(39% 0.008 62.0)",
+          "oklch(51% 0.009 62.0)",
+          "oklch(63% 0.008 62.0)",
+          "oklch(75% 0.007 62.0)",
+          "oklch(87% 0.006 62.0)",
+          "oklch(95% 0.005 62.0)"
+        ],
+        "purpose": "Secondary text and button hover borders."
+      },
+      "ink-faint": {
+        "role": "neutral",
+        "displayName": "Faint Ink",
+        "canonical": "oklch(54% 0.007 62)",
+        "tonalRamp": [
+          "oklch(15% 0.004 62.0)",
+          "oklch(27% 0.005 62.0)",
+          "oklch(39% 0.006 62.0)",
+          "oklch(51% 0.007 62.0)",
+          "oklch(63% 0.006 62.0)",
+          "oklch(75% 0.006 62.0)",
+          "oklch(87% 0.005 62.0)",
+          "oklch(95% 0.004 62.0)"
+        ],
+        "purpose": "Metadata, field labels, column heads, and the COMPLETED plate text."
+      },
+      "mark": {
+        "role": "neutral",
+        "displayName": "Mark",
+        "canonical": "oklch(64% 0.006 62)",
+        "tonalRamp": [
+          "oklch(15% 0.004 62.0)",
+          "oklch(27% 0.005 62.0)",
+          "oklch(39% 0.006 62.0)",
+          "oklch(51% 0.007 62.0)",
+          "oklch(63% 0.006 62.0)",
+          "oklch(75% 0.006 62.0)",
+          "oklch(87% 0.005 62.0)",
+          "oklch(95% 0.004 62.0)"
+        ],
+        "purpose": "Shapes that are never words: the switch knob and the order-trail chevron's border. Below the text threshold by design — never reuse it for type."
+      },
+      "mark-quiet": {
+        "role": "neutral",
+        "displayName": "Quiet Mark",
+        "canonical": "oklch(70% 0.006 62)",
+        "tonalRamp": [
+          "oklch(15% 0.004 62.0)",
+          "oklch(27% 0.005 62.0)",
+          "oklch(39% 0.006 62.0)",
+          "oklch(51% 0.007 62.0)",
+          "oklch(63% 0.006 62.0)",
+          "oklch(75% 0.006 62.0)",
+          "oklch(87% 0.005 62.0)",
+          "oklch(95% 0.004 62.0)"
+        ],
+        "purpose": "The quietest mark in the system, used once: the counter-sale source dot. Permitted only because the word COUNTER sits beside it."
+      },
+      "desk": {
+        "role": "neutral",
+        "displayName": "Bench Desk",
+        "canonical": "oklch(92.6% 0.006 84)",
+        "tonalRamp": [
+          "oklch(15% 0.004 84.0)",
+          "oklch(27% 0.004 84.0)",
+          "oklch(39% 0.005 84.0)",
+          "oklch(51% 0.006 84.0)",
+          "oklch(63% 0.006 84.0)",
+          "oklch(75% 0.005 84.0)",
+          "oklch(87% 0.004 84.0)",
+          "oklch(95% 0.004 84.0)"
+        ],
+        "purpose": "The counter ground behind every sheet; also the page background gradient's lower stop and the fill behind a quantity chip."
+      },
+      "stock": {
+        "role": "neutral",
+        "displayName": "Ticket Stock",
+        "canonical": "oklch(99.3% 0.002 84)",
+        "tonalRamp": [
+          "oklch(15% 0.004 84)",
+          "oklch(27% 0.004 84)",
+          "oklch(39% 0.004 84)",
+          "oklch(51% 0.004 84)",
+          "oklch(63% 0.004 84)",
+          "oklch(75% 0.004 84)",
+          "oklch(87% 0.004 84)",
+          "oklch(95% 0.004 84)"
+        ],
+        "purpose": "The near-white every ticket, input, button and sheet is printed on. The system's paper."
+      },
+      "stock-tray": {
+        "role": "neutral",
+        "displayName": "Tray Stock",
+        "canonical": "oklch(96.4% 0.005 84)",
+        "tonalRamp": [
+          "oklch(15% 0.003 84.0)",
+          "oklch(27% 0.004 84.0)",
+          "oklch(39% 0.004 84.0)",
+          "oklch(51% 0.005 84.0)",
+          "oklch(63% 0.005 84.0)",
+          "oklch(75% 0.004 84.0)",
+          "oklch(87% 0.003 84.0)",
+          "oklch(95% 0.003 84.0)"
+        ],
+        "purpose": "One step down from stock. Lane bodies and the torn-stub corner gradient — and the ground the NEW tray's jute tint is mixed into."
+      },
+      "stock-ledger": {
+        "role": "neutral",
+        "displayName": "Ledger Stock",
+        "canonical": "oklch(97.6% 0.008 82)",
+        "tonalRamp": [
+          "oklch(15% 0.005 82.0)",
+          "oklch(27% 0.006 82.0)",
+          "oklch(39% 0.007 82.0)",
+          "oklch(51% 0.008 82.0)",
+          "oklch(63% 0.007 82.0)",
+          "oklch(75% 0.006 82.0)",
+          "oklch(87% 0.005 82.0)",
+          "oklch(95% 0.005 82.0)"
+        ],
+        "purpose": "The bill sheet, a hair warmer than tray stock so an invoice reads as its own kind of paper."
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "oklch(17.5% 0.008 62 / 0.16)",
+        "tonalRamp": [
+          "oklch(15% 0.005 62.0)",
+          "oklch(27% 0.006 62.0)",
+          "oklch(39% 0.007 62.0)",
+          "oklch(51% 0.008 62.0)",
+          "oklch(63% 0.007 62.0)",
+          "oklch(75% 0.006 62.0)",
+          "oklch(87% 0.005 62.0)",
+          "oklch(95% 0.005 62.0)"
+        ],
+        "purpose": "16% ink. A section divider or a panel head rule."
+      },
+      "rule-mid": {
+        "role": "neutral",
+        "displayName": "Rule Mid",
+        "canonical": "oklch(17.5% 0.008 62 / 0.30)",
+        "tonalRamp": [
+          "oklch(15% 0.005 62.0)",
+          "oklch(27% 0.006 62.0)",
+          "oklch(39% 0.007 62.0)",
+          "oklch(51% 0.008 62.0)",
+          "oklch(63% 0.007 62.0)",
+          "oklch(75% 0.006 62.0)",
+          "oklch(87% 0.005 62.0)",
+          "oklch(95% 0.005 62.0)"
+        ],
+        "purpose": "30% ink. A container, lane or button border, and the dashed accepted sub-band. Never an interactive control's boundary — that takes --control-edge, which clears the 3:1 non-text floor this measures 2.00:1 below."
+      },
+      "rule-hair": {
+        "role": "neutral",
+        "displayName": "Rule Hair",
+        "canonical": "oklch(17.5% 0.008 62 / 0.08)",
+        "tonalRamp": [
+          "oklch(15% 0.005 62.0)",
+          "oklch(27% 0.006 62.0)",
+          "oklch(39% 0.007 62.0)",
+          "oklch(51% 0.008 62.0)",
+          "oklch(63% 0.007 62.0)",
+          "oklch(75% 0.006 62.0)",
+          "oklch(87% 0.005 62.0)",
+          "oklch(95% 0.005 62.0)"
+        ],
+        "purpose": "8% ink. A table row divider. The faintest line in the system."
+      },
+      "control-edge": {
+        "role": "neutral",
+        "displayName": "Control Edge",
+        "canonical": "oklch(48% 0.008 62)",
+        "tonalRamp": [
+          "oklch(15% 0.005 62.0)",
+          "oklch(27% 0.006 62.0)",
+          "oklch(39% 0.007 62.0)",
+          "oklch(51% 0.008 62.0)",
+          "oklch(63% 0.007 62.0)",
+          "oklch(75% 0.006 62.0)",
+          "oklch(87% 0.005 62.0)",
+          "oklch(95% 0.005 62.0)"
+        ],
+        "purpose": "The boundary of a control — every .input, select.input and the .switch track. A rule divides, an edge locates: a control's boundary has to be findable, and WCAG 1.4.11 asks 3:1 for a shape that carries meaning without words. Measures 6.41:1 on --stock and 5.24:1 on --desk, where --rule-mid at 30% measures 2.00:1 and 1.96:1."
+      },
+      "rail": {
+        "role": "neutral",
+        "displayName": "Counter Iron",
+        "canonical": "oklch(20.5% 0.009 250)",
+        "tonalRamp": [
+          "oklch(15% 0.005 250.0)",
+          "oklch(27% 0.006 250.0)",
+          "oklch(39% 0.008 250.0)",
+          "oklch(51% 0.009 250.0)",
+          "oklch(63% 0.008 250.0)",
+          "oklch(75% 0.007 250.0)",
+          "oklch(87% 0.006 250.0)",
+          "oklch(95% 0.005 250.0)"
+        ],
+        "purpose": "The one dark surface: the machined top rail, sticky at --rail-h."
+      },
+      "rail-line": {
+        "role": "neutral",
+        "displayName": "Rail Line",
+        "canonical": "oklch(100% 0 0 / 0.10)",
+        "tonalRamp": [
+          "oklch(15% 0.005 250.0)",
+          "oklch(27% 0.006 250.0)",
+          "oklch(39% 0.008 250.0)",
+          "oklch(51% 0.009 250.0)",
+          "oklch(63% 0.008 250.0)",
+          "oklch(75% 0.007 250.0)",
+          "oklch(87% 0.006 250.0)",
+          "oklch(95% 0.005 250.0)"
+        ],
+        "purpose": "A 10% white hairline: the border of the rail's buttons and pills."
+      },
+      "rail-ink": {
+        "role": "neutral",
+        "displayName": "Rail Ink",
+        "canonical": "oklch(93% 0.005 84)",
+        "tonalRamp": [
+          "oklch(15% 0.006 84)",
+          "oklch(27% 0.006 84)",
+          "oklch(39% 0.006 84)",
+          "oklch(51% 0.006 84)",
+          "oklch(63% 0.006 84)",
+          "oklch(75% 0.006 84)",
+          "oklch(87% 0.006 84)",
+          "oklch(95% 0.006 84)"
+        ],
+        "purpose": "Primary text on iron. Paper ink cannot sit on the dark ground."
+      },
+      "rail-ghost": {
+        "role": "neutral",
+        "displayName": "Rail Ghost",
+        "canonical": "oklch(72% 0.008 84)",
+        "tonalRamp": [
+          "oklch(15% 0.003 84.0)",
+          "oklch(27% 0.004 84.0)",
+          "oklch(39% 0.004 84.0)",
+          "oklch(51% 0.005 84.0)",
+          "oklch(63% 0.005 84.0)",
+          "oklch(75% 0.004 84.0)",
+          "oklch(87% 0.003 84.0)",
+          "oklch(95% 0.003 84.0)"
+        ],
+        "purpose": "Inactive tabs, sub-labels and counts on iron."
+      },
+      "jute": {
+        "role": "primary",
+        "displayName": "Jute Gold",
+        "canonical": "oklch(80.5% 0.163 82)",
+        "tonalRamp": [
+          "oklch(15% 0.098 82.0)",
+          "oklch(27% 0.117 82.0)",
+          "oklch(39% 0.137 82.0)",
+          "oklch(51% 0.156 82.0)",
+          "oklch(63% 0.15 82.0)",
+          "oklch(75% 0.13 82.0)",
+          "oklch(87% 0.111 82.0)",
+          "oklch(95% 0.098 82.0)"
+        ],
+        "purpose": "The one accent, and the seal. Primary button, NEW plate, current-tab underline, NEW lane count, arrival toast, row-hover underline — and the 11% tint mixed into tray stock to mark the NEW tray as the one that needs work."
+      },
+      "jute-deep": {
+        "role": "primary",
+        "displayName": "Deep Jute",
+        "canonical": "oklch(52% 0.140 74)",
+        "tonalRamp": [
+          "oklch(15% 0.084 74.0)",
+          "oklch(27% 0.101 74.0)",
+          "oklch(39% 0.118 74.0)",
+          "oklch(51% 0.134 74.0)",
+          "oklch(63% 0.129 74.0)",
+          "oklch(75% 0.112 74.0)",
+          "oklch(87% 0.095 74.0)",
+          "oklch(95% 0.084 74.0)"
+        ],
+        "purpose": "Jute pressed further: the seal button's border, the NEW plate's inner ring, the ON switch, and the border of the tinted NEW tray."
+      },
+      "jute-wash": {
+        "role": "primary",
+        "displayName": "Jute Wash",
+        "canonical": "oklch(94% 0.058 84)",
+        "tonalRamp": [
+          "oklch(15% 0.035 84.0)",
+          "oklch(27% 0.042 84.0)",
+          "oklch(39% 0.049 84.0)",
+          "oklch(51% 0.056 84.0)",
+          "oklch(63% 0.053 84.0)",
+          "oklch(75% 0.046 84.0)",
+          "oklch(87% 0.039 84.0)",
+          "oklch(95% 0.035 84.0)"
+        ],
+        "purpose": "Jute thinned to a ground: notes, demo tags, ON switch track, fresh-ticket glow, default toast."
+      },
+      "verdigris": {
+        "role": "secondary",
+        "displayName": "Verdigris Patina",
+        "canonical": "oklch(51% 0.086 188)",
+        "tonalRamp": [
+          "oklch(15% 0.052 188.0)",
+          "oklch(27% 0.062 188.0)",
+          "oklch(39% 0.072 188.0)",
+          "oklch(51% 0.083 188.0)",
+          "oklch(63% 0.079 188.0)",
+          "oklch(75% 0.069 188.0)",
+          "oklch(87% 0.058 188.0)",
+          "oklch(95% 0.052 188.0)"
+        ],
+        "purpose": "PREPARING. The PREPARING plate, the PREPARING lane count, the meter fill."
+      },
+      "verdigris-wash": {
+        "role": "secondary",
+        "displayName": "Verdigris Wash",
+        "canonical": "oklch(93% 0.032 190)",
+        "tonalRamp": [
+          "oklch(15% 0.019 190.0)",
+          "oklch(27% 0.023 190.0)",
+          "oklch(39% 0.027 190.0)",
+          "oklch(51% 0.031 190.0)",
+          "oklch(63% 0.029 190.0)",
+          "oklch(75% 0.026 190.0)",
+          "oklch(87% 0.022 190.0)",
+          "oklch(95% 0.019 190.0)"
+        ],
+        "purpose": "The PREPARING ground at low emphasis: the calm note strip, the calm toast."
+      },
+      "ledger": {
+        "role": "secondary",
+        "displayName": "Ledger Green",
+        "canonical": "oklch(45% 0.104 148)",
+        "tonalRamp": [
+          "oklch(15% 0.062 148.0)",
+          "oklch(27% 0.075 148.0)",
+          "oklch(39% 0.087 148.0)",
+          "oklch(51% 0.1 148.0)",
+          "oklch(63% 0.096 148.0)",
+          "oklch(75% 0.083 148.0)",
+          "oklch(87% 0.071 148.0)",
+          "oklch(95% 0.062 148.0)"
+        ],
+        "purpose": "READY. The READY plate, the READY lane count, the online LED."
+      },
+      "ledger-wash": {
+        "role": "secondary",
+        "displayName": "Ledger Wash",
+        "canonical": "oklch(94% 0.038 150)",
+        "tonalRamp": [
+          "oklch(15% 0.023 150.0)",
+          "oklch(27% 0.027 150.0)",
+          "oklch(39% 0.032 150.0)",
+          "oklch(51% 0.036 150.0)",
+          "oklch(63% 0.035 150.0)",
+          "oklch(75% 0.03 150.0)",
+          "oklch(87% 0.026 150.0)",
+          "oklch(95% 0.023 150.0)"
+        ],
+        "purpose": "READY at low emphasis."
+      },
+      "india": {
+        "role": "secondary",
+        "displayName": "India Red",
+        "canonical": "oklch(47.5% 0.183 26)",
+        "tonalRamp": [
+          "oklch(15% 0.11 26.0)",
+          "oklch(27% 0.132 26.0)",
+          "oklch(39% 0.154 26.0)",
+          "oklch(51% 0.176 26.0)",
+          "oklch(63% 0.168 26.0)",
+          "oklch(75% 0.146 26.0)",
+          "oklch(87% 0.124 26.0)",
+          "oklch(95% 0.11 26.0)"
+        ],
+        "purpose": "Money and refusal. Every ticket total and every row total, the CANCELLED plate, the grand-total rule, the danger button."
+      },
+      "india-wash": {
+        "role": "secondary",
+        "displayName": "India Wash",
+        "canonical": "oklch(94.5% 0.036 27)",
+        "tonalRamp": [
+          "oklch(15% 0.022 27.0)",
+          "oklch(27% 0.026 27.0)",
+          "oklch(39% 0.03 27.0)",
+          "oklch(51% 0.035 27.0)",
+          "oklch(63% 0.033 27.0)",
+          "oklch(75% 0.029 27.0)",
+          "oklch(87% 0.024 27.0)",
+          "oklch(95% 0.022 27.0)"
+        ],
+        "purpose": "Red thinned to a ground: the warning note strip, the alert toast, the danger hover."
+      },
+      "graphite": {
+        "role": "secondary",
+        "displayName": "Graphite",
+        "canonical": "oklch(44% 0.006 250)",
+        "tonalRamp": [
+          "oklch(15% 0.004 250.0)",
+          "oklch(27% 0.004 250.0)",
+          "oklch(39% 0.005 250.0)",
+          "oklch(51% 0.006 250.0)",
+          "oklch(63% 0.006 250.0)",
+          "oklch(75% 0.005 250.0)",
+          "oklch(87% 0.004 250.0)",
+          "oklch(95% 0.004 250.0)"
+        ],
+        "purpose": "COMPLETED, and the only tray ink with no wash. A terminal state gets a neutral, not a fifth bright hue."
+      },
+      "on-jute": {
+        "role": "neutral",
+        "displayName": "Ink on Jute",
+        "canonical": "oklch(26% 0.035 70)",
+        "tonalRamp": [
+          "oklch(15% 0.021 70.0)",
+          "oklch(27% 0.025 70.0)",
+          "oklch(39% 0.029 70.0)",
+          "oklch(51% 0.034 70.0)",
+          "oklch(63% 0.032 70.0)",
+          "oklch(75% 0.028 70.0)",
+          "oklch(87% 0.024 70.0)",
+          "oklch(95% 0.021 70.0)"
+        ],
+        "purpose": "Text set on a filled jute plate or the seal button. Named for its ground so the two retint together."
+      },
+      "on-jute-deep": {
+        "role": "neutral",
+        "displayName": "Deep Ink on Jute",
+        "canonical": "oklch(24% 0.03 70)",
+        "tonalRamp": [
+          "oklch(15% 0.018 70.0)",
+          "oklch(27% 0.022 70.0)",
+          "oklch(39% 0.025 70.0)",
+          "oklch(51% 0.029 70.0)",
+          "oklch(63% 0.028 70.0)",
+          "oklch(75% 0.024 70.0)",
+          "oklch(87% 0.02 70.0)",
+          "oklch(95% 0.018 70.0)"
+        ],
+        "purpose": "Text on the NEW lane-count block, the darkest of the on-jute steps so a small figure holds on gold."
+      },
+      "on-verdigris": {
+        "role": "neutral",
+        "displayName": "Ink on Verdigris",
+        "canonical": "oklch(98% 0.012 190)",
+        "tonalRamp": [
+          "oklch(15% 0.007 190.0)",
+          "oklch(27% 0.009 190.0)",
+          "oklch(39% 0.01 190.0)",
+          "oklch(51% 0.012 190.0)",
+          "oklch(63% 0.011 190.0)",
+          "oklch(75% 0.01 190.0)",
+          "oklch(87% 0.008 190.0)",
+          "oklch(95% 0.007 190.0)"
+        ],
+        "purpose": "Text on the PREPARING plate."
+      },
+      "on-ledger": {
+        "role": "neutral",
+        "displayName": "Ink on Ledger",
+        "canonical": "oklch(98% 0.012 150)",
+        "tonalRamp": [
+          "oklch(15% 0.007 150.0)",
+          "oklch(27% 0.009 150.0)",
+          "oklch(39% 0.01 150.0)",
+          "oklch(51% 0.012 150.0)",
+          "oklch(63% 0.011 150.0)",
+          "oklch(75% 0.01 150.0)",
+          "oklch(87% 0.008 150.0)",
+          "oklch(95% 0.007 150.0)"
+        ],
+        "purpose": "Text on the READY plate."
+      },
+      "on-graphite": {
+        "role": "neutral",
+        "displayName": "Ink on Graphite",
+        "canonical": "oklch(84% 0.006 84)",
+        "tonalRamp": [
+          "oklch(15% 0.004 84.0)",
+          "oklch(27% 0.004 84.0)",
+          "oklch(39% 0.005 84.0)",
+          "oklch(51% 0.006 84.0)",
+          "oklch(63% 0.006 84.0)",
+          "oklch(75% 0.005 84.0)",
+          "oklch(87% 0.004 84.0)",
+          "oklch(95% 0.004 84.0)"
+        ],
+        "purpose": "The tally strip's micro labels on ink; also the value that reads on a graphite lane count."
+      },
+      "jute-edge": {
+        "role": "primary",
+        "displayName": "Pressed Jute Edge",
+        "canonical": "oklch(45% 0.13 70)",
+        "tonalRamp": [
+          "oklch(15% 0.078 70.0)",
+          "oklch(27% 0.094 70.0)",
+          "oklch(39% 0.109 70.0)",
+          "oklch(51% 0.125 70.0)",
+          "oklch(63% 0.12 70.0)",
+          "oklch(75% 0.104 70.0)",
+          "oklch(87% 0.088 70.0)",
+          "oklch(95% 0.078 70.0)"
+        ],
+        "purpose": "The seal button's hover border: jute pressed past its own deep step."
+      },
+      "fig-jute": {
+        "role": "primary",
+        "displayName": "Jute Figure",
+        "canonical": "oklch(74.5% 0.175 80)",
+        "tonalRamp": [
+          "oklch(15% 0.105 80.0)",
+          "oklch(27% 0.126 80.0)",
+          "oklch(39% 0.147 80.0)",
+          "oklch(51% 0.168 80.0)",
+          "oklch(63% 0.161 80.0)",
+          "oklch(75% 0.14 80.0)",
+          "oklch(87% 0.119 80.0)",
+          "oklch(95% 0.105 80.0)"
+        ],
+        "purpose": "The lightened jute a seal button hovers to, and the last --fig-* token. The tally strip no longer tints its figures: the strip carries the day's arithmetic, which has no status. --fig-verdigris and --fig-ledger were deleted with the strip cells that used them; a '--fig-<ink>' family with one member is a name waiting to drift."
+      },
+      "alert": {
+        "role": "secondary",
+        "displayName": "Alert Band",
+        "canonical": "oklch(38% 0.14 26)",
+        "tonalRamp": [
+          "oklch(15% 0.084 26.0)",
+          "oklch(27% 0.101 26.0)",
+          "oklch(39% 0.118 26.0)",
+          "oklch(51% 0.134 26.0)",
+          "oklch(63% 0.129 26.0)",
+          "oklch(75% 0.112 26.0)",
+          "oklch(87% 0.095 26.0)",
+          "oklch(95% 0.084 26.0)"
+        ],
+        "purpose": "The full-bleed offline band under the tally strip."
+      },
+      "alert-ink": {
+        "role": "secondary",
+        "displayName": "Alert Strip Ink",
+        "canonical": "oklch(34% 0.12 26)",
+        "tonalRamp": [
+          "oklch(15% 0.072 26.0)",
+          "oklch(27% 0.086 26.0)",
+          "oklch(39% 0.101 26.0)",
+          "oklch(51% 0.115 26.0)",
+          "oklch(63% 0.11 26.0)",
+          "oklch(75% 0.096 26.0)",
+          "oklch(87% 0.082 26.0)",
+          "oklch(95% 0.072 26.0)"
+        ],
+        "purpose": "Body text on the india-wash note strip."
+      },
+      "alert-deep": {
+        "role": "secondary",
+        "displayName": "Alert Flag Ink",
+        "canonical": "oklch(38% 0.13 26)",
+        "tonalRamp": [
+          "oklch(15% 0.078 26.0)",
+          "oklch(27% 0.094 26.0)",
+          "oklch(39% 0.109 26.0)",
+          "oklch(51% 0.125 26.0)",
+          "oklch(63% 0.12 26.0)",
+          "oklch(75% 0.104 26.0)",
+          "oklch(87% 0.088 26.0)",
+          "oklch(95% 0.078 26.0)"
+        ],
+        "purpose": "Text on a ticket's warning flag, where the ground is narrower and the text needs the contrast."
+      },
+      "alert-led": {
+        "role": "secondary",
+        "displayName": "Alert LED",
+        "canonical": "oklch(97% 0.02 26)",
+        "tonalRamp": [
+          "oklch(15% 0.012 26.0)",
+          "oklch(27% 0.014 26.0)",
+          "oklch(39% 0.017 26.0)",
+          "oklch(51% 0.019 26.0)",
+          "oklch(63% 0.018 26.0)",
+          "oklch(75% 0.016 26.0)",
+          "oklch(87% 0.014 26.0)",
+          "oklch(95% 0.012 26.0)"
+        ],
+        "purpose": "The offline band's LED; near-white so it survives on a saturated red band."
+      },
+      "note-ink": {
+        "role": "secondary",
+        "displayName": "Note Flag Ink",
+        "canonical": "oklch(38% 0.07 74)",
+        "tonalRamp": [
+          "oklch(15% 0.042 74.0)",
+          "oklch(27% 0.05 74.0)",
+          "oklch(39% 0.059 74.0)",
+          "oklch(51% 0.067 74.0)",
+          "oklch(63% 0.064 74.0)",
+          "oklch(75% 0.056 74.0)",
+          "oklch(87% 0.048 74.0)",
+          "oklch(95% 0.042 74.0)"
+        ],
+        "purpose": "Text on a ticket's jute-wash note flag."
+      },
+      "note-deep": {
+        "role": "secondary",
+        "displayName": "Note Tag Ink",
+        "canonical": "oklch(38% 0.09 74)",
+        "tonalRamp": [
+          "oklch(15% 0.054 74.0)",
+          "oklch(27% 0.065 74.0)",
+          "oklch(39% 0.076 74.0)",
+          "oklch(51% 0.086 74.0)",
+          "oklch(63% 0.083 74.0)",
+          "oklch(75% 0.072 74.0)",
+          "oklch(87% 0.061 74.0)",
+          "oklch(95% 0.054 74.0)"
+        ],
+        "purpose": "Text on a jute-wash tag, one step off the note flag for the smaller surface."
+      },
+      "calm-ink": {
+        "role": "secondary",
+        "displayName": "Calm Strip Ink",
+        "canonical": "oklch(30% 0.07 190)",
+        "tonalRamp": [
+          "oklch(15% 0.042 190.0)",
+          "oklch(27% 0.05 190.0)",
+          "oklch(39% 0.059 190.0)",
+          "oklch(51% 0.067 190.0)",
+          "oklch(63% 0.064 190.0)",
+          "oklch(75% 0.056 190.0)",
+          "oklch(87% 0.048 190.0)",
+          "oklch(95% 0.042 190.0)"
+        ],
+        "purpose": "Text on the verdigris-wash note strip."
+      },
+      "whatsapp": {
+        "role": "secondary",
+        "displayName": "Whatsapp Jade",
+        "canonical": "oklch(62% 0.13 152)",
+        "tonalRamp": [
+          "oklch(15% 0.078 152.0)",
+          "oklch(27% 0.094 152.0)",
+          "oklch(39% 0.109 152.0)",
+          "oklch(51% 0.125 152.0)",
+          "oklch(63% 0.12 152.0)",
+          "oklch(75% 0.104 152.0)",
+          "oklch(87% 0.088 152.0)",
+          "oklch(95% 0.078 152.0)"
+        ],
+        "purpose": "The source dot on an incoming ticket, and nothing else in the product."
+      },
+      "ink-hover": {
+        "role": "neutral",
+        "displayName": "Hover Ink",
+        "canonical": "oklch(25% 0.01 62)",
+        "tonalRamp": [
+          "oklch(15% 0.006 62.0)",
+          "oklch(27% 0.007 62.0)",
+          "oklch(39% 0.008 62.0)",
+          "oklch(51% 0.01 62.0)",
+          "oklch(63% 0.009 62.0)",
+          "oklch(75% 0.008 62.0)",
+          "oklch(87% 0.007 62.0)",
+          "oklch(95% 0.006 62.0)"
+        ],
+        "purpose": "The ink button's hover: ink, warmed a step toward hover rather than darkened."
+      },
+      "desk-lit": {
+        "role": "neutral",
+        "displayName": "Lit Desk",
+        "canonical": "oklch(94.6% 0.006 84)",
+        "tonalRamp": [
+          "oklch(15% 0.004 84.0)",
+          "oklch(27% 0.004 84.0)",
+          "oklch(39% 0.005 84.0)",
+          "oklch(51% 0.006 84.0)",
+          "oklch(63% 0.006 84.0)",
+          "oklch(75% 0.005 84.0)",
+          "oklch(87% 0.004 84.0)",
+          "oklch(95% 0.004 84.0)"
+        ],
+        "purpose": "The page background gradient's upper stop, a step lighter than the desk it sits on."
+      },
+      "rail-grain": {
+        "role": "neutral",
+        "displayName": "Rail Grain",
+        "canonical": "oklch(100% 0 0 / 0.022)",
+        "purpose": "2.2% white. The brushed-metal grain repeating 1px every 3px on the iron rail."
+      },
+      "rail-wash": {
+        "role": "neutral",
+        "displayName": "Rail Wash",
+        "canonical": "oklch(100% 0 0 / 0.05)",
+        "purpose": "5% white. A tab's hover ground and the rail's top light."
+      },
+      "rail-soft": {
+        "role": "neutral",
+        "displayName": "Rail Soft",
+        "canonical": "oklch(100% 0 0 / 0.06)",
+        "purpose": "6% white. The ground of the rail's metal fittings and its machined top highlight."
+      },
+      "rail-hair": {
+        "role": "neutral",
+        "displayName": "Rail Hair",
+        "canonical": "oklch(100% 0 0 / 0.11)",
+        "purpose": "11% white. The tally strip's cell dividers."
+      },
+      "rail-lift": {
+        "role": "neutral",
+        "displayName": "Rail Lift",
+        "canonical": "oklch(100% 0 0 / 0.12)",
+        "purpose": "12% white. The hover ground of an icon button or the demo button."
+      },
+      "edge-hair": {
+        "role": "neutral",
+        "displayName": "Edge Hair",
+        "canonical": "oklch(0% 0 0 / 0.22)",
+        "purpose": "22% black. The stamp plate's mottle dot layer and the finest edge on dark."
+      },
+      "edge-soft": {
+        "role": "neutral",
+        "displayName": "Edge Soft",
+        "canonical": "oklch(0% 0 0 / 0.30)",
+        "purpose": "30% black. The offline band's top rule."
+      },
+      "edge": {
+        "role": "neutral",
+        "displayName": "Edge",
+        "canonical": "oklch(0% 0 0 / 0.40)",
+        "purpose": "40% black. The tally strip's rules against the ink ground."
+      },
+      "edge-deep": {
+        "role": "neutral",
+        "displayName": "Edge Deep",
+        "canonical": "oklch(0% 0 0 / 0.50)",
+        "purpose": "50% black. The rail's machined bottom inset edge."
+      },
+      "ink-alpha": {
+        "role": "neutral",
+        "displayName": "Plate Ink",
+        "canonical": "oklch(0% 0 0 / 0.16)",
+        "purpose": "16% black. The stamp plate's inner bleed."
+      },
+      "ink-alpha-w": {
+        "role": "neutral",
+        "displayName": "Plate Ink Light",
+        "canonical": "oklch(100% 0 0 / 0.16)",
+        "purpose": "16% white. The second, offset dot layer of the stamp plate's mottle."
+      },
+      "shade-deep": {
+        "role": "neutral",
+        "displayName": "Shade Deep",
+        "canonical": "oklch(17.5% 0.008 62 / 0.28)",
+        "purpose": "28% of the paper ink. The sticky footer bars' scroll-cue."
+      },
+      "scrim": {
+        "role": "neutral",
+        "displayName": "Scrim",
+        "canonical": "oklch(17.5% 0.008 62 / 0.42)",
+        "purpose": "42% of the paper ink. The wash behind the drawer and the bill sheet."
+      },
+      "print-ink": {
+        "role": "neutral",
+        "displayName": "Print Ink",
+        "canonical": "#000",
+        "purpose": "A thermal head draws one black on white. Never retinted toward the screen palette."
+      },
+      "print-ground": {
+        "role": "neutral",
+        "displayName": "Print Ground",
+        "canonical": "#fff",
+        "purpose": "The receipt's paper. A device colour, not a stock."
+      },
+      "mask-solid": {
+        "role": "neutral",
+        "displayName": "Mask Solid",
+        "canonical": "#000",
+        "purpose": "The rail-nav fade mask's key. A mask must be fully opaque or it does not mask, so this cannot be a palette ink."
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Stat Numerals",
+        "purpose": "Stencil 700 at var(--t-figure) (1.5rem). The day band on Bills and the bill-sheet grand total. The largest type in the product is a number."
+      },
+      "headline": {
+        "displayName": "Stencil Section Voice",
+        "purpose": "Stencil 700 uppercase at var(--t-screen), 0.14em. Screen titles on Bills, Products, Customers and Settings, the bill sheet bar, panel headers. The order board is the exception: .board-title is --t-lead because it shares a line with a 13px sentence."
+      },
+      "lot-number": {
+        "displayName": "Lot Number",
+        "purpose": "Stencil 700 at var(--t-lot) (1.1875rem) with a 0.34em gutter per space. The identity of every ticket; animates in character by character at 26ms steps."
+      },
+      "total": {
+        "displayName": "Ticket Total",
+        "purpose": "Stencil 700 at var(--t-total), tabular. The full card's foot figure and the tally strip's figures, each with its rupee set separately in Archivo. A row's total steps down to --t-mark, and a row's lot number to --t-lead, because a claimed ticket is scanned rather than read."
+      },
+      "title": {
+        "displayName": "Name",
+        "purpose": "Stencil 400 at var(--t-name) (0.9375rem). Customer and shop names on the full card, the drawer and the bill sheet. In a row the name is Archivo at the same size — it is the one string on a row that must never truncate."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Archivo 400 at the document default of 15px/1.5. Item names, notes, empty-state prose."
+      },
+      "copy": {
+        "displayName": "Copy",
+        "purpose": "Archivo at var(--t-lead) (0.875rem). Prose blocks, inputs, fact lists, note text, and the board's one-sentence summary, which is prose rather than body copy."
+      },
+      "control": {
+        "displayName": "Control",
+        "purpose": "Archivo 600 at var(--t-body) (0.8125rem), the workhorse. Buttons, inputs, table cells, ticket lines."
+      },
+      "label": {
+        "displayName": "Field Label",
+        "purpose": "Archivo 700 at var(--micro) (0.6875rem), uppercase, 0.14em-0.16em. A hard floor for functional text: this screen is read at arm's length under bad light. Nothing functional goes below it, and a row's action label sits exactly on it."
+      },
+      "mono": {
+        "displayName": "Figures",
+        "purpose": "Platform monospace at 0.8125em, -0.01em, tabular numerals — the ramp's one deliberately em-relative step, so a figure shrinks with whatever it sits inside. Phone numbers, IDs, and every money column including the receipt."
+      }
+    },
+    "shadows": [
+      {
+        "name": "lift",
+        "value": "0 1px 0 oklch(17.5% 0.008 62 / 0.10), 0 2px 4px oklch(17.5% 0.008 62 / 0.06)",
+        "purpose": "Paper resting on the desk. A 1px hard contact line plus a 4px diffuse. Tickets and sheet cards only."
+      },
+      {
+        "name": "lift-up",
+        "value": "0 1px 0 oklch(17.5% 0.008 62 / 0.12), 0 6px 16px oklch(17.5% 0.008 62 / 0.13)",
+        "purpose": "Paper picked up off the desk: drawer, bill sheet, connector sheet, toast, alerting ticket."
+      },
+      {
+        "name": "rail-edge",
+        "value": "inset 0 -1px 0 var(--edge-deep), 0 1px 0 var(--rail-soft)",
+        "purpose": "The machined bottom edge (--edge-deep) and top highlight (--rail-soft) of the iron rail. A lit metal edge, not a card. The brushed grain over it is a 1px hairline repeating every 3px at --rail-grain — a material, kept over the sweep's repeating-stripes finding."
+      },
+      {
+        "name": "footer-cue",
+        "value": "0 -9px 11px -9px var(--shade-deep)",
+        "purpose": "Lets scrolling content pass under a sticky footer bar (drawer foot, bill sheet foot)."
+      },
+      {
+        "name": "focus",
+        "value": "0 0 0 2px oklch(99.3% 0.002 84), 0 0 0 4px oklch(47.5% 0.183 26 / 0.85)",
+        "purpose": "The single focus ring for the whole product: a stock gap so an india ring reads on any ground."
+      }
+    ],
+    "motion": [
+      {
+        "name": "state",
+        "value": "0.12s",
+        "purpose": "Button background, border and colour transitions."
+      },
+      {
+        "name": "nav",
+        "value": "0.14s",
+        "purpose": "Tab colour, inset underline and ground."
+      },
+      {
+        "name": "switch",
+        "value": "0.16s",
+        "purpose": "The toggle knob's slide and colour."
+      },
+      {
+        "name": "press",
+        "value": "0.06s",
+        "purpose": "Button :active translateY(1px). The button physically presses."
+      },
+      {
+        "name": "drawer-in",
+        "value": "0.22s ease-out",
+        "purpose": "Ticket drawer from translateX(14px)."
+      },
+      {
+        "name": "toast",
+        "value": "0.2s ease-out",
+        "purpose": "Arrival notice in and out."
+      },
+      {
+        "name": "stamp-press",
+        "value": "0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The rubber stamp falls, contacts hard at 38%, settles. The overshoot stays; the elastic tail does not."
+      },
+      {
+        "name": "ticket-in",
+        "value": "0.4s ease-out",
+        "purpose": "A new lot ticket arriving on the desk."
+      },
+      {
+        "name": "split-flap",
+        "value": "0.3s steps(4), 26ms per character",
+        "purpose": "The lot number flipping in, character by character."
+      },
+      {
+        "name": "perf-glow",
+        "value": "1.1s ease-out",
+        "purpose": "The punched perforation briefly glowing jute wash on arrival."
+      },
+      {
+        "name": "sync-pulse",
+        "value": "1.1s ease-in-out infinite",
+        "purpose": "The only loop in the system: the connection LED while syncing."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "0.001ms (prefers-reduced-motion: reduce)",
+        "purpose": "Collapses every animation and transition globally in tokens.css."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "tablet",
+        "value": "1180px",
+        "purpose": "Board 4 -> 2 columns. The tally stays at three cells; its labels do not clip at any width down to 720px."
+      },
+      {
+        "name": "rail-wrap",
+        "value": "900px",
+        "purpose": "The rail wraps to two rows so no tab is ever off-canvas, and the board's one sentence takes its own full-width line under the title; 2/3-col grids and the bill sheet collapse to one."
+      },
+      {
+        "name": "mobile",
+        "value": "720px",
+        "purpose": "Board to 1 column; the tally becomes a stack of three label-left/figure-right bands rather than three columns, because three labels side by side clip at 390px; drawer to 100vw."
+      },
+      {
+        "name": "bill-foot",
+        "value": "560px",
+        "purpose": "The bill sheet footer bar stacks and stretches."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Seal Button",
+      "kind": "button",
+      "refersTo": "button-seal",
+      "description": "The primary action and the only filled-jute control. Always ends in a chevron, because a seal is a press that moves the ticket forward.",
+      "html": "<button class=\"ds-btn ds-btn-seal\">Accept order<span class=\"ds-chev\"></span></button>",
+      "css": ".ds-btn-seal{background:var(--jute);border-color:var(--jute-deep);color:var(--on-jute);font-weight:700}\n.ds-btn-seal:hover{background:var(--fig-jute);border-color:var(--jute-edge)}\n.ds-btn{min-height:2.5rem;padding:0 0.9rem;display:inline-flex;align-items:center;justify-content:center;gap:0.5em;border:1.5px solid var(--rule-mid);border-radius:3px;background:var(--stock);color:var(--ink);font-family:'Archivo',system-ui,sans-serif;font-size:0.8125rem;font-weight:600;letter-spacing:0.02em;cursor:pointer;white-space:nowrap;transition:background 0.12s,border-color 0.12s,color 0.12s,transform 0.06s}\n:focus-visible{box-shadow:var(--focus);border-radius:3px}\n.ds-btn:active{transform:translateY(1px)}\n.ds-btn:disabled{opacity:0.42;cursor:not-allowed}\n.ds-btn:hover{background:#fff;border-color:var(--ink-soft)}\n.ds-chev{width:0.44em;height:0.44em;flex:none;border-top:1.6px solid currentColor;border-right:1.6px solid currentColor;transform:rotate(45deg) translate(-1px,-1px)}"
+    },
+    {
+      "name": "Ink Button",
+      "kind": "button",
+      "refersTo": "button-ink",
+      "description": "The dark commitment, used on the ink bar of the bill sheet.",
+      "html": "<button class=\"ds-btn ds-btn-ink\">Save bill</button>",
+      "css": ".ds-btn-ink{background:var(--ink);border-color:var(--ink);color:var(--stock)}\n.ds-btn-ink:hover{background:var(--ink-hover);border-color:var(--ink-hover)}\n.ds-btn{min-height:2.5rem;padding:0 0.9rem;display:inline-flex;align-items:center;justify-content:center;gap:0.5em;border:1.5px solid var(--rule-mid);border-radius:3px;background:var(--stock);color:var(--ink);font-family:'Archivo',system-ui,sans-serif;font-size:0.8125rem;font-weight:600;letter-spacing:0.02em;cursor:pointer;white-space:nowrap;transition:background 0.12s,border-color 0.12s,color 0.12s,transform 0.06s}\n:focus-visible{box-shadow:var(--focus);border-radius:3px}\n.ds-btn:active{transform:translateY(1px)}\n.ds-btn:disabled{opacity:0.42;cursor:not-allowed}\n.ds-btn:hover{background:#fff;border-color:var(--ink-soft)}\n.ds-chev{width:0.44em;height:0.44em;flex:none;border-top:1.6px solid currentColor;border-right:1.6px solid currentColor;transform:rotate(45deg) translate(-1px,-1px)}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Default for secondary actions. Hover fills with stock so the button gains weight only under the pointer.",
+      "html": "<button class=\"ds-btn ds-btn-ghost\">View order</button>",
+      "css": ".ds-btn-ghost{background:transparent;color:var(--ink-soft)}\n.ds-btn-ghost:hover{background:var(--stock);color:var(--ink)}\n.ds-btn{min-height:2.5rem;padding:0 0.9rem;display:inline-flex;align-items:center;justify-content:center;gap:0.5em;border:1.5px solid var(--rule-mid);border-radius:3px;background:var(--stock);color:var(--ink);font-family:'Archivo',system-ui,sans-serif;font-size:0.8125rem;font-weight:600;letter-spacing:0.02em;cursor:pointer;white-space:nowrap;transition:background 0.12s,border-color 0.12s,color 0.12s,transform 0.06s}\n:focus-visible{box-shadow:var(--focus);border-radius:3px}\n.ds-btn:active{transform:translateY(1px)}\n.ds-btn:disabled{opacity:0.42;cursor:not-allowed}\n.ds-btn:hover{background:#fff;border-color:var(--ink-soft)}\n.ds-chev{width:0.44em;height:0.44em;flex:none;border-top:1.6px solid currentColor;border-right:1.6px solid currentColor;transform:rotate(45deg) translate(-1px,-1px)}"
+    },
+    {
+      "name": "Danger Button",
+      "kind": "button",
+      "refersTo": "button-danger",
+      "description": "Never a filled red. Transparent with an india hairline; the hover fills with india wash.",
+      "html": "<button class=\"ds-btn ds-btn-danger\">Reject order</button>",
+      "css": ".ds-btn-danger{background:transparent;border-color:color-mix(in oklch,var(--india) 55%,transparent);color:var(--india)}\n.ds-btn-danger:hover{background:var(--india-wash);border-color:var(--india)}\n.ds-btn{min-height:2.5rem;padding:0 0.9rem;display:inline-flex;align-items:center;justify-content:center;gap:0.5em;border:1.5px solid var(--rule-mid);border-radius:3px;background:var(--stock);color:var(--ink);font-family:'Archivo',system-ui,sans-serif;font-size:0.8125rem;font-weight:600;letter-spacing:0.02em;cursor:pointer;white-space:nowrap;transition:background 0.12s,border-color 0.12s,color 0.12s,transform 0.06s}\n:focus-visible{box-shadow:var(--focus);border-radius:3px}\n.ds-btn:active{transform:translateY(1px)}\n.ds-btn:disabled{opacity:0.42;cursor:not-allowed}\n.ds-btn:hover{background:#fff;border-color:var(--ink-soft)}\n.ds-chev{width:0.44em;height:0.44em;flex:none;border-top:1.6px solid currentColor;border-right:1.6px solid currentColor;transform:rotate(45deg) translate(-1px,-1px)}"
+    },
+    {
+      "name": "Stamp Plate",
+      "kind": "custom",
+      "refersTo": "stamp-plate",
+      "description": "Status as a filled, inked plate rotated -1.5deg with a multiply-blended ink mottle and an inner bleed — never a dot, never a faint tint, and always carrying its word. NEW/ACCEPTED/PREPARING/READY are filled; COMPLETED and CANCELLED are outlined, because a state that is no longer in play should not spend an ink.",
+      "html": "<span class=\"ds-plate\" data-ink=\"new\">NEW</span>\n  <span class=\"ds-plate\" data-ink=\"accepted\">ACCEPTED</span>\n  <span class=\"ds-plate\" data-ink=\"preparing\">PREPARING</span>\n  <span class=\"ds-plate\" data-ink=\"ready\">READY</span>\n  <span class=\"ds-plate\" data-ink=\"completed\">COMPLETED</span>\n  <span class=\"ds-plate\" data-ink=\"cancelled\">CANCELLED</span>",
+      "css": ".ds-plate{position:relative;display:inline-flex;align-items:center;font-family:'Stardos Stencil','Archivo',system-ui,sans-serif;font-weight:700;font-size:0.6875rem;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;padding:0.32em 0.6em 0.28em;border-radius:2px;transform:rotate(-1.5deg);margin:0 0.15rem}\n.ds-plate[data-ink=\"new\"]{background:var(--jute);color:var(--on-jute);box-shadow:inset 0 0 0 1.5px var(--jute-deep);}\n.ds-plate[data-ink=\"accepted\"]{background:var(--ink);color:var(--stock);}\n.ds-plate[data-ink=\"preparing\"]{background:var(--verdigris);color:var(--on-verdigris);}\n.ds-plate[data-ink=\"ready\"]{background:var(--ledger);color:var(--on-ledger);}\n.ds-plate[data-ink=\"completed\"]{background:transparent;color:var(--ink-faint);box-shadow:inset 0 0 0 1.5px var(--rule-mid);}\n.ds-plate[data-ink=\"cancelled\"]{background:transparent;color:var(--india);box-shadow:inset 0 0 0 1.5px var(--india);}\n.ds-plate::after{content:\"\";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background-image:radial-gradient(var(--edge-hair) 0.5px,transparent 0.7px),radial-gradient(var(--ink-alpha-w) 0.5px,transparent 0.7px);background-size:3px 3px,4px 4px;background-position:0 0,1px 2px;mix-blend-mode:multiply;opacity:0.8;box-shadow:inset 0 0 2px var(--ink-alpha)}\n@keyframes ds-stamp-press{0%{transform:rotate(-8deg) scale(1.24);filter:blur(1.6px);opacity:0.08}38%{transform:rotate(-1deg) scale(1.06);filter:blur(0);opacity:1}62%{transform:rotate(-2deg) scale(0.985)}100%{transform:rotate(-1.5deg) scale(1)}}\n.ds-plate.is-stamped{animation:ds-stamp-press 0.3s cubic-bezier(0.16,1,0.3,1) both}"
+    },
+    {
+      "name": "Lot Ticket",
+      "kind": "card",
+      "refersTo": "lot-ticket",
+      "description": "The signature component at its full density, and the only status that gets it: NEW, where accepting the order means reading it. On the card only the customer name is a button; the lot number is a plain stencil span, a recorded gap rather than a decision. A row makes both of them controls. Past NEW the same ticket prints as the two-line Ticket Row — a ticket needs reading only while nobody has claimed it, and scanning after that.",
+      "html": "<article class=\"ds-ticket\">\n  <div class=\"ds-ticket-head\">\n    <span class=\"ds-lot\">SAM-10294</span>\n    <span class=\"ds-plate\" data-ink=\"new\">NEW</span>\n  </div>\n  <button class=\"ds-ticket-name\">Rahul Sharma</button>\n  <div class=\"ds-when\"><span class=\"mono\">2:35 PM</span><span>WhatsApp</span><span>Delivery</span><span>UPI</span></div>\n  <hr class=\"ds-rule\">\n  <ul class=\"ds-lines\">\n    <li><span class=\"ds-q\">2</span><span class=\"ds-nm\">Amul Taaza Milk</span><span class=\"ds-amt mono\">&#8377;60.00</span></li>\n    <li><span class=\"ds-q\">1</span><span class=\"ds-nm\">Britannia Good Day Bread</span><span class=\"ds-amt mono\">&#8377;40.00</span></li>\n    <li><span class=\"ds-q\">3</span><span class=\"ds-nm\">Parle-G Gold Medal Biscuits</span><span class=\"ds-amt mono\">&#8377;30.00</span></li>\n  </ul>\n  <p class=\"ds-flag\">Please send fresh items.</p>\n  <div class=\"ds-foot\"><span class=\"ds-count\">6 ITEMS</span><span class=\"ds-total\"><i>&#8377;</i><b>166</b></span></div>\n  <div class=\"ds-actions\"><button class=\"ds-btn-ghost\">View order</button><button class=\"ds-btn-seal\">Accept order<span class=\"ds-chev\"></span></button></div>\n</article>",
+      "css": ".ds-ticket{position:relative;isolation:isolate;background:var(--stock);border:1px solid var(--rule-mid);\nborder-radius:0 0 3px 3px;box-shadow:var(--lift);padding:0.85rem 0.7rem 0.6rem;display:flex;flex-direction:column;gap:0.45rem}\n.ds-ticket::before{content:\"\";position:absolute;inset:-1px -1px auto -1px;height:8px;pointer-events:none;z-index:1;\nbackground:linear-gradient(var(--rule-mid),var(--rule-mid)) 0 7px/100% 1px no-repeat,\nradial-gradient(circle at 3.6px -1px,var(--desk) 3.7px,transparent 3.9px) 0 0/9px 7px repeat-x}\n.ds-ticket::after{content:\"\";position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;pointer-events:none;\nbackground:linear-gradient(315deg,var(--stock-tray) 0 50%,transparent 50%)}\n.ds-ticket-head{display:flex;align-items:center;gap:0.5rem}\n.ds-lot{flex:1;min-width:0;font-family:'Stardos Stencil','Archivo',system-ui,sans-serif;font-weight:700;\nfont-size:1.1875rem;letter-spacing:0.055em;line-height:1.1;color:var(--ink)}\n.ds-plate{position:relative;flex:none;display:inline-flex;align-items:center;font-family:'Stardos Stencil','Archivo',system-ui,sans-serif;\nfont-weight:700;font-size:0.6875rem;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;\npadding:0.32em 0.6em 0.28em;border-radius:2px;transform:rotate(-1.5deg);background:var(--jute);color:var(--on-jute);\nbox-shadow:inset 0 0 0 1.5px var(--jute-deep)}\n.ds-ticket-name{display:block;width:100%;text-align:left;padding:0;border:0;background:none;cursor:pointer;\nfont-family:'Stardos Stencil','Archivo',system-ui,sans-serif;font-weight:400;font-size:0.9375rem;\nletter-spacing:0.04em;line-height:1.2;color:var(--ink)}\n.ds-ticket-name:hover{color:var(--jute-edge);text-decoration:underline}\n.ds-when{display:flex;flex-wrap:wrap;gap:0.3em 0.6em;font-family:'Archivo',system-ui,sans-serif;\nfont-size:0.6875rem;color:var(--ink-faint)}\n.mono{font-family:ui-monospace,'DejaVu Sans Mono','SFMono-Regular',Menlo,Consolas,monospace;font-size:0.8125em;letter-spacing:-0.01em}\n.ds-rule{border:0;border-top:1px solid var(--rule);margin:0.1rem 0}\n.ds-lines{list-style:none;padding:0;margin:0;display:grid;gap:0.2rem;font-size:0.8125rem;font-family:'Archivo',system-ui,sans-serif}\n.ds-lines li{display:flex;gap:0.4rem;align-items:baseline}\n.ds-q{font-family:'Stardos Stencil','Archivo',system-ui,sans-serif;font-weight:700;font-size:0.6875rem;\nmin-width:1.35rem;text-align:center;flex:none;background:var(--desk);border-radius:2px;padding:0.05em 0.2em}\n.ds-nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n.ds-amt{font-size:0.75rem;color:var(--ink-soft);flex:none;font-variant-numeric:tabular-nums}\n.ds-flag{font-family:'Archivo',system-ui,sans-serif;font-size:0.6875rem;font-weight:600;line-height:1.35;\npadding:0.3rem 0.4rem;border-radius:2px;background:var(--jute-wash);color:var(--note-ink);\nbox-shadow:inset 0 0 0 1px color-mix(in oklch,var(--jute-deep) 35%,transparent);margin:0}\n.ds-foot{display:flex;align-items:flex-end;gap:0.5rem;margin-top:auto}\n.ds-count{font-family:'Archivo',system-ui,sans-serif;font-size:0.6875rem;font-weight:600;letter-spacing:0.12em;\ntext-transform:uppercase;color:var(--ink-faint);padding-bottom:0.15rem}\n.ds-total{margin-left:auto;display:flex;align-items:baseline;gap:0.1em;color:var(--india)}\n.ds-total i{font-style:normal;font-family:'Archivo',system-ui,sans-serif;font-weight:700;font-size:0.8125rem}\n.ds-total b{font-family:'Stardos Stencil','Archivo',system-ui,sans-serif;font-weight:700;font-size:1.3125rem;\nline-height:1;font-variant-numeric:tabular-nums}\n.ds-actions{display:flex;gap:0.4rem;padding-top:0.15rem}\n.ds-btn-ghost{flex:1;min-width:0;min-height:2rem;padding:0 0.55rem;border:1.5px solid var(--rule-mid);border-radius:3px;\nbackground:transparent;color:var(--ink-soft);font-family:'Archivo',system-ui,sans-serif;font-weight:600;\nfont-size:0.75rem;cursor:pointer}\n.ds-btn-ghost:hover{background:var(--stock)}\n.ds-btn-seal{flex:1.6;min-height:2rem;padding:0 0.55rem;border:1px solid var(--jute-deep);border-radius:3px;\nbackground:var(--jute);color:var(--on-jute);font-family:'Archivo',system-ui,sans-serif;font-weight:700;\nfont-size:0.75rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:0.35em}\n.ds-btn-seal:hover{background:oklch(74.5% 0.175 80);border-color:var(--jute-edge)}\n.ds-chev{width:0.44em;height:0.44em;flex:none;border-top:1.6px solid currentColor;border-right:1.6px solid currentColor;\ntransform:rotate(45deg) translate(-1px,-1px)}\n@keyframes ds-ticket-in{0%{opacity:0;transform:translateY(-6px);box-shadow:0 0 0 3px var(--jute-wash),var(--lift)}100%{opacity:1;transform:none}}\n.ds-ticket.is-fresh{animation:ds-ticket-in 0.4s ease-out both}"
+    },
+    {
+      "name": "Ticket Row",
+      "kind": "card",
+      "refersTo": "ticket-row",
+      "description": "The second density, for every status past NEW: 77px instead of 341px, seven rows to a tray instead of one and a half. Line one is identity and money, line two is the customer and the action. The lot number and the name are the two buttons that open the order — there is no View order button, because in a row it would cost more room than the name it protects. A row's height is fixed by its two lines, so a third fact is a layout change, not an addition. The perforation band is the card's 8px geometry, not a shortened copy of it: the tear hairline sits at 7px inside the band, so a 6px band paints the hairline outside its own box and the row shows no tear line at all. The lot number ellipsizes rather than spilling — latent for SAM-NNNNN, but the connector mints whatever order_id the cloud sends.",
+      "html": "<article class=\"ds-row\">\n  <div class=\"ds-row-top\">\n    <span class=\"ds-plate\" data-ink=\"preparing\">PREPARING</span>\n    <button class=\"ds-row-lot\">SAM-10289</button>\n    <span class=\"ds-row-when mono\">2:23 PM</span>\n    <span class=\"ds-row-total\"><i>&#8377;</i><b>434</b></span>\n  </div>\n  <div class=\"ds-row-bot\">\n    <button class=\"ds-row-who\">Sunita Deshmukh</button>\n    <button class=\"ds-btn-seal\">Start preparing<span class=\"ds-chev\"></span></button>\n  </div>\n</article>\n<article class=\"ds-row\">\n  <div class=\"ds-row-top\">\n    <span class=\"ds-plate\" data-ink=\"completed\">COMPLETED</span>\n    <button class=\"ds-row-lot\">SAM-10282</button>\n    <span class=\"ds-row-total\"><i>&#8377;</i><b>249</b></span>\n  </div>\n  <div class=\"ds-row-bot\">\n    <button class=\"ds-row-who\">Kavita Menon</button>\n    <span class=\"ds-tag\" title=\"Billed B-00001\">B-00001</span>\n  </div>\n</article>",
+      "css": ".ds-row{position:relative;isolation:isolate;background:var(--stock);border:1px solid var(--rule-mid);\nborder-radius:0 0 3px 3px;box-shadow:var(--lift);padding:0.5rem 0.6rem 0.45rem;display:flex;flex-direction:column;gap:0.3rem}\n.ds-row::before{content:\"\";position:absolute;inset:-1px -1px auto -1px;height:8px;pointer-events:none;z-index:1;\nbackground:linear-gradient(var(--rule-mid),var(--rule-mid)) 0 7px/100% 1px no-repeat,\nradial-gradient(circle at 3.6px -1px,var(--desk) 3.7px,transparent 3.9px) 0 0/9px 7px repeat-x}\n.ds-row::after{content:\"\";position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;pointer-events:none;\nbackground:linear-gradient(315deg,var(--stock-tray) 0 50%,transparent 50%)}\n.ds-plate{position:relative;flex:none;display:inline-flex;align-items:center;font-family:'Stardos Stencil','Archivo',system-ui,sans-serif;\nfont-weight:700;font-size:0.6875rem;letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap;\npadding:0.32em 0.6em 0.28em;border-radius:2px;transform:rotate(-1.5deg)}\n.ds-plate[data-ink=\"preparing\"]{background:var(--verdigris);color:var(--on-verdigris)}\n.ds-plate[data-ink=\"completed\"]{background:transparent;color:var(--ink-faint);box-shadow:inset 0 0 0 1.5px var(--rule-mid)}\n.mono{font-family:ui-monospace,'DejaVu Sans Mono','SFMono-Regular',Menlo,Consolas,monospace;font-size:0.8125em;letter-spacing:-0.01em}\n.ds-row-top{display:flex;align-items:center;gap:0.5rem}\n.ds-row-lot{font-family:'Stardos Stencil','Archivo',system-ui,sans-serif;font-weight:700;font-size:0.875rem;\nletter-spacing:0.05em;color:var(--ink);background:none;border:0;padding:0;cursor:pointer;\ntext-align:left;white-space:nowrap;flex:0 1 auto;min-width:0;\noverflow:hidden;text-overflow:ellipsis}\n.ds-row-lot:hover{color:var(--jute-edge);text-decoration:underline}\n.ds-row-when{color:var(--ink-faint);font-size:0.6875rem;flex:none}\n.ds-row-total{margin-left:auto;display:flex;align-items:baseline;gap:0.1em;color:var(--india)}\n.ds-row-total i{font-style:normal;font-family:'Archivo',system-ui,sans-serif;font-weight:700;font-size:0.75rem}\n.ds-row-total b{font-family:'Stardos Stencil','Archivo',system-ui,sans-serif;font-weight:700;font-size:1.125rem;line-height:1}\n.ds-row-bot{display:flex;align-items:center;gap:0.5rem}\n.ds-row-who{flex:1;min-width:0;background:none;border:0;padding:0;cursor:pointer;text-align:left;font:inherit;\ncolor:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\n.ds-row-who:hover{color:var(--ink);text-decoration:underline}\n.ds-tag{display:inline-block;font-size:0.6875rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;\npadding:0.15em 0.35em;border-radius:2px;background:var(--desk);color:var(--ink-soft);white-space:nowrap}\n.ds-btn-seal{flex:none;min-height:2rem;padding:0 0.55rem;border:1px solid var(--jute-deep);border-radius:3px;\nbackground:var(--jute);color:var(--on-jute);font-family:'Archivo',system-ui,sans-serif;font-weight:700;\nfont-size:0.6875rem;letter-spacing:0.04em;cursor:pointer;display:inline-flex;align-items:center;gap:0.35em}\n.ds-btn-seal:hover{background:oklch(74.5% 0.175 80);border-color:var(--jute-edge)}\n.ds-chev{width:0.38em;height:0.38em;flex:none;border-top:1.6px solid currentColor;border-right:1.6px solid currentColor;\ntransform:rotate(45deg) translate(-1px,-1px)}\n@keyframes ds-alert{from{box-shadow:0 0 0 2px var(--jute),0 0 0 6px var(--jute-wash),var(--lift-up)}\nto{box-shadow:0 0 0 2px transparent,0 0 0 6px transparent,var(--lift)}}\n.ds-row.is-alerting{animation:ds-alert 1.8s ease-out both}\n.mono{font-size:0.6875rem}"
+    },
+    {
+      "name": "Lane Count Block",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Region-scale colour: a filled 1.5rem block carrying the tray's ticket count, tinted by tray ink. A zero count hides entirely. The NEW tray behind it is the tinted one — jute mixed into tray stock — so the tray that needs work is identifiable before anything in it is read. Nothing else may take that tint.",
+      "html": "<section class=\"ds-lane ds-lane--work\"><header class=\"ds-lane-head\"><h2>NEW</h2><span class=\"ds-lane-count\">4</span></header></section>\n<section class=\"ds-lane\"><header class=\"ds-lane-head\"><h2>READY</h2><span class=\"ds-lane-count\">2</span></header></section>",
+      "css": ".ds-lane{background:var(--stock-tray);border:1px solid var(--rule);border-radius:3px}\n.ds-lane-head{display:flex;align-items:center;gap:0.5rem;padding:0.4rem 0.6rem;\nborder-bottom:1px solid var(--rule);background:linear-gradient(var(--stock),var(--stock-tray))}\n.ds-lane-head h2{margin:0;font-family:'Stardos Stencil','Archivo',system-ui,sans-serif;font-size:0.75rem;\nfont-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink)}\n.ds-lane-count{margin-left:auto;min-width:1.5rem;height:1.5rem;padding:0 0.35rem;display:inline-grid;place-items:center;\nfont-family:'Stardos Stencil','Archivo',system-ui,sans-serif;font-weight:700;font-size:0.75rem;border-radius:2px;\nbackground:var(--ledger);color:var(--stock)}\n.ds-lane--work{background:color-mix(in oklch,var(--jute) 11%,var(--stock-tray));\nborder-color:color-mix(in oklch,var(--jute-deep) 28%,transparent)}\n.ds-lane--work .ds-lane-head h2{color:var(--jute-deep)}\n.ds-lane--work .ds-lane-count{background:var(--jute);color:var(--on-jute-deep)}"
+    },
+    {
+      "name": "Board Say",
+      "kind": "custom",
+      "refersTo": "board-say",
+      "description": "The one plain-English sentence beside the screen title. The board must explain itself before it is read, and this is the only line that does. It is prose, so it takes Archivo and not the stencil — and it is the one place on the board where a figure is deliberately restated in words. A sentence the screen speaks is a claim: settled today filters on createdAt >= todayStart, and the WhatsApp clause counts only source === 'whatsapp', with counter-sourced tickets claimed in their own clause — otherwise the prose drifts away from the figures printed beside it.",
+      "html": "<div class=\"ds-board-head\">\n  <h1 class=\"ds-board-title\">ORDER TRAYS</h1>\n  <p class=\"ds-board-say\">4 new WhatsApp orders waiting &middot; 2 new counter tickets waiting &middot; 3 being prepared &middot; 2 ready to go &middot; 3 settled today</p>\n</div>\n<div class=\"ds-board-head\">\n  <h1 class=\"ds-board-title\">ORDER TRAYS</h1>\n  <p class=\"ds-board-say\">Nothing in the trays. New WhatsApp orders appear here by themselves.</p>\n</div>",
+      "css": ".ds-board-head{display:flex;align-items:center;gap:1rem;padding:0.5rem var(--gutter);\nborder-bottom:1px solid var(--rule-hair);background:var(--desk)}\n.ds-board-title{margin:0;font-family:'Stardos Stencil','Archivo',system-ui,sans-serif;font-size:0.875rem;\nfont-weight:700;letter-spacing:0.16em;text-transform:uppercase}\n.ds-board-say{order:0;flex-basis:auto;margin:0 auto 0 0;\nfont-family:'Archivo',system-ui,sans-serif;font-size:0.8125rem;color:var(--ink-soft)}\n@media (max-width:900px){.ds-board-head{flex-wrap:wrap}\n.ds-board-say{order:3;flex-basis:100%;margin:-0.15rem 0 0}}"
+    },
+    {
+      "name": "Tally Cell",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "One of three cells on the ink strip, carrying the day's arithmetic and nothing the board already shows: Today's bills, Today's sales, Bills via WhatsApp. The strip used to carry six cells printing the queue counts the tabs and tray heads already print, so 4/3/2 appeared three times each. The figures are stock, not tinted — there is no status on the strip any more. The sales figure sets its rupee separately from the number and one step down at 0.66em, like every other total in the product; writing it as one text node sets the sign at the figure's full weight and size and breaks the pattern.",
+      "html": "<div class=\"ds-tally\">\n  <div class=\"ds-tally-cell\"><span class=\"ds-tally-n\">3</span><span class=\"ds-tally-l\">Today's bills</span></div>\n  <div class=\"ds-tally-cell\"><span class=\"ds-tally-n\"><i>&#8377;</i>702</span><span class=\"ds-tally-l\">Today's sales</span></div>\n  <div class=\"ds-tally-cell\"><span class=\"ds-tally-n\">3</span><span class=\"ds-tally-l\">Bills via WhatsApp</span></div>\n</div>",
+      "css": ".ds-tally{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:var(--ink);color:var(--stock);\nborder-block:1px solid var(--edge)}\n.ds-tally-cell{display:flex;flex-direction:column;justify-content:center;gap:0.1rem;\npadding:0.45rem var(--gutter) 0.5rem;border-left:1px solid var(--rail-hair);min-width:0}\n.ds-tally-cell:first-child{border-left:0}\n.ds-tally-n{font-family:'Stardos Stencil','Archivo',system-ui,sans-serif;font-weight:700;font-size:1.3125rem;\nline-height:1.05;letter-spacing:0.01em;display:flex;align-items:baseline;gap:0.08em}\n.ds-tally-n i{font-style:normal;font-size:0.66em;font-family:'Archivo',system-ui,sans-serif;font-weight:700}\n.ds-tally-l{font-family:'Archivo',system-ui,sans-serif;font-size:0.6875rem;font-weight:600;letter-spacing:0.16em;\ntext-transform:uppercase;color:var(--on-graphite);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}\n@media (max-width:720px){.ds-tally{grid-template-columns:minmax(0,1fr)}\n.ds-tally-cell{flex-direction:row;align-items:baseline;gap:0.6rem;padding:0.3rem var(--gutter);\nborder-left:0;border-top:1px solid var(--rail-hair)}\n.ds-tally-cell:first-child{border-top:0}\n.ds-tally-l{order:2;margin-left:auto}\n.ds-tally-n{order:1;min-width:4.5rem}}"
+    },
+    {
+      "name": "Rail Tab",
+      "kind": "nav",
+      "refersTo": "tab",
+      "description": "Section navigation on the iron rail. The current tab is underlined in jute, never a filled pill. Counts are stencil chips that invert when hot and vanish at zero.",
+      "html": "<button class=\"ds-tab is-current\">New orders<span class=\"ds-tab-count\">4</span></button>",
+      "css": ".ds-rail{display:flex;align-items:stretch;gap:1rem;height:3.5rem;padding-inline:1.25rem;\nbackground:repeating-linear-gradient(90deg,var(--rail-grain) 0 1px,transparent 1px 3px),\nlinear-gradient(var(--rail-wash),transparent 40%),var(--rail);color:var(--rail-ink);\nbox-shadow:inset 0 -1px 0 var(--edge-deep),0 1px 0 var(--rail-soft)}\n.ds-tab{position:relative;flex:none;border:0;background:transparent;cursor:pointer;display:inline-flex;\nalign-items:center;gap:0.4em;padding:0 0.7rem;font-family:'Archivo',system-ui,sans-serif;font-size:0.75rem;\nfont-weight:600;letter-spacing:0.03em;color:var(--rail-ghost);white-space:nowrap;\nbox-shadow:inset 0 -3px 0 transparent;transition:color 0.14s,box-shadow 0.14s,background 0.14s}\n.ds-tab:hover{color:var(--rail-ink);background:var(--rail-wash)}\n.ds-tab.is-current{color:var(--stock);box-shadow:inset 0 -3px 0 var(--jute)}\n:focus-visible{box-shadow:var(--focus);border-radius:3px}\n.ds-tab-count{min-width:1.35rem;height:1.35rem;padding:0 0.3rem;display:inline-grid;place-items:center;\nfont-family:'Stardos Stencil','Archivo',system-ui,sans-serif;font-weight:700;font-size:0.6875rem;\ncolor:var(--rail);background:var(--rail-ghost);border-radius:2px}\n.ds-tab.is-current .ds-tab-count{background:var(--jute);color:var(--rail)}\n.ds-tab-count:empty,.ds-tab-count[data-count=\"0\"]{display:none}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Tabular numerals, a 1.5px control-edge border — an alpha rule measures 2:1 and fails the 3:1 floor a boundary has to clear — and a micro uppercase field label. Focus shifts the border to ink and takes the product focus ring.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-l\">DISCOUNT &#8377;</span><input class=\"ds-input\" value=\"0\"></label>",
+      "css": ".ds-field{display:grid;gap:0.2rem}\n.ds-field-l{font-family:'Archivo',system-ui,sans-serif;font-size:0.6875rem;font-weight:700;\nletter-spacing:0.14em;text-transform:uppercase;color:var(--ink-faint)}\n.ds-input{width:100%;min-height:2.25rem;padding:0.35rem 0.5rem;border:1.5px solid var(--control-edge);\nborder-radius:3px;background:var(--stock);color:var(--ink);font-family:'Archivo',system-ui,sans-serif;\nfont-size:0.875rem;font-weight:600;line-height:1.2;font-variant-numeric:tabular-nums}\n.ds-input:focus-visible{border-color:var(--ink);outline:none}\n:focus-visible{box-shadow:var(--focus);border-radius:3px}"
+    },
+    {
+      "name": "Switch",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "A machined toggle: a desk track with a --mark knob that slides in jute-deep onto a jute-wash track when on. Its boundary takes --control-edge rather than a rule, because a track's edge is what makes it findable. The knob is a shape, so it wears a mark rather than a lightened ink.",
+      "html": "<label class=\"ds-toggle\"><span class=\"ds-toggle-text\"><b>Demo mode</b><small>Simulates a new order every 25 seconds</small></span><input type=\"checkbox\" class=\"sr\"><span class=\"ds-switch\"></span></label>",
+      "css": ".sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}\n.ds-toggle{display:flex;align-items:center;gap:0.7rem;cursor:pointer;padding:0.55rem 0;\nborder-bottom:1px solid var(--rule-hair)}\n.ds-toggle-text{flex:1;font-family:'Archivo',system-ui,sans-serif}\n.ds-toggle-text b{display:block;font-size:0.875rem;font-weight:600}\n.ds-toggle-text small{color:var(--ink-faint);font-size:0.75rem}\n.ds-switch{flex:none;width:2.75rem;height:1.5rem;border-radius:999px;background:var(--desk);\nborder:1.5px solid var(--control-edge);position:relative}\n.ds-switch::after{content:\"\";position:absolute;top:2px;left:2px;width:1.125rem;height:1.125rem;border-radius:50%;\nbackground:var(--mark);transition:transform 0.16s,background 0.16s}\n.ds-toggle input:checked + .ds-switch{background:var(--jute-wash);border-color:var(--jute-deep)}\n.ds-toggle input:checked + .ds-switch::after{transform:translateX(1.2rem);background:var(--jute-deep)}\n.ds-toggle input:focus-visible + .ds-switch{outline:none;box-shadow:var(--focus)}"
+    },
+    {
+      "name": "Note Flag",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "A ticket note or a warning. The wash is the signal, with a 1px ink ring instead of a heavier border.",
+      "html": "<p class=\"ds-flag\">Please send fresh items.</p>",
+      "css": ".ds-flag{display:flex;align-items:flex-start;gap:0.35rem;font-family:'Archivo',system-ui,sans-serif;\nfont-size:var(--t-body);font-weight:600;line-height:1.35;padding:0.3rem 0.4rem;border-radius:var(--radius-cut);\nbackground:var(--india-wash);box-shadow:inset 0 0 0 1px color-mix(in oklch,var(--india) 40%,transparent);color:var(--alert-deep)}\n.ds-flag.is-note{background:var(--jute-wash);box-shadow:inset 0 0 0 1px color-mix(in oklch,var(--jute-deep) 35%,transparent);color:var(--note-ink)}"
+    },
+    {
+      "name": "CSS-Drawn Icons",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Every icon in this system is drawn from borders, gradients and clip-paths — including the warning triangle, whose bar is knocked out in the flag's own ground so it reads on red stock. No icon font, no glyph character, no <img>, no fetched SVG.",
+      "html": "<span class=\"ds-chev\"></span><span class=\"ds-print\"></span><span class=\"ds-mute\"><i></i></span><span class=\"ds-warn\"></span>",
+      "css": ".ds-chev{width:0.44em;height:0.44em;flex:none;border-top:1.6px solid currentColor;\nborder-right:1.6px solid currentColor;transform:rotate(45deg) translate(-1px,-1px);vertical-align:middle}\n.ds-print{width:0.95em;height:0.95em;flex:none;position:relative;border:1.5px solid currentColor;border-radius:1px;\nvertical-align:middle}\n.ds-print::before{content:\"\";position:absolute;top:2px;left:2px;right:2px;height:2px;background:currentColor}\n.ds-print::after{content:\"\";position:absolute;bottom:-1.5px;left:2px;width:6px;height:4px;background:currentColor;\nbox-shadow:0 0 0 1.5px var(--jute)}\n.ds-mute{width:0.9rem;height:0.9rem;display:inline-block;position:relative;\nborder-left:1.6px solid var(--rail-ink);border-radius:0 var(--radius-shell) var(--radius-shell) 0}\n.ds-mute::before{content:\"\";position:absolute;left:3px;top:3px;width:5px;height:6px;background:var(--rail-ink);\nclip-path:polygon(0 0,60% 0,100% 50%,60% 100%,0 100%)}\n.ds-mute::after{content:\"\";position:absolute;left:8px;top:4px;width:7px;height:1.6px;background:var(--jute);\ntransform:rotate(-45deg);transform-origin:left center}\n.ds-warn{width:0.86em;height:0.8em;display:inline-block;position:relative;color:var(--alert-deep);\nalign-self:flex-start;margin-top:0.12em}\n.ds-warn::before{content:\"\";position:absolute;inset:0;border-left:0.43em solid transparent;\nborder-right:0.43em solid transparent;border-bottom:0.78em solid currentColor}\n.ds-warn::after{content:\"\";position:absolute;left:50%;bottom:0.15em;width:0.11em;height:0.26em;\nmargin-left:-0.055em;background:var(--india-wash)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Lot Ticket",
+    "overview": "This is a ticket printer's desk at the wholesale mandi, not a task manager. An incoming WhatsApp order is a numbered lot ticket already printed on white stock — customer, lines, GST slab, total — and the only thing the operator ever does to it is press a rubber stamp. That premise decides everything else: the screen is four trays on a counter, not four columns of cards; the rails and dividers are torn paper edges and hairline rules, with a single small contact shadow kept for paper lying on the counter or lifted off it; and the loudest thing on any surface is a lot number wearing a stencil face, because on a real ticket the number is what you read.\n\nThe material is drawn, not imported. Ticket edges are punched with a repeating radial-gradient that leaves a tear hairline under the notches. The bottom-right corner of every ticket is torn off with a single 315deg gradient. Stamp plates carry an ink mottle — two multiply-blended dot layers over an inner bleed — so the status colour looks pressed rather than filled. The rail wears a brushed grain from a 1px hairline every 3px at 2.2% white. Every mark in the product is drawn the same way — the chevron, the speaker cone, the printer, the warning triangle. None of this is decoration for its own sake: each device is the cheapest CSS that produces the material it names, and the world refuses anything it cannot justify that way.\n\nIt is a dense screen. The operator is standing at a fixed terminal, reading at arm's length under bad light, and every tap costs a stamp. So the build is quiet by default and loud only where the operator must act: colour commits at **region scale** — a filled lane-count block, a filled stamp plate, the ink tally strip — and never as scattered accents. Nothing functional goes below `--micro` (0.6875rem / 11px), a floor that exists because the room is bright and the reader is not.\n\nDensity is a decision, not a constant. A ticket needs **reading** only while nobody has claimed it; after that it needs **scanning**. So the board runs two densities — a full card in the NEW tray, a two-line row everywhere else — and the whole layout is budgeted around that. On the target viewport (1366×768) the chrome before the first ticket is 199px, a live card is 283px, and a row is 77px, which is what turns a tray from one and a half visible tickets into seven.",
+    "keyCharacteristics": [
+      "Paper-and-ink neutrals plus exactly one accent (jute gold); a five-ink stamp tray for state.",
+      "Two ticket densities on one board: the full card where a decision is made, a two-line row everywhere past it.",
+      "Stencil (Stardos Stencil) for every number that must be read at a glance; Archivo for everything else.",
+      "Status is a filled, rotated, mottled stamp plate with a text label — never a dot, never a tint.",
+      "Hairline rules and drawn material; one small contact shadow, reserved for paper at rest or lifted.",
+      "One perforation geometry at two densities: an 8px band, a 1px tear hairline at 7px, notches on a 9px period. A height change to one density is a regression in the other.",
+      "The rupee sign always sets separately from the figure, one step down, never inside the numeral.",
+      "A sentence the screen speaks is a claim, and gets the same filtering as the numbers it summarises.",
+      "Every size, radius and colour is a named token in `tokens.css`; the sweep found nothing left as a literal.",
+      "Integer paise and `en-IN` grouping on every rupee figure, in every surface including the receipt.",
+      "A number appears once on a surface; the strip carries only what the board does not already show."
+    ],
+    "rules": [
+      {
+        "name": "The Region-Scale Rule",
+        "body": "Colour commits in blocks, never in accents. A filled stamp plate, a filled",
+        "section": "colors"
+      },
+      {
+        "name": "The Tinted-Tray Rule",
+        "body": "The tray that needs work is the tinted one, and the tint means nothing else.",
+        "section": "colors"
+      },
+      {
+        "name": "The One-Number Rule",
+        "body": "A figure appears once on a surface, as a figure. If two regions would print the",
+        "section": "colors"
+      },
+      {
+        "name": "The Stamp-Tray Rule",
+        "body": "The five tray inks (jute, verdigris, ledger, india, graphite) each mean one",
+        "section": "colors"
+      },
+      {
+        "name": "The Derived-Ink Rule",
+        "body": "Anything that sits on a stamp colour is named for the colour it sits on —",
+        "section": "colors"
+      },
+      {
+        "name": "The Mark-Not-Muted Rule",
+        "body": "A muted colour in this system is a `--mark`, never a lightened `--ink`.",
+        "section": "colors"
+      },
+      {
+        "name": "The Control-Edge Rule",
+        "body": "A rule draws a line between things; a control's edge is the thing that says",
+        "section": "colors"
+      },
+      {
+        "name": "The Settled-Tag Rule",
+        "body": "`Settled` confirms a finished sale and nothing else. It is emitted only when",
+        "section": "colors"
+      },
+      {
+        "name": "The One-Label Rule",
+        "body": "Every status carries a text label in addition to its colour — the stamp plate",
+        "section": "colors"
+      },
+      {
+        "name": "The Ramp Rule",
+        "body": "Every `font-size` in the screen build names a token on the ramp above. The ramp was",
+        "section": "typography"
+      },
+      {
+        "name": "The Rupee-Sets-Separately Rule",
+        "body": "In this system the rupee sign always sets separately from the",
+        "section": "typography"
+      },
+      {
+        "name": "The Micro Floor Rule",
+        "body": "`--micro: 0.6875rem` (11px) is a hard floor for any functional text. It was",
+        "section": "typography"
+      },
+      {
+        "name": "The Stencil-Numbers Rule",
+        "body": "If a value is a number the operator scans for — a count, a total, a lot",
+        "section": "typography"
+      },
+      {
+        "name": "The Hairline Rule",
+        "body": "Depth is a hairline rule or one of the two lifts — nothing else. Do not add a",
+        "section": "elevation & depth"
+      },
+      {
+        "name": "The One-Shell Rule",
+        "body": "`--radius-shell` (8px) has exactly one user: the mute speaker cone. It is a",
+        "section": "shapes"
+      },
+      {
+        "name": "The One-Perforation Rule",
+        "body": "The perforation is one geometry at two densities. `.ticket::before` is",
+        "section": "shapes"
+      },
+      {
+        "name": "The Board-Speaks-First Rule",
+        "body": "The board must explain itself before it is read, and this sentence is",
+        "section": "components"
+      },
+      {
+        "name": "The Sentence-Is-A-Claim Rule",
+        "body": "A sentence the screen speaks is a claim, and a claim gets the same",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "**Do** press a status change as a filled stamp plate with a text label, and let `.is-stamped` play.",
+      "**Do** commit colour at region scale — a filled plate, a filled count block, the tally strip.",
+      "**Do** keep every rupee figure in integer paise and format it with `en-IN` grouping; keep tabular numerals on every money column.",
+      "**Do** separate layers with a hairline rule, `--lift` for paper at rest, or `--lift-up` for paper picked up.",
+      "**Do** keep functional text at or above `--micro` (0.6875rem / 11px), and take every other size from the ramp (`--t-label` → `--t-figure`) rather than writing one out.",
+      "**Do** draw an icon in CSS from borders, gradients or clip-paths, the way `.chev`, `.icon-mute`, `.icon-print` and `.warn-glyph` already are.",
+      "**Do** name a colour that sits on a stamp ink `--on-<that ink>`, and reach for an existing token before writing a literal. Where an alpha wash is needed off a tray ink, write `color-mix(in oklch, var(--india) 40%, transparent)` so the tray stays the source.",
+      "**Do** keep `--print-ink`, `--print-ground` and `--mask-solid` as device colours when you touch the receipt, set the tray's base with `--tray-*-type`, and size every line inside `#receipt` in `em` against that base so the receipt scales with the tray.",
+      "**Do** let the stencil stack fall through to Archivo for `₹`; that is the shipped result.",
+      "**Do** set the rupee sign separately from the figure and one step down, in every money run — `'<i>₹</i>' + figure`, never `SV.money()` as one text node.",
+      "**Do** write a sentence's numbers with the same predicates as the figures it summarises, and drop a clause rather than print a `0`.",
+      "**Do** hide a zero count entirely rather than printing a `0`.",
+      "**Do** pick the density from the status, not from the available space: the full card in NEW, the two-line row everywhere past it. Past NEW a ticket is claimed and needs scanning, not reading.",
+      "**Do** keep the lot number and the customer name as the two controls that open the order, at both densities. Those are the facts an operator recognises a ticket by.",
+      "**Do** keep a row's action label whole and shrink the button before the name — `.row-bot .btn` runs `--micro` so that the name never has to.",
+      "**Do** print a figure once on a surface. If a second region would show it, cut one of them.",
+      "**Do** guard a row's identifiers against the data the connector can actually send: `.row-lot` ellipsizes rather than spilling, and a check that only sees `SAM-NNNNN` has not seen the guard.",
+      "**Do** tint the work tray and nothing else; the tint answers \"where do I work\" and no other question.",
+      "**Do** let the board say what it is in one plain sentence, and update it whenever the board renders."
+    ],
+    "donts": [
+      "**Don't** render status as a bare dot or a faint tint — the filled plate and its word are the system.",
+      "**Don't** add a lighter ink to make something read as muted, and don't reintroduce a fourth step below `--ink-faint`. Muted is a `--mark` or `--mark-quiet` when it is a shape, `--ink-faint` when it is a word, and there is no third option.",
+      "**Don't** use a second accent. The tray inks each mean one state; India red is money and refusal only.",
+      "**Don't** introduce hex, rgb or hsl alongside the OKLCH source in `tokens.css`.",
+      "**Don't** add a shadow that is not `--lift` or `--lift-up`, and don't add a glow or a blur to a resting surface.",
+      "**Don't** put functional text below `--micro`, and don't \"fix\" the stencil stack's missing rupee by removing Archivo from it.",
+      "**Don't** set `₹` inside a numeral run, and don't add a second relative font size where a ramp step will do.",
+      "**Don't** treat a passing contrast audit as proof about a state no seeded ticket reaches — render the state, then measure it.",
+      "**Don't** change the perforation band's height at one density without changing the other, and don't move a tray's hairline to re-tint it. The ink mix is the whole of the tint.",
+      "**Don't** border an interactive control with an alpha rule; `--control-edge` is what clears 3:1.",
+      "**Don't** hand-write an `oklch` next to a tray ink, and don't invent a sixth ink — extend the tray instead.",
+      "**Don't** retint `--print-ink`, `--print-ground` or `--mask-solid` toward the screen palette, and don't reuse a palette ink as a mask key.",
+      "**Don't** reach for `--radius-shell` outside the mute speaker cone, or for `--radius-pill` outside the rail's metal fittings.",
+      "**Don't** put a dotless kanban, a blue accent, a grey card or a soft elevation shadow on this surface — that is the category default the world exists to refuse.",
+      "**Don't** make ACCEPTED its own tray or count. It rides in PREPARING under a dashed sub-band so the tray count, the tab chip and the lane head cannot disagree.",
+      "**Don't** re-key an order into a bill. The bill inherits its lines; products are never re-entered.",
+      "**Don't** put a third fact on a row. A row's height is fixed by its two lines, so adding one is a layout change: decide what comes off before deciding what goes on.",
+      "**Don't** restore a queue count to the tally strip. The tabs and the tray heads already print it, and the strip is for the day's arithmetic only.",
+      "**Don't** give a row a \"View order\" button. The lot number and the name already open the order, and the button would cost more room than the name it protects.",
+      "**Don't** truncate the customer name to protect a button, a tag, or a timestamp. Verify row content by measuring `scrollWidth` against `clientWidth`; a screenshot will not show it.",
+      "**Don't** let a lot number spill past the ticket onto the tray behind it."
+    ]
+  }
+}

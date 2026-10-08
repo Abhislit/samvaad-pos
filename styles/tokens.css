@@ -1,0 +1,190 @@
+/* SAMVAAD POS — paper, ink and the stamp tray.
+   The lot ticket: white stock on a counter, stencil numbers, stamped status. */
+
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 75% 125%;
+  font-display: swap;
+  src: url("../assets/fonts/archivo-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* The rupee sign (U+20B9) lives in this subset; Stardos Stencil has no rupee
+   glyph, so the stencil stack falls through to Archivo for it. */
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 75% 125%;
+  font-display: swap;
+  src: url("../assets/fonts/archivo-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Stardos Stencil";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/stardos-stencil-400.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Stardos Stencil";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/stardos-stencil-700.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light;
+
+  /* Stock — the desk, the tickets, the ledger sheet */
+  --desk:          oklch(92.6% 0.006 84);
+  --stock:         oklch(99.3% 0.002 84);
+  --stock-tray:    oklch(96.4% 0.005 84);
+  --stock-ledger:  oklch(97.6% 0.008 82);
+
+  /* Ink */
+  --ink:           oklch(17.5% 0.008 62);
+  --ink-soft:      oklch(39% 0.009 62);
+  --ink-faint:     oklch(54% 0.007 62);
+  --rule:          oklch(17.5% 0.008 62 / 0.16);
+  --rule-mid:      oklch(17.5% 0.008 62 / 0.30);
+  --rule-hair:     oklch(17.5% 0.008 62 / 0.08);
+
+  /* Iron rail — the machined counter edge */
+  --rail:          oklch(20.5% 0.009 250);
+  --rail-line:     oklch(100% 0 0 / 0.10);
+  --rail-ink:      oklch(93% 0.005 84);
+  --rail-ghost:    oklch(72% 0.008 84);
+
+  /* The stamp tray */
+  --jute:          oklch(80.5% 0.163 82);
+  --jute-deep:     oklch(52% 0.140 74);
+  --jute-wash:     oklch(94% 0.058 84);
+  --verdigris:     oklch(51% 0.086 188);
+  --verdigris-wash:oklch(93% 0.032 190);
+  --ledger:        oklch(45% 0.104 148);
+  --ledger-wash:   oklch(94% 0.038 150);
+  --india:         oklch(47.5% 0.183 26);
+  --india-wash:    oklch(94.5% 0.036 27);
+  --graphite:      oklch(44% 0.006 250);
+
+  /* Type */
+  --ui: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --stencil: "Stardos Stencil", "Archivo", system-ui, sans-serif;
+  --mono: ui-monospace, "DejaVu Sans Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* Metrics */
+  --rail-h: 3.5rem;
+  --gutter: clamp(0.75rem, 1.4vw, 1.5rem);
+  --radius: 3px;
+  --tap: 2.5rem;
+  /* Floor for any functional text in this product. A counter is read at
+     arm's length under bad light; nothing functional goes under it. */
+  --micro: 0.6875rem;
+
+  /* ── Type ramp ───────────────────────────────────────────────────────
+     Every size in the product is one of these. 0.8125rem is the workhorse
+     body/control size; 0.75rem is the uppercase label size; the rest are
+     reserved for figures that must be read across a room. */
+  --t-body:   0.8125rem;   /* 13px  controls, table cells, lines          */
+  --t-label:  0.75rem;     /* 12px  uppercase labels, nav, buttons      */
+  --t-lead:   0.875rem;    /* 14px  body copy, inputs, facts            */
+  --t-name:   0.9375rem;   /* 15px  ticket customer name                 */
+  --t-screen: 1rem;        /* 16px  screen titles                        */
+  --t-mark:   1.125rem;    /* 18px  wordmark, bill number, ledger head   */
+  --t-lot:    1.1875rem;   /* 19px  the lot number on a ticket           */
+  --t-total:  1.3125rem;   /* 21px  the stencil total on a ticket        */
+  --t-figure: 1.5rem;      /* 24px  stat numerals, grand total           */
+
+  /* ── Radius scale ────────────────────────────────────────────────────
+     Paper and stamps have almost no rounding. 1px is a printed edge, 2px is a
+     cut corner, 3px is the sheet itself, and a pill is only for controls that
+     are genuinely rounded. */
+  --radius-hair: 1px;
+  --radius-cut:  2px;
+  --radius-pill: 999px;
+  --radius-shell: 8px;   /* the one rounded-off shape: the mute speaker cone */
+
+  /* ── Inks derived from the tray ──────────────────────────────────────
+     Text and washes that sit ON a stamp colour, so they travel with it. */
+  --on-jute:       oklch(26% 0.035 70);
+  --on-jute-deep:  oklch(24% 0.03 70);
+  --on-verdigris:  oklch(98% 0.012 190);
+  --on-ledger:     oklch(98% 0.012 150);
+  --on-graphite:   oklch(84% 0.006 84);
+  --jute-edge:     oklch(45% 0.13 70);
+
+  /* The one ledger accent left: a figure that sits on a stamp colour takes
+     its own step of that ink, never a tint of it. */
+  --fig-jute:      oklch(74.5% 0.175 80);
+  --alert:         oklch(38% 0.14 26);
+  --alert-ink:     oklch(34% 0.12 26);
+  --note-ink:      oklch(38% 0.07 74);
+
+  /* Offsets onto a wash, for text and borders that sit on red or jute stock. */
+  --alert-deep:   oklch(38% 0.13 26);
+  --note-deep:    oklch(38% 0.09 74);
+  --whatsapp:     oklch(62% 0.13 152);
+  --rail-hair:    oklch(100% 0 0 / 0.11);
+  --rail-soft:    oklch(100% 0 0 / 0.06);
+  --rail-lift:    oklch(100% 0 0 / 0.12);
+  --rail-wash:    oklch(100% 0 0 / 0.05);
+  --alert-led:    oklch(97% 0.02 26);
+  --shade-deep:   oklch(17.5% 0.008 62 / 0.28);
+  --desk-lit:     oklch(94.6% 0.006 84);
+
+  /* ── Edge shades and screen-space alphas ─────────────────────────────
+     Darks on dark (the rail's machined edges) and the scrim. */
+  --rail-grain:  oklch(100% 0 0 / 0.022);
+  --edge-hair:   oklch(0% 0 0 / 0.22);
+  --edge-soft:   oklch(0% 0 0 / 0.30);
+  --edge:        oklch(0% 0 0 / 0.40);
+  --edge-deep:   oklch(0% 0 0 / 0.50);
+  --ink-alpha:   oklch(0% 0 0 / 0.16);
+  --ink-alpha-w: oklch(100% 0 0 / 0.16);
+  --ink-hover:   oklch(25% 0.01 62);
+  --calm-ink:    oklch(30% 0.07 190);
+  --scrim:       oklch(17.5% 0.008 62 / 0.42);
+
+  /* Marks that are not text: status dots, the switch knob. Kept separate from
+     --ink-faint so nothing below AA is ever rendered as words. */
+  --control-edge:  oklch(48% 0.008 62);
+  --mark:          oklch(64% 0.006 62);
+  --mark-quiet:    oklch(70% 0.006 62);
+
+  /* ── Printer inks ───────────────────────────────────────────────────
+     A thermal head draws one black on white. These are device colours, not
+     screen inks, and must never be retinted to the palette. */
+  --print-ink: #000;
+  --mask-solid: #000;    /* a CSS mask key: must be opaque, never a palette ink */
+  /* Thermal trays are measured in device pixels, not on the screen ramp. */
+  --tray-58-type: 10px;
+  --tray-80-type: 11px;
+  --tray-a4-type: 13px;
+  --print-ground: #fff;
+
+  --focus: 0 0 0 2px var(--stock), 0 0 0 4px oklch(47.5% 0.183 26 / 0.85);
+
+  /* One lift for paper on a desk: a hard contact shadow, not a glow. */
+  --lift: 0 1px 0 oklch(17.5% 0.008 62 / 0.10), 0 2px 4px oklch(17.5% 0.008 62 / 0.06);
+  --lift-up: 0 1px 0 oklch(17.5% 0.008 62 / 0.12), 0 6px 16px oklch(17.5% 0.008 62 / 0.13);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
