@@ -110,7 +110,7 @@ const AUDIT = `
       await p.selectOption('#counter-pick', { index: 2 }); await p.click('[data-counter-add]');
     }],
     ['resolve', async (p) => {
-      await p.click('.lane[data-lane="new"] .ticket:has(.flag-warn) [data-ticket-open]');
+      await p.click('.lane[data-lane="new"] .ticket:has(.row-flag) [data-ticket-open]');
     }]
   ];
   const all = [];

@@ -318,6 +318,9 @@ window.SV = window.SV || {};
         return;
       }
 
+      const drop = pick('[data-ticket-drop]');
+      if (drop) return SV.board.toggleDrop(drop.dataset.ticketDrop);
+
       const advanceBtn = pick('[data-ticket-advance]');
       if (advanceBtn) return advance(advanceBtn.dataset.ticketAdvance);
 
@@ -458,6 +461,7 @@ window.SV = window.SV || {};
 
     document.addEventListener('keydown', (ev) => {
       if (ev.key === 'Escape') {
+        if (SV.board.anyDropped()) return SV.board.collapseAll();
         if (!$('#conn-sheet').hidden) {
           $('#conn-sheet').hidden = true;
           $('#conn-pill').setAttribute('aria-expanded', 'false');

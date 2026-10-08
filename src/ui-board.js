@@ -13,6 +13,11 @@ window.SV = window.SV || {};
 
   const DELIVERY = { delivery: 'Delivery', pickup: 'Pickup' };
 
+  /* Which rows are dropped open. View state, not order state: it is never
+     persisted, because the next person to open the board should see the same
+     queue the last one did. */
+  const dropped = new Set();
+
   /* Every mark in this world is drawn, not typed. */
   const WARN = '<span class="warn-glyph" aria-hidden="true"></span>';
 
@@ -30,97 +35,45 @@ window.SV = window.SV || {};
     };
   }
 
-  function meta(order) {
-    const e = SV.esc;
-    return '<span class="mono">' + e(SV.clock(order.createdAt)) + '</span>' +
-      '<span>' + (order.source === 'whatsapp' ? 'WhatsApp' : 'Counter') + '</span>' +
-      '<span>' + e(DELIVERY[order.delivery]) + '</span>' +
-      '<span>' + e(order.payment) + '</span>';
-  }
-
-  function actions(order, extraClass) {
-    const e = SV.esc;
-    const out = [];
-    out.push('<button class="btn btn-ghost btn-sm' + (extraClass || '') + '" data-ticket-open="' + e(order.id) + '">View order</button>');
-    if (order.billNo) {
-      out.push('<span class="tag">Billed ' + e(order.billNo) + '</span>');
-    } else if (SV.orders.canBill(order)) {
-      out.push('<button class="btn btn-ghost btn-sm" data-bill-open="' + e(order.id) + '">Bill</button>');
-    }
-    const next = SV.orders.nextAction(order);
-    if (next) {
-      out.push('<button class="btn btn-seal btn-sm" data-ticket-advance="' + e(order.id) + '">' +
-        e(next.label) + '<span class="chev" aria-hidden="true"></span></button>');
-    }
-    return out.join('');
-  }
-
-  /* The full ticket, for the one tray that needs a decision made about it.
-     Everything an operator needs to accept an order without opening it. */
-  function ticketCard(order, fresh) {
+  /* One ticket, one shape, every tray. At a counter you scan for who, how much
+     and how old, then open one. The items, the notes and the address are one
+     click away in the drawer, which is where a shopkeeper reads them properly
+     anyway. Only the not-found flag earns face space on the row, because it is
+     work waiting to be done rather than information to be read. */
+  function ticketHTML(order, opts) {
+    const o = opts || {};
     const e = SV.esc;
     const m = money(order);
-    const unmatched = order.items.filter((l) => l.unmatched);
-    const shown = order.items.slice(0, 3);
-    const hidden = order.items.length - shown.length;
-
-    return (
-      '<article class="ticket ticket--live' + (fresh ? ' is-fresh' : '') + '" data-ticket="' + e(order.id) +
-        '" data-status="' + e(order.status) + '" tabindex="-1">' +
-        '<div class="ticket-head">' +
-          '<span class="ticket-lot">' + (fresh ? SV.flipHTML(order.id) : e(order.id)) + '</span>' +
-          plate(order) +
-        '</div>' +
-        '<button class="ticket-name" data-ticket-open="' + e(order.id) + '">' + e(order.customerName) + '</button>' +
-        '<div class="ticket-when">' + meta(order) + '</div>' +
-        (unmatched.length
-          ? '<p class="flag flag-warn">' + WARN + '<span class="flag-bad">' + unmatched.length + ' product' +
-            (unmatched.length > 1 ? 's' : '') + ' not found</span></p>'
-          : '') +
-        '<hr class="rule">' +
-        '<ul class="ticket-lines">' +
-          shown.map((l) =>
-            '<li><span class="q">' + SV.qty(l.qty) + '</span>' +
-            '<span class="nm">' + e(l.name) + '</span>' +
-            '<span class="amt">' + e(SV.money(l.qty * l.unitPrice)) + '</span></li>'
-          ).join('') +
-          (hidden > 0 ? '<li class="more">+' + hidden + ' more item' + (hidden > 1 ? 's' : '') + '</li>' : '') +
-        '</ul>' +
-        (order.notes ? '<p class="flag flag-note">' + e(order.notes) + '</p>' : '') +
-        '<div class="ticket-foot">' +
-          '<span class="ticket-count">' + m.units + ' item' + (m.units === 1 ? '' : 's') + '</span>' +
-          '<span class="ticket-total"><i>₹</i><b>' + SV.amount(m.grand) + '</b></span>' +
-        '</div>' +
-        '<div class="ticket-actions">' + actions(order) + '</div>' +
-      '</article>'
-    );
-  }
-
-  /* Everything past NEW is already claimed, so it needs to be scanned, not
-     read. Two lines: what it is, what to press. */
-  function ticketRow(order) {
-    const e = SV.esc;
-    const m = money(order);
+    const unmatched = order.items.filter((l) => l.unmatched).length;
     const next = SV.orders.nextAction(order);
+    const fresh = !!o.fresh;
+    const open = dropped.has(order.id);
+
+    const flag = unmatched
+      ? '<span class="row-flag" title="This order has ' + unmatched + ' item' + (unmatched > 1 ? 's' : '') +
+        ' SAMVAAD could not price. Open the order to match ' + (unmatched > 1 ? 'them' : 'it') + '.">' +
+        WARN + '<span class="sr">' + unmatched + ' product' + (unmatched > 1 ? 's' : '') + ' not found</span></span>'
+      : '';
+
     return (
-      '<article class="ticket ticket--row" data-ticket="' + e(order.id) +
+      '<article class="ticket ticket--row' + (fresh ? ' is-fresh' : '') + '" data-ticket="' + e(order.id) +
         '" data-status="' + e(order.status) + '" tabindex="-1">' +
         '<div class="row-top">' +
           plate(order) +
-          '<button class="row-lot" data-ticket-open="' + e(order.id) + '">' + e(order.id) + '</button>' +
-          /* A settled ticket's time is history; its lot number and bill are not. */
-          (order.status === 'completed'
-            ? ''
-            : '<span class="row-when mono">' + e(SV.clock(order.createdAt)) + '</span>') +
+          '<button class="row-lot" data-ticket-open="' + e(order.id) + '">' +
+            (fresh ? SV.flipHTML(order.id) : e(order.id)) + '</button>' +
           '<span class="row-total"><i>₹</i><b>' + SV.amount(m.grand) + '</b></span>' +
+          '<button class="caret" data-ticket-drop="' + e(order.id) + '"' +
+            ' aria-expanded="' + (open ? 'true' : 'false') + '"' +
+            ' aria-label="' + (open ? 'Hide' : 'Show') + ' what ' + e(order.id) + ' contains">' +
+            '<span class="caret-mark" aria-hidden="true"></span></button>' +
         '</div>' +
         '<div class="row-bot">' +
           '<button class="row-who" data-ticket-open="' + e(order.id) + '">' +
-            e(order.customerName) +
+            '<span class="nm">' + e(order.customerName) + '</span>' +
+            '<span class="row-when mono">' + e(SV.clock(order.createdAt)) + '</span>' +
           '</button>' +
-/* A row carries the state change, and the bill beside it once the
-             order is billable. An accepted ticket can be billed, and reaching
-             that bill should not cost a detour through the detail view. */
+          flag +
           (order.billNo
             ? '<span class="tag" title="Billed ' + e(order.billNo) + '">' + e(order.billNo) + '</span>'
             : (SV.orders.canBill(order)
@@ -132,14 +85,38 @@ window.SV = window.SV || {};
                 : /* Completed and unbilled: the bill is the only action left. */
                   '<button class="btn btn-seal btn-sm" data-bill-open="' + e(order.id) + '">Generate bill</button>')) +
         '</div>' +
+        (open ? detailHTML(order) : '') +
       '</article>'
     );
   }
 
-  function ticketHTML(order, opts) {
-    return order.status === 'new'
-      ? ticketCard(order, (opts || {}).fresh)
-      : ticketRow(order);
+  /* What the row is hiding: the lines, the note, and where it is going. Enough
+     to accept an order without opening it, which is what the full card used to
+     carry for every ticket in every tray. */
+  function detailHTML(order) {
+    const e = SV.esc;
+    const items = order.items;
+    return '<div class="row-detail">' +
+      '<ul class="row-lines">' +
+        items.map((l) =>
+          '<li' + (l.unmatched ? ' class="is-unmatched"' : '') + '>' +
+            '<span class="q">' + SV.qty(l.qty) + '</span>' +
+            '<span class="nm">' + (l.unmatched ? WARN : '') + e(l.name) + '</span>' +
+            '<span class="amt">' + e(SV.money(l.qty * l.unitPrice)) + '</span>' +
+          '</li>'
+        ).join('') +
+      '</ul>' +
+      '<div class="row-facts">' +
+        '<span>Received ' + e(SV.clock(order.createdAt)) + '</span>' +
+        '<span>' + (order.source === 'whatsapp' ? 'Ordered on WhatsApp' : 'Counter sale') + '</span>' +
+        '<span>' + e(DELIVERY[order.delivery]) + '</span>' +
+        '<span>' + e(order.payment) + '</span>' +
+        '<span>' + order.items.length + ' line' + (order.items.length === 1 ? '' : 's') + '</span>' +
+        (order.address && order.delivery === 'delivery'
+          ? '<span class="row-addr">' + e(order.address) + '</span>' : '') +
+      '</div>' +
+      (order.notes ? '<p class="flag flag-note">' + e(order.notes) + '</p>' : '') +
+    '</div>';
   }
 
   function laneHTML(lane, orders, freshId) {
@@ -173,6 +150,18 @@ window.SV = window.SV || {};
   SV.board = {
     LANES,
     ticketHTML,
+
+    /* Drop one row open or shut. Re-renders the board so the row keeps its
+       place in the tray rather than jumping. */
+    toggleDrop(id) {
+      if (dropped.has(id)) dropped.delete(id);
+      else dropped.add(id);
+      SV.board.render(SV.$('#board'), {});
+    },
+
+    anyDropped() { return dropped.size > 0; },
+
+    collapseAll() { dropped.clear(); SV.board.render(SV.$('#board'), {}); },
 
     render(root, opts) {
       const o = opts || {};
