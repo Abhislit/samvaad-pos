@@ -151,17 +151,45 @@ window.SV = window.SV || {};
     LANES,
     ticketHTML,
 
-    /* Drop one row open or shut. Re-renders the board so the row keeps its
-       place in the tray rather than jumping. */
+    /* Drop one row open or shut, in place. Re-rendering the board here rebuilt
+       every row in every tray: the button you had just pressed was destroyed,
+       focus fell to the body, and each fresh caret replayed its rotation — which
+       is what read as a blink. One row changes, so only one row changes. */
     toggleDrop(id) {
-      if (dropped.has(id)) dropped.delete(id);
-      else dropped.add(id);
-      SV.board.render(SV.$('#board'), {});
+      const row = SV.$('.ticket[data-ticket="' + id + '"]');
+      if (!row) return;
+      const caret = row.querySelector('.caret');
+      const detail = row.querySelector('.row-detail');
+
+      if (detail) {
+        detail.remove();
+        dropped.delete(id);
+        row.classList.remove('is-dropped');
+        caret.setAttribute('aria-expanded', 'false');
+        caret.setAttribute('aria-label', 'Show what ' + id + ' contains');
+        return;
+      }
+
+      const order = SV.orders.byId(id);
+      if (!order) return;
+      row.querySelector('.row-bot').after(SV.el(detailHTML(order)));
+      dropped.add(id);
+      row.classList.add('is-dropped');
+      caret.setAttribute('aria-expanded', 'true');
+      caret.setAttribute('aria-label', 'Hide what ' + id + ' contains');
     },
 
     anyDropped() { return dropped.size > 0; },
 
-    collapseAll() { dropped.clear(); SV.board.render(SV.$('#board'), {}); },
+    collapseAll() {
+      dropped.clear();
+      SV.$$('.row-detail').forEach((n) => n.remove());
+      SV.$$('.caret[aria-expanded="true"]').forEach((c) => {
+        c.setAttribute('aria-expanded', 'false');
+        c.setAttribute('aria-label', 'Show what ' + c.dataset.ticketDrop + ' contains');
+      });
+      SV.$$('.ticket.is-dropped').forEach((r) => r.classList.remove('is-dropped'));
+    },
 
     render(root, opts) {
       const o = opts || {};
