@@ -121,15 +121,55 @@ window.SV = window.SV || {};
 
   const calm = () => window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  /* How long the hot head takes to cross a ticket. Read from the same token the
-     keyframe is timed by, so retiming the animation cannot leave the print
-     sequence waiting on a number that no longer exists. */
-  const headMs = () => parseFloat(
-    getComputedStyle(document.documentElement).getPropertyValue('--head-ms')) || 460;
+  /* How long a motion takes, read from the same token its keyframe is timed by,
+     so retiming an animation cannot leave the sequence waiting on a number
+     that no longer exists. */
+  const ms = (name, fallback) => parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue(name)) || fallback;
+
+  /* ── approve ─────────────────────────────────────────────────────────
+     The stamp comes down, contacts, and leaves APPROVED on the ticket. The
+     plate is painted by the press, not swapped in under it: the arm is placed
+     exactly where the plate will end up, so the press appears to leave it. */
+  function approve(id) {
+    const order = SV.orders.byId(id);
+    if (!order || !SV.orders.canApprove(order)) return;
+
+    if (calm().matches) {
+      SV.orders.approve(id);
+      SV.notifications.say('Approved · ' + order.id + ' · ' + order.customerName);
+      return;
+    }
+
+    const row = SV.$('.row[data-order="' + id + '"]');
+    const plate = row && row.querySelector('.plate');
+    SV.board.approving(id);
+    render();
+
+    const landed = SV.$('.row[data-order="' + id + '"]');
+    const target = landed && landed.querySelector('.plate');
+    if (landed && target) {
+      const box = target.getBoundingClientRect();
+      const host = landed.getBoundingClientRect();
+      const arm = SV.el('<span class="stamp-arm">Approve</span>');
+      arm.style.left = (box.left - host.left) + 'px';
+      arm.style.top = (box.top - host.top) + 'px';
+      landed.appendChild(arm);
+      arm.addEventListener('animationend', (ev) => {
+        if (ev.target !== arm || ev.animationName !== 'stamp') return;
+        SV.orders.approve(id);
+        arm.remove();
+        SV.notifications.say('Approved · ' + order.id + ' · ' + order.customerName);
+      }, { once: true });
+    } else {
+      /* No row to stamp on: do the work rather than leave the order stuck. */
+      setTimeout(() => SV.orders.approve(id), ms('--stamp-ms', 520));
+    }
+  }
 
   function printOrder(id) {
     const order = SV.orders.byId(id);
-    if (!order || order.printedAt) return;
+    if (!order || order.printedAt || !order.approvedAt) return;
 
     /* The print happens in two beats. First the head runs down the ticket
        while it is still unprinted; then the ticket is marked printed and
@@ -144,7 +184,7 @@ window.SV = window.SV || {};
 
     SV.board.printing(id);
     render();
-    setTimeout(() => finishPrint(id), headMs());
+    setTimeout(() => finishPrint(id), ms('--head-ms', 460));
   }
 
   function finishPrint(id) {
@@ -177,6 +217,9 @@ window.SV = window.SV || {};
 
     document.addEventListener('click', (ev) => {
       const pick = (sel) => ev.target.closest(sel);
+
+      const approveBtn = pick('[data-approve]');
+      if (approveBtn) return approve(approveBtn.dataset.approve);
 
       const print = pick('[data-print]');
       if (print) return printOrder(print.dataset.print);

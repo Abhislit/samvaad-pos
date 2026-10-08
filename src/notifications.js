@@ -46,6 +46,33 @@ window.SV = window.SV || {};
 
     play() { if (SV.notifications.enabled()) chirp(); },
 
+    /* The platen. A thermal head does not beep, it ratchets — a dry buzz that
+       rises as the paper accelerates. Played once, over the feed. */
+    ratchet() {
+      if (!SV.notifications.enabled()) return;
+      try {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        ctx = ctx || new AC();
+        if (ctx.state === 'suspended') ctx.resume();
+        const t0 = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const buzz = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, t0);
+        osc.frequency.exponentialRampToValueAtTime(260, t0 + 0.34);
+        buzz.gain.setValueAtTime(0.0001, t0);
+        buzz.gain.exponentialRampToValueAtTime(0.028, t0 + 0.03);
+        buzz.gain.setValueAtTime(0.028, t0 + 0.30);
+        buzz.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.42);
+        osc.connect(buzz).connect(ctx.destination);
+        osc.start(t0);
+        osc.stop(t0 + 0.45);
+      } catch (_) {
+        /* silence is an acceptable failure */
+      }
+    },
+
     /* An arrival, then a print. Both are one line, both go away. */
     say(message, tone) {
       const host = SV.$('#toaster');

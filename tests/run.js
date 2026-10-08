@@ -35,6 +35,9 @@ const sandbox = {
   clearInterval: noop
 };
 sandbox.window = sandbox;
+/* A browser global the modules legitimately read: the motion durations live in
+   CSS tokens. Empty here, so the documented fallbacks in script are used. */
+sandbox.getComputedStyle = () => ({ getPropertyValue: () => '' });
 sandbox.globalThis = sandbox;
 sandbox.document = {
   addEventListener: noop,

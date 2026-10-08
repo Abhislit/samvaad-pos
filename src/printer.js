@@ -26,6 +26,11 @@ window.SV = window.SV || {};
     pageRule.textContent = '@page { size: ' + paper.mm + ' auto; margin: 3mm; }';
   }
 
+  /* Read from the same tokens the stylesheet is timed by. */
+  const ms = (name) => parseFloat(getComputedStyle(document.documentElement).getPropertyValue(name)) || 0;
+  const FEED_MS = ms('--feed-ms') || 1150;
+  const TEAR_MS = ms('--tear-ms') || 260;
+
   function receiptHTML(order) {
     const e = SV.esc;
     const s = SV.store.state;
@@ -80,6 +85,62 @@ window.SV = window.SV || {};
 
   SV.printer = {
     PAPERS,
+
+    /* ── the feed ──────────────────────────────────────────────────────
+       The paper comes out of the machine, travels at a platen's constant
+       rate, then tears on its perforation. Resolves when the sheet is off,
+       so the caller can hand the real receipt to the printer afterwards. */
+    feed(order) {
+      const outlet = SV.$('#outlet');
+      const paper = SV.$('#paper');
+      const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      paper.innerHTML = receiptHTML(order);
+      outlet.hidden = false;
+      outlet.classList.remove('is-tearing');
+
+      /* Height has to be measured: the sheet is as long as the order is. */
+      paper.style.height = 'auto';
+      const full = paper.scrollHeight;
+      paper.style.height = '';
+      paper.style.setProperty('--feed-h', full + 'px');
+
+      /* Forced reflow so the feed animation starts from zero every time. */
+      void paper.offsetHeight;
+      if (calm.matches) {
+        /* Reduced motion keeps the outcome: the sheet is shown finished, held
+           long enough to read, and then goes. No movement. */
+        paper.style.height = full + 'px';
+        return new Promise((done) => setTimeout(() => {
+          outlet.hidden = true;
+          paper.style.height = '';
+          done();
+        }, 1400));
+      }
+
+      return new Promise((done) => {
+        setTimeout(() => outlet.classList.add('is-tearing'), FEED_MS + 120);
+        setTimeout(() => {
+          outlet.hidden = true;
+          paper.style.height = '';
+          paper.classList.remove('is-tearing');
+          outlet.classList.remove('is-tearing');
+          done();
+        }, FEED_MS + 120 + TEAR_MS);
+      });
+    },
+
+    /* The real thing leaves the machine. Same paper, no animation. */
+    async handTo(order) {
+      if (SV.connector.isAvailable()) {
+        const result = await SV.connector.sendToLocalConnector(order);
+        if (result.sent) return result;
+      }
+      SV.$('#receipt').innerHTML = receiptHTML(order);
+      pageStyle();
+      window.print();
+      return { printed: true };
+    },
     /* Exposed so the self-check can assert on the paper without printing it. */
     receiptFor: receiptHTML,
 
@@ -91,19 +152,13 @@ window.SV = window.SV || {};
     /* Honest by construction: the browser prints, and it says so on the paper. */
     modeLabel() { return SV.connector.isAvailable() ? 'Local connector' : 'Browser print'; },
 
-    /* Print one order. The receipt target stays hidden for the whole session:
-       print.css's #receipt is an ID selector, so it outranks the [hidden]
-       attribute rule and reveals the receipt for print only. */
+    /* Feed the sheet out of the machine, then print it. */
     async print(order) {
-      if (SV.connector.isAvailable()) {
-        const result = await SV.connector.sendToLocalConnector(order);
-        if (result.sent) return result;
-      }
       const { totals } = SV.orders.money(order);
-      SV.$('#receipt').innerHTML = receiptHTML(order);
-      pageStyle();
-      window.print();
-      return { printed: true, total: totals.grand };
-    }
+      SV.notifications.ratchet();
+      await SV.printer.feed(order);
+      const result = await SV.printer.handTo(order);
+      return Object.assign({ total: totals.grand }, result);
+    },
   };
 })(window.SV);

@@ -46,7 +46,12 @@
 
 <aside class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-labelledby="drawer-title"></aside>
 
-<!-- the receipt is the only thing that ever reaches paper -->
+<!-- the machine. Paper comes out of here, and this is the only thing that
+     ever reaches paper. -->
+<div class="outlet" id="outlet" hidden aria-hidden="true">
+  <div class="outlet-mouth"></div>
+  <div class="paper" id="paper"></div>
+</div>
 <div class="receipt" id="receipt" hidden aria-hidden="true"></div>
 
 <div class="toaster" id="toaster" role="status" aria-live="polite"></div>

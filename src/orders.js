@@ -41,6 +41,7 @@ window.SV = window.SV || {};
         delivery: payload.delivery_type === 'pickup' ? 'pickup' : 'delivery',
         notes: payload.notes || '',
         createdAt: payload.createdAt || Date.now(),
+        approvedAt: null,
         printedAt: null,
         billNo: null
       };
@@ -56,6 +57,24 @@ window.SV = window.SV || {};
 
     printed(order) { return !!order.printedAt; },
 
+    /* Two beats, not a lifecycle: an order is approved, then it prints.
+       Nothing else is a state, because nothing else changes what the machine
+       does. */
+    approved(order) { return !!order.approvedAt; },
+    canApprove(order) { return !order.approvedAt && !order.printedAt; },
+    canPrint(order) { return !!order.approvedAt && !order.printedAt; },
+
+    approve(id) {
+      let done = null;
+      SV.store.update((s) => {
+        const order = s.orders.find((o) => o.id === id);
+        if (!order || order.approvedAt || order.printedAt) return;
+        order.approvedAt = Date.now();
+        done = order;
+      });
+      return done;
+    },
+
     /* Printing is the end of the road for a ticket. The bill number is kept on
        the order rather than in a separate book, because nothing else needs it. */
     markPrinted(id) {
@@ -63,6 +82,7 @@ window.SV = window.SV || {};
       SV.store.update((s) => {
         const order = s.orders.find((o) => o.id === id);
         if (!order || order.printedAt) return;
+        order.approvedAt = order.approvedAt || Date.now();
         billSeq += 1;
         order.billNo = 'B-' + String(s.billSeq + billSeq).padStart(5, '0');
         order.printedAt = Date.now();

@@ -71,6 +71,8 @@
   --jute:          oklch(80.5% 0.163 82);
   --jute-deep:     oklch(52% 0.140 74);
   --jute-wash:     oklch(94% 0.058 84);
+  --ledger:        oklch(45% 0.104 148);
+  --ledger-deep:   oklch(34% 0.086 148);
   --india:         oklch(47.5% 0.183 26);
   --india-wash:    oklch(94.5% 0.036 27);
   --graphite:      oklch(44% 0.006 250);
@@ -81,6 +83,8 @@
   --mono: ui-monospace, "DejaVu Sans Mono", "SFMono-Regular", Menlo, Consolas, monospace;
 
   /* Metrics */
+  /* The rail is the machine's top; the paper leaves its underside. */
+  --rail-h: 3.5rem;
   --gutter: clamp(0.75rem, 1.6vw, 1.6rem);
   --radius: 3px;
   --radius-cut: 2px;
@@ -120,6 +124,15 @@
      this token and the print sequence waits on it, so it is read from here
      rather than restated in script. */
   --head-ms: 460ms;
+
+  /* How long the machine takes to feed a receipt out. The paper travels at a
+     constant rate, the way a platen does — only the tear decelerates. */
+  --feed-ms: 1150ms;
+  --tear-ms: 260ms;
+
+  /* The approve stamp falls, contacts hard, and settles. A rubber stamp
+     overshoots because it is a physical thing, so the curve does too. */
+  --stamp-ms: 520ms;
 
   /* Stock fibre. Laid lines across, chain lines down — the grain is what stops
      a ticket reading as a white rectangle. */

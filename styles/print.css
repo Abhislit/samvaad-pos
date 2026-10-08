@@ -1,5 +1,9 @@
-/* Print: the receipt alone. Chrome is removed, not merely hidden by opacity,
-   and the paper width follows the tray the shop actually loaded. */
+/* Print: the receipt alone. The chrome is removed from the tree, not merely
+   faded out, and the paper width follows the tray the shop actually loaded.
+
+   The receipt's ink lives in app.css, shared with the outlet — the same paper
+   has to be legible on screen while the machine is feeding it. Only the page
+   setup and the tray belong here. */
 
 @media print {
   html, body {
@@ -10,6 +14,9 @@
     display: none !important;
   }
 
+  /* The outlet is a screen object. On paper the receipt is the whole truth. */
+  #outlet { display: none !important; }
+
   #receipt {
     display: block !important;
     position: static;
@@ -18,30 +25,13 @@
     padding: 3mm 2mm;
     color: var(--print-ink);
     background: var(--print-ground);
-    font: 400 var(--tray-80-type)/1.35 var(--mono);
-    letter-spacing: 0;
+    font-size: var(--tray-80-type);
   }
   body[data-paper="58"] #receipt { width: 54mm; font-size: var(--tray-58-type); }
   body[data-paper="80"] #receipt { width: 72mm; font-size: var(--tray-80-type); }
   body[data-paper="a4"] #receipt { width: 150mm; font-size: var(--tray-a4-type); }
 
-  /* Scoped to the tray, so a 54 mm roll does not print A4-sized headings. */
-  #receipt .r-shop { font: 700 1.18em/1.25 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
-  #receipt .r-sub { font-size: 0.92em; margin-top: 1px; }
-  #receipt .r-meta { font-size: 0.92em; }
-  #receipt .r-hr { border-top: 1px dashed var(--print-ink); margin: 3px 0; }
-  #receipt .r-hr.dbl { border-top: 1px solid var(--print-ink); border-bottom: 1px solid var(--print-ink); height: 2px; }
-  #receipt .r-row { display: flex; justify-content: space-between; gap: 6px; }
-  #receipt .r-item { margin-top: 3px; }
-  #receipt .r-item .n { display: flex; justify-content: space-between; gap: 6px; }
-  #receipt .r-item .d { font-size: 0.92em; }
-  #receipt .r-total { font: 700 1.18em/1.3 var(--mono); }
-  #receipt .r-label { text-transform: uppercase; letter-spacing: 0.06em; }
-  #receipt .r-foot { margin-top: 5px; font-size: 0.92em; text-align: center; }
-  #receipt .r-src { margin-top: 4px; border: 1px solid var(--print-ink); padding: 2px 4px; font-size: 0.92em; text-align: center; }
-  #receipt .r-cut { margin-top: 6px; border-top: 1px dashed var(--print-ink); }
-
-  /* the printer cannot draw a shadow or a gradient */
+  /* A thermal head cannot draw a shadow or a gradient. */
   * { box-shadow: none !important; text-shadow: none !important; }
   *::before, *::after { background-image: none !important; }
 }

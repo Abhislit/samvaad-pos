@@ -102,7 +102,22 @@ const AUDIT = `
     ['board', async () => {}],
     ['drawer', async (p) => { await p.click('.row [data-open]'); }],
     ['dropped', async (p) => { await p.click('.row [data-drop]'); }],
-    ['after-print', async (p) => { await p.click('.row [data-print]'); }],
+    ['after-approve', async (p) => {
+      await p.click('.row [data-approve]');
+      await p.waitForTimeout(900);
+    }],
+    ['after-print', async (p) => {
+      await p.click('.row [data-approve]');
+      await p.waitForTimeout(900);
+      await p.click('.row [data-print]');
+      await p.waitForTimeout(2600);
+    }],
+    ['outlet', async (p) => {
+      await p.click('.row [data-approve]');
+      await p.waitForTimeout(900);
+      await p.click('.row [data-print]');
+      await p.waitForTimeout(800);
+    }],
     ['mobile-nav', async (p) => { await p.click('#demo-btn'); }]
   ];
   const all = [];

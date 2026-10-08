@@ -36,17 +36,21 @@ Deployed copy: **https://abhislit.github.io/samvaad-pos/**
 ## The flow
 
 ```
-Customer → WhatsApp → SAMVAAD cloud → this screen → Print bill → receipt
+Customer → WhatsApp → SAMVAAD cloud → this screen → Approve → Print bill → receipt
 ```
 
-That is the whole product. There is no second screen to learn and no state to keep in step.
+That is the whole product. Two beats, no second screen to learn, and no state to keep in step
+beyond whether a ticket has been stamped yet.
 
-1. An order arrives on WhatsApp and **appears in the list by itself** — no refresh, no retyping.
-2. Read it: who, how much, how many items, what time.
-3. Press **Print bill**.
+1. An order arrives on WhatsApp and **comes out of the slot** in the top rail — no refresh, no
+   retyping. Read it: who, how much, how many items, what time.
+2. **Approve.** A stamp comes down onto the ticket and leaves `APPROVED` in its ink.
+3. **Print bill.** A hot head crosses the ticket, then the receipt feeds out of the machine,
+   line by line, and tears off. That sheet is then printed at the tray the shop has loaded —
+   58 mm, 80 mm or A4.
 
-Printed orders sink below the waiting ones and stop offering the button. The day's count
-and total sit in one line at the bottom.
+Printed orders sink below the waiting ones and stop offering a button. The day's count and
+total sit in one line at the bottom.
 
 Order source is stamped on every ticket, and an item SAMVAAD could not price is flagged
 **⚠** on the row, because a bill that silently costs nothing is worse than no bill.
@@ -66,6 +70,7 @@ through — that is where the cloud socket will attach.
 | `S` | simulate one order |
 | `M` | mute / unmute the arrival chirp |
 | `Esc` | close the order, or collapse an open row |
+| sound | the arrival chirp, and the platen's ratchet while the receipt feeds |
 | the caret on a row | drop the line items open without leaving the list |
 
 Orders persist in `localStorage`. Clearing site data resets the demo shop.

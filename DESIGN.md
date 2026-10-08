@@ -86,6 +86,32 @@ sitting closer to the platen than the tickets already on the counter.
 the stock only. It is what stops a ticket reading as a white rectangle, at 1.4% and 0.9% ink —
 visible at arm's length under bad light, invisible as a pattern on screen.
 
+## The machine
+
+Two focal sequences, and both come from this product rather than from a library.
+
+**The feed.** The rail is the machine's top; paper leaves its underside. A receipt emerges from
+behind a dark lip at `72mm` — the same millimetres the tray prints — because a preview narrower
+than the paper wraps where the real receipt does not, and a preview that lies is worse than no
+preview. It travels at a **platen's constant rate**: `linear`, because paper does not accelerate
+through a roller. Then it tears on a perforation, like the tickets do, and the mouth ticks once.
+
+**The stamp.** Approve is a rubber stamp, not a label swap. The arm is placed exactly where the
+plate will end up, so the press appears to *leave* `APPROVED` in its ink rather than reveal a
+label that was there all along. It falls from above and small, contacts hard, and overshoots —
+because it is a physical object. The ticket flinches once at contact.
+
+**The head.** Printing runs the head down the face of the ticket while it is still unprinted,
+then the ticket travels down into the printed pile. Printing first and animating second would
+show the press landing on a ticket that has already left.
+
+Every duration lives in a token — `--feed-ms`, `--tear-ms`, `--stamp-ms`, `--head-ms` — which
+times the keyframe and is read back by the sequence that waits on it, so the two cannot drift.
+
+Nothing loops and nothing autoplays. The feed runs once per explicit print. Reduced motion
+keeps the outcome and drops the travel: the stamp leaves its plate, the sheet is shown finished
+and held long enough to read, and no animation runs at all.
+
 ## Components
 
 - **The rail.** Dark, brushed with a 1px/3px repeating hairline at 2.2% alpha. Wordmark
@@ -93,7 +119,10 @@ visible at arm's length under bad light, invisible as a pattern on screen.
   waiting, so that number exists in exactly one place.
 - **The lot ticket.** Perforated head (repeating radial notches with a tear hairline), stamp
   plate, stencil lot number, clock, stencil total, customer name and item count, and one
-  arrow-led **Print bill**. `PRINTED` plates are outlined, not filled.
+  arrow-led action: **Approve**, then **Print bill**. `APPROVED` is filled ledger green,
+  `PRINTED` is outlined, never filled — spent ink does not shout.
+- **The outlet.** Fixed, centred under the rail, `pointer-events: none` so it can never trap a
+  click. It is removed from the print tree: on paper the receipt is the whole truth.
 - **The row never shrinks.** The name's flex item is `1 0 auto`, so when the actions stop
   fitting it is they that wrap — a half-printed customer name is worse than a taller ticket.
   Verified unclipped at 360, 390, 414, 720, 768, 1024, 1280, 1366, 1440 and 1920.

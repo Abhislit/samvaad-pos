@@ -19,6 +19,7 @@ window.SV = window.SV || {};
      the element leaves the DOM on the next render. */
   let arrivingId = null;
   let printingId = null;
+  let approvingId = null;
 
   const calm = () => window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -91,12 +92,14 @@ window.SV = window.SV || {};
     const units = order.items.reduce((s, l) => s + l.qty, 0);
     const unmatched = order.items.filter((l) => l.unmatched).length;
     const printed = SV.orders.printed(order);
+    const approved = SV.orders.approved(order);
     const open = dropped.has(order.id);
 
     /* The two one-shot machine states. Rendered into the ticket that is
        mid-motion and into nothing else. */
     const arriving = !printed && !calm().matches && order.id === arrivingId;
-    const printing = !printed && !calm().matches && order.id === printingId;
+    const printing = approved && !printed && !calm().matches && order.id === printingId;
+    const approving = SV.orders.canApprove(order) && !calm().matches && order.id === approvingId;
 
     const flag = unmatched
       ? '<span class="row-flag" title="SAMVAAD could not price ' + unmatched + ' item' +
@@ -106,10 +109,13 @@ window.SV = window.SV || {};
 
     return '<article class="row' + (printed ? ' is-printed' : '') + (open ? ' is-dropped' : '') +
       (arriving ? ' is-arriving' : '') + (printing ? ' is-printing' : '') +
+      (approving ? ' is-approving' : '') +
       '" data-order="' + e(order.id) + '" tabindex="-1">' +
       '<div class="row-top">' +
-        '<span class="plate" data-ink="' + (printed ? 'printed' : order.source) + '">' +
-          e(printed ? 'Printed' : order.source === 'whatsapp' ? 'WhatsApp' : 'Counter') + '</span>' +
+        '<span class="plate" data-ink="' +
+          (printed ? 'printed' : approved ? 'approved' : order.source) + '">' +
+          e(printed ? 'Printed' : approved ? 'Approved' : order.source === 'whatsapp' ? 'WhatsApp' : 'Counter') +
+        '</span>' +
         '<button class="row-lot" data-open="' + e(order.id) + '">' + e(order.id) + '</button>' +
         '<span class="row-when mono">' + e(SV.clock(order.createdAt)) + '</span>' +
         '<span class="row-total"><i>₹</i><b>' + SV.amount(totals.grand) + '</b></span>' +
@@ -125,8 +131,11 @@ window.SV = window.SV || {};
         flag +
         (printed
           ? '<span class="row-when row-was">' + e(SV.clock(order.printedAt)) + '</span>'
-          : '<button class="btn btn-seal btn-sm" data-print="' + e(order.id) + '">' +
-            'Print bill<span class="chev" aria-hidden="true"></span></button>') +
+          : approved
+            ? '<button class="btn btn-seal btn-sm" data-print="' + e(order.id) + '">' +
+              'Print bill<span class="chev" aria-hidden="true"></span></button>'
+            : '<button class="btn btn-seal btn-sm" data-approve="' + e(order.id) + '">' +
+              'Approve<span class="chev" aria-hidden="true"></span></button>') +
       '</div>' +
       (open ? detailHTML(order) : '') +
     '</article>';
@@ -165,6 +174,7 @@ window.SV = window.SV || {};
          clears them; nothing here survives to be read twice. */
       arrivingId = null;
       printingId = null;
+      approvingId = null;
     },
 
     /* The arrival is the machine's own movement: a new ticket comes out of
@@ -174,6 +184,9 @@ window.SV = window.SV || {};
     /* The print runs before the ticket leaves the board, so the paper warms
        and the head passes while it is still the operator's to look at. */
     printing(id) { printingId = id; },
+
+    /* The stamp comes down onto the ticket and leaves its plate behind. */
+    approving(id) { approvingId = id; },
 
     /* Drop one row open or shut, in place. Rebuilding the list here would
        destroy the button you just pressed and drop focus to the body. */
