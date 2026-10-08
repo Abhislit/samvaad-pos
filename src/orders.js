@@ -1,154 +1,102 @@
-/* SAMVAAD POS — order intake and the order lifecycle.
-   receiveNewOrder(payload) is the one door every order comes through, whether
-   it arrived from the cloud, from the demo timer, or from the console. */
+/* SAMVAAD POS — order intake.
+   One job: an order arrives from WhatsApp, and it can be printed. There is no
+   lifecycle to walk and nowhere to type the order a second time. */
 window.SV = window.SV || {};
 
 (function (SV) {
   'use strict';
 
-  const FLOW = ['new', 'accepted', 'preparing', 'ready', 'completed'];
+  let billSeq = 0;
 
-  const SPEC = {
-    new:       { label: 'New',       plate: 'new',       action: 'Accept order',  to: 'accepted' },
-    accepted:  { label: 'Accepted',  plate: 'accepted',  action: 'Start preparing', to: 'preparing' },
-    preparing: { label: 'Preparing', plate: 'preparing', action: 'Mark ready',     to: 'ready' },
-    ready:     { label: 'Ready',     plate: 'ready',     action: 'Complete order', to: 'completed' },
-    completed: { label: 'Completed', plate: 'completed', action: null,            to: null },
-    cancelled: { label: 'Cancelled', plate: 'cancelled', action: null,            to: null }
+  /* A number arrives from the cloud as +919876543210 and is read off a bill as
+     +91 98765 43210. Two helpers, because that is all the customer record
+     ever needed to be. */
+  const digits = (v) => String(v || '').replace(/\D/g, '');
+  SV.customersPhone = digits;
+  SV.customersPrettyPhone = (raw) => {
+    const d = digits(raw);
+    if (d.length === 10) return '+91 ' + d.slice(0, 5) + ' ' + d.slice(5);
+    if (d.length === 12) return '+91 ' + d.slice(2, 7) + ' ' + d.slice(7);
+    return raw || '';
   };
 
-  /* NEW | ACCEPTED | PREPARING | READY | COMPLETED | CANCELLED */
-  const KEYS = Object.keys(SPEC);
-
   SV.orders = {
-    FLOW,
-    KEYS,
-    SPEC,
-    LABEL: KEYS.reduce((m, k) => ((m[k] = SPEC[k].label), m), {}),
-
-    all() { return SV.store.state.orders; },
-
-    byId(id) { return SV.store.state.orders.find((o) => o.id === id) || null; },
-
-    /* ACCEPTED has no tray of its own: it is a PREPARING ticket the operator
-       has claimed but not started. It rides in that tray under its own band,
-       so the tray count and the badge always agree. */
-    laneOf(order) {
-      if (order.status === 'cancelled') return 'completed';
-      if (order.status === 'accepted') return 'preparing';
-      return order.status;
-    },
-
-    /* Billable from ACCEPTED onward. The brief's rule: never bill a ticket the
-       operator has not taken responsibility for. */
-    canBill(order) { return order.status !== 'new' && order.status !== 'cancelled'; },
-
-    nextAction(order) {
-      const spec = SPEC[order.status];
-      return spec && spec.action ? { label: spec.action, to: spec.to } : null;
-    },
-
-    /* ── the door ───────────────────────────────────────────────────── */
+    /* ── the door ─────────────────────────────────────────────────────
+       Every order comes through here, whatever delivered it: the demo
+       button, the demo timer, or the cloud socket that will replace both. */
     receiveNewOrder(payload) {
       const state = SV.store.state;
       const id = payload.order_id || 'SAM-' + (10000 + state.seq + 1);
       if (SV.orders.byId(id)) return SV.orders.byId(id);
 
-      const customer = SV.customers.findOrCreate({
-        name: payload.customer && payload.customer.name,
-        phone: payload.customer && payload.customer.phone,
-        address: payload.address
-      });
-
-      const items = (payload.items || []).map((item) => SV.products.resolve(item));
-
+      const phone = SV.customersPhone(payload.customer && payload.customer.phone);
       const order = {
         id,
         source: payload.source === 'counter' ? 'counter' : 'whatsapp',
-        customerId: customer.id,
-        customerName: customer.name,
-        phone: customer.phone,
-        address: payload.address || customer.address || '',
-        items,
+        customerName: (payload.customer && payload.customer.name) || 'WhatsApp customer',
+        phone: phone ? SV.customersPrettyPhone(phone) : '',
+        address: payload.address || '',
+        items: (payload.items || []).map((item) => SV.products.resolve(item)),
         payment: payload.payment_method || 'Cash',
         delivery: payload.delivery_type === 'pickup' ? 'pickup' : 'delivery',
         notes: payload.notes || '',
-        status: 'new',
         createdAt: payload.createdAt || Date.now(),
-        discount: 0,
-        billNo: null,
-        history: [{ status: 'new', at: payload.createdAt || Date.now() }]
+        printedAt: null,
+        billNo: null
       };
 
-      const fresh = { id, seq: state.seq + 1 };
-      SV.store.update((s) => {
-        s.orders.unshift(order);
-        s.seq = fresh.seq;
-        /* Offline work is held, never dropped, and stamped when it syncs. */
-        if (!s.conn.online) s.conn.queue.push({ kind: 'order', id, at: Date.now() });
-      });
-
-      document.dispatchEvent(new CustomEvent('samvaad:order', { detail: { order, fresh: true } }));
+      const seq = state.seq + 1;
+      SV.store.update((s) => { s.orders.unshift(order); s.seq = seq; });
+      document.dispatchEvent(new CustomEvent('samvaad:order', { detail: { order } }));
       return order;
     },
 
-    /* ── lifecycle ──────────────────────────────────────────────────── */
-    advance(id) {
-      const order = SV.orders.byId(id);
-      if (!order) return null;
-      const next = SV.orders.nextAction(order);
-      if (!next) return order;
-      return SV.orders.setStatus(id, next.to);
-    },
+    byId(id) { return SV.store.state.orders.find((o) => o.id === id); },
+    all() { return SV.store.state.orders; },
 
-    setStatus(id, status) {
-      if (!SPEC[status]) return null;
-      let changed = null;
+    printed(order) { return !!order.printedAt; },
+
+    /* Printing is the end of the road for a ticket. The bill number is kept on
+       the order rather than in a separate book, because nothing else needs it. */
+    markPrinted(id) {
+      let done = null;
       SV.store.update((s) => {
         const order = s.orders.find((o) => o.id === id);
-        if (!order || order.status === status) return;
-        order.status = status;
-        order.history.push({ status, at: Date.now() });
-        changed = order;
+        if (!order || order.printedAt) return;
+        billSeq += 1;
+        order.billNo = 'B-' + String(s.billSeq + billSeq).padStart(5, '0');
+        order.printedAt = Date.now();
+        done = order;
       });
-      if (changed) {
-        document.dispatchEvent(new CustomEvent('samvaad:status', { detail: { order: changed, status } }));
-      }
-      return changed;
+      return done;
     },
 
-    cancel(id) { return SV.orders.setStatus(id, 'cancelled'); },
+    nextBillNo() { return 'B-' + String(SV.store.state.billSeq + billSeq + 1).padStart(5, '0'); },
 
-    waitingCount() {
-      return SV.store.state.orders.filter((o) => o.status === 'new').length;
+    /* The order's money, which is what the receipt prints. */
+    money(order) {
+      const lines = SV.bills.linesOf(order.items);
+      return { lines, totals: SV.bills.totalsOf(lines, { delivery: order.delivery === 'delivery' ? 2000 : 0 }) };
     },
 
-    /* ── the day's numbers ──────────────────────────────────────────── */
-    stats() {
-      const state = SV.store.state;
+    /* One line of truth for the rail: what is waiting, and what has gone out. */
+    tally() {
+      const orders = SV.orders.all();
       const start = SV.todayStart();
-      const byStatus = KEYS.reduce((m, k) => ((m[k] = 0), m), {});
-      state.orders.forEach((o) => { byStatus[o.status] = (byStatus[o.status] || 0) + 1; });
-
-      const todays = state.bills.filter((b) => b.createdAt >= start);
-      return {
-        byStatus,
-        todayOrders: todays.length,
-        todaySales: todays.reduce((s, b) => s + b.totals.grand, 0),
-        whatsapp: todays.filter((b) => b.source === 'whatsapp').length,
-        counter: todays.filter((b) => b.source === 'counter').length
-      };
+      const waiting = orders.filter((o) => !o.printedAt);
+      const done = orders.filter((o) => o.printedAt && o.printedAt >= start);
+      const sales = done.reduce((sum, o) => sum + SV.orders.money(o).totals.grand, 0);
+      return { waiting: waiting.length, printedToday: done.length, sales };
     },
 
     /* ── demo timer ─────────────────────────────────────────────────── */
     sim: { timer: null },
 
-    startDemo(seconds) {
+    startDemo() {
       SV.orders.stopDemo();
-      const gap = Math.max(8, seconds || SV.store.state.ui.demoGap) * 1000;
+      const gap = Math.max(8, SV.store.state.ui.demoGap) * 1000;
       SV.orders.sim.timer = setInterval(() => {
-        if (!SV.store.state.ui.demo) return;
-        SV.orders.receiveNewOrder(SV.data.makeIncoming(SV.store.state));
+        if (SV.store.state.ui.demo) SV.orders.receiveNewOrder(SV.data.makeIncoming(SV.store.state));
       }, gap);
     },
 

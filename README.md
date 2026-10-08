@@ -1,6 +1,6 @@
 # SAMVAAD POS
 
-The local POS half of **SAMVAAD** — a WhatsApp ordering system for local shops.
+The counter half of **SAMVAAD** — a WhatsApp ordering system for local shops.
 
 A customer messages the shop's WhatsApp number in plain text:
 
@@ -10,22 +10,20 @@ A customer messages the shop's WhatsApp number in plain text:
 3 Parle-G
 ```
 
-SAMVAAD parses that into a structured order and pushes it to the shop's counter. This app is the
-counter. The order arrives as a printed ticket with its customer, items, prices and GST already on
-it. One click produces a correct bill and a receipt.
+SAMVAAD parses that into a structured order and pushes it to the shop. This app is the
+counter. The order arrives as a printed ticket with its customer, items, prices and GST
+already on it. Press **Print bill** and the receipt comes out.
 
-**The point of the whole system is that the shopkeeper never types an order twice.** Every bill
-inherits its lines from the order behind it. Products are never re-keyed.
+**The point of the whole system is that the shopkeeper never types an order twice.**
 
 ---
 
 ## Run it
 
-Open `index.html`. That is the whole install — no server, no build step, no dependencies to
-install.
+Open `index.html`. That is the whole install — no server, no build step, no dependencies.
 
-It also serves fine, and a server is slightly better because some browsers restrict `localStorage`
-on `file://` origins:
+It also serves fine, and a server is slightly better because some browsers restrict
+`localStorage` on `file://` origins:
 
 ```sh
 python3 -m http.server 8000
@@ -35,21 +33,42 @@ Deployed copy: **https://abhislit.github.io/samvaad-pos/**
 
 ---
 
-## The workflow
+## The flow
 
 ```
-Customer → WhatsApp → SAMVAAD cloud → local POS → accept → prepare → bill → print
+Customer → WhatsApp → SAMVAAD cloud → this screen → Print bill → receipt
 ```
 
-1. A WhatsApp order arrives and **appears on the board by itself** — no refresh, no retyping.
-2. It lands in the **NEW** tray as a full ticket: customer, phone, items, totals, note.
-3. `ACCEPT ORDER` → the ticket is stamped and moves along.
-4. `START PREPARING` → `MARK READY` → `COMPLETE ORDER`.
-5. `GENERATE BILL` opens the shop's ledger with the order's lines already on it.
-6. Change discount, payment method or customer details if you need to. **Never the products.**
-7. `PRINT BILL` prints the receipt alone.
+That is the whole product. There is no second screen to learn and no state to keep in step.
 
-Order states: `NEW → ACCEPTED → PREPARING → READY → COMPLETED`, plus `CANCELLED`.
+1. An order arrives on WhatsApp and **appears in the list by itself** — no refresh, no retyping.
+2. Read it: who, how much, how many items, what time.
+3. Press **Print bill**.
+
+Printed orders sink below the waiting ones and stop offering the button. The day's count
+and total sit in one line at the bottom.
+
+Order source is stamped on every ticket, and an item SAMVAAD could not price is flagged
+**⚠** on the row, because a bill that silently costs nothing is worse than no bill.
+
+From the browser console, `receiveNewOrder(payload)` is the one door every order comes
+through — that is where the cloud socket will attach.
+
+---
+
+## Demo controls
+
+| | |
+|---|---|
+| `Simulate order` | sends one realistic WhatsApp order |
+| `Demo mode` | an order every 25 seconds |
+| `Tray: 80 mm` | cycles 58 / 80 / A4 |
+| `S` | simulate one order |
+| `M` | mute / unmute the arrival chirp |
+| `Esc` | close the order, or collapse an open row |
+| the caret on a row | drop the line items open without leaving the list |
+
+Orders persist in `localStorage`. Clearing site data resets the demo shop.
 
 ---
 
@@ -58,45 +77,23 @@ Order states: `NEW → ACCEPTED → PREPARING → READY → COMPLETED`, plus `CA
 **Real** — the arithmetic and the flow:
 
 - Money is held in integer paise end to end. No float rupees anywhere.
-- GST splits per line into CGST and SGST at bill time, and prints grouped by slab on the receipt.
-- The order lifecycle, bill derivation and product matching are genuine code paths, not mock-ups.
-- Counter sales are supported: `Stamp new ticket` builds the same bill sheet from scratch.
+- GST splits per line into CGST and SGST, and prints grouped by slab so a 58 mm tray does
+  not wrap. Tax is computed on catalogue prices, which is the point of matching product IDs.
+- An unknown WhatsApp item does not become ₹0 quietly — it is left unpriced and flagged.
 
 **Demo** — everything you can see is synthetic, and is labelled as such:
 
-- The shop (`SHREE SAI PROVISION STORES`), its GSTIN, every customer name, phone number and
-  address, the product catalogue and all prices are authored for this demo. None of it is real.
+- The shop, its GSTIN, every customer, phone, address, product and price is authored for
+  this demo. None of it is real.
 - GST invoice numbering for filing is **not modelled**.
 
 **Not connected, on purpose:**
 
 - **SAMVAAD cloud** — no WebSocket is opened. `ws://127.0.0.1:8765` is documented in
-  `src/connector.js` as the point where real orders will arrive.
+  `src/connector.js` as where real orders will arrive.
 - **SAMVAAD POS CONNECTOR** — simulated. Nothing contacts a local service.
-- **TRUCOUNT T-10** — the browser cannot drive it, and this app never claims it can. Printer
-  mode reports **Browser print**.
-
-Those three are the real deployment's job. This build stops at the browser and says so.
-
----
-
-## Demo controls
-
-| | |
-|---|---|
-| `Simulate WhatsApp order` | pushes one realistic order |
-| `Demo mode` (rail, or **Settings**) | a new order every 25s |
-| `M` | mute / unmute the arrival chirp |
-| `S` | simulate one order |
-| `Esc` | close the drawer or bill sheet |
-| Connection pill | simulate losing the connection — orders are held and released |
-
-Orders persist in `localStorage`. **Settings → Reset demo data** puts it back.
-
-An unmatched WhatsApp item (roughly one in six) shows `⚠ PRODUCT NOT FOUND`; open the order and
-pick the right product, and the bill prices it from the catalogue.
-
-From the browser console, `receiveNewOrder(payload)` is the one door every order comes through.
+- **TRUCOUNT T-10** — the browser cannot drive it, and this app never claims it can.
+  Printer mode reports **Browser print**, on the paper and in the tray label.
 
 ---
 
@@ -105,27 +102,28 @@ From the browser console, `receiveNewOrder(payload)` is the one door every order
 ```
 index.html            the shell
 styles/
-  tokens.css          87 tokens: the type ramp, radius scale, stamp tray
-  app.css             components
+  tokens.css          type ramp, radius scale, stamp tray
+  app.css             the rail, the list, the ticket, the drawer
   print.css           the receipt-only print tree
 src/
   store.js            state, persistence, change bus
-  data.js             the synthetic shop, catalogue and customers
-  products.js         catalogue and WhatsApp product matching
-  customers.js        customer records
-  orders.js           intake and the order lifecycle
-  bills.js            bill derivation and the money
-  printer.js          printBill and the receipt markup
+  data.js             the synthetic shop, catalogue and the order generator
+  products.js         WhatsApp product matching
+  bills.js            the money on the receipt
+  orders.js           intake, printing, the day's count
+  printer.js          the receipt and window.print()
   connector.js        the simulated SAMVAAD POS CONNECTOR
-  notifications.js    arrival sound and toasts
-  ui-*.js             board, drawer, bill sheet, screens
+  notifications.js    the arrival chirp and toasts
+  ui-board.js         the list
+  ui-drawer.js        the order, opened
+  app.js              wiring
 tests/
-  run.js              node tests/run.js — 46 checks on the money and the lifecycle
-  contrast-audit.js   rendered-DOM WCAG audit across every screen
+  run.js              node tests/run.js — 43 checks on the money and the flow
+  contrast-audit.js   rendered-DOM WCAG audit
 ```
 
-Plain scripts on one `window.SV` namespace rather than ES modules, so the shop can open the file
-off the disk with nothing running.
+Plain scripts on one `window.SV` namespace rather than ES modules, so the shop can open the
+file off the disk with nothing running.
 
 ```sh
 node tests/run.js
@@ -135,8 +133,9 @@ node tests/run.js
 
 ## Printing
 
-58 mm, 80 mm (default) and A4, set in **Settings → Printer tray**. `@media print` removes the
-interface and prints the receipt alone.
+58 mm, 80 mm (default) and A4. `@media print` removes the interface and prints the receipt
+alone. The receipt target stays `hidden` all session — `#receipt` is an ID selector, so it
+outranks the `[hidden]` rule and print media reveals it on its own.
 
-`printBill(bill)` prefers the local connector when one is available and otherwise calls
-`window.print()` — the seam where a confirmed TRUCOUNT protocol will go.
+`SV.printer.print(order)` prefers the local connector when one is available and otherwise
+calls `window.print()` — the seam where a confirmed TRUCOUNT protocol will go.

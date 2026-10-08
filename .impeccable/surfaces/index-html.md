@@ -62,12 +62,17 @@ rail is the counter's iron edge.
 total. The operator presses ACCEPT, the stamp lands, the ticket moves along the trays, and the
 bill sheet inherits the same line items — nothing is re-keyed at any point.
 
-**FIRST VIEWPORT.** A dark top rail: SAMVAAD wordmark left, eight nav tabs, connection pill,
-sound and demo controls right. Directly below, a filled stat strip of six ink blocks. Below that,
-four lanes — NEW / PREPARING / READY / COMPLETED — of perforated ticket cards, the stamp plate in
-each ticket's top-right corner, the stencil total in red stamp ink bottom-right, and the
-arrow-led primary action along the ticket's bottom edge. The newest ticket cascades
-character-by-character into the NEW lane.
+**FIRST VIEWPORT.** A dark top rail: SAMVAAD wordmark left, one plain-language line saying how
+many orders are waiting, sound and demo controls right. Below it a single list of perforated lot
+tickets in a responsive grid — unprinted orders first, printed ones below in outline. Each ticket:
+stamp plate top-left saying where the order came from, stencil lot number, arrival time, stencil
+total in red stamp ink, and the arrow-led **Print bill** along the bottom edge with the customer
+name. One line at the bottom carries the day's count and total. No lanes, no nav, no dashboard.
+
+**Revised after build.** The first version of this contract committed to a four-tray Kanban board
+with an eight-tab rail and a six-cell stat strip. The operator rejected it as too dense to read at a
+counter. The world is unchanged; the topology is now one list and one button, which is what the
+contract's own principle — built for the counter, not the office — actually asks for.
 
 **FORM.** Lot ticket — the direction assigned by `concept-seed --scope direction --mode operate`
 (decision round `9ffe5e16`, card "The Lot Ticket"), locked by the user over four alternates and

@@ -6,8 +6,7 @@
     background: var(--print-ground) !important;
     background-image: none !important;
   }
-  .rail, .tally, .conn-sheet, main, .skip-link,
-  .drawer, .drawer-scrim, .billsheet, .sheet-scrim, .toaster {
+  .rail, main, .skip-link, .drawer, .toaster, .board-head, .board-foot {
     display: none !important;
   }
 

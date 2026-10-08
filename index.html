@@ -4,16 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SAMVAAD POS — counter</title>
-<meta name="description" content="SAMVAAD POS — WhatsApp orders land here as tickets. Demonstration build; all data is synthetic.">
+<meta name="description" content="SAMVAAD POS — WhatsApp orders arrive here and print. Demonstration build; all data is synthetic.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231d1d1b'/%3E%3Ctext x='16' y='24' font-family='Georgia,serif' font-size='22' font-weight='700' fill='%23e0a326' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles/tokens.css">
 <link rel="stylesheet" href="styles/app.css">
 <link rel="stylesheet" href="styles/print.css">
 </head>
 <body>
-<a class="skip-link" href="#board">Skip to order board</a>
+<a class="skip-link" href="#orders">Skip to orders</a>
 
-<!-- ── the counter's iron rail ───────────────────────────────────────── -->
 <header class="rail">
   <div class="rail-brand">
     <span class="wordmark">SAMVAAD</span>
@@ -21,87 +20,33 @@
     <span class="wordmark-sub">POS</span>
   </div>
 
-  <nav class="rail-nav" aria-label="Sections">
-    <button class="tab is-current" data-nav="board" aria-current="page">New Orders<span class="tab-count" data-count="board">0</span></button>
-    <button class="tab" data-nav="preparing">Preparing<span class="tab-count" data-count="preparing">0</span></button>
-    <button class="tab" data-nav="ready">Ready<span class="tab-count" data-count="ready">0</span></button>
-    <button class="tab" data-nav="completed">Completed<span class="tab-count" data-count="completed">0</span></button>
-    <button class="tab" data-nav="bills">Bills</button>
-    <button class="tab" data-nav="products">Products</button>
-    <button class="tab" data-nav="customers">Customers</button>
-    <button class="tab" data-nav="settings">Settings</button>
-  </nav>
+  <p class="rail-say" data-say role="status"></p>
 
   <div class="rail-tools">
-    <button class="conn" id="conn-pill" aria-expanded="false" aria-haspopup="true">
-      <span class="conn-led" data-conn-led></span>
-      <span class="conn-text">
-        <b data-conn-state>Connected</b>
-        <small data-conn-sync>just now</small>
-      </span>
-    </button>
-    <button class="icon-btn" id="sound-toggle" aria-pressed="false" title="Notification sound (M)">
-      <span class="icon-mute" aria-hidden="true"></span><span class="sr">Mute notification sound</span>
+    <button class="icon-btn" id="sound-toggle" aria-pressed="false" title="Arrival sound (M)">
+      <span class="icon-mute" aria-hidden="true"></span><span class="sr">Unmute arrival sound</span>
     </button>
     <button class="demo-btn" id="demo-btn" aria-pressed="false">Demo mode</button>
   </div>
 </header>
 
-<!-- ── connection popover ────────────────────────────────────────────── -->
-<div class="conn-sheet" id="conn-sheet" hidden>
-  <h2 class="sheet-h">SAMVAAD POS CONNECTOR</h2>
-  <dl class="kv">
-    <dt>Connector</dt><dd>SAMVAAD POS Connector</dd>
-    <dt>Connection</dt><dd><span data-conn-state>Connected</span></dd>
-    <dt>Last sync</dt><dd data-conn-sync>just now</dd>
-    <dt>Queued</dt><dd><span data-queue-count>0</span> items waiting</dd>
-    <dt>Transport</dt><dd class="mono">simulated · WebSocket pending</dd>
-  </dl>
-  <p class="sheet-note" id="conn-note">Demo build: the connector is simulated. No local service is contacted.</p>
-  <button class="btn btn-ghost btn-block" id="conn-toggle">Simulate connection loss</button>
-</div>
-
-<!-- ── the day's tally ───────────────────────────────────────────────── -->
-<section class="tally" aria-label="Today at a glance">
-  <div class="tally-cell" data-tally="orders"><span class="tally-n">0</span><span class="tally-l">Today's bills</span></div>
-  <div class="tally-cell" data-tally="sales"><span class="tally-n">0</span><span class="tally-l">Today's sales</span></div>
-  <div class="tally-cell" data-tally="whatsapp"><span class="tally-n">0</span><span class="tally-l">Bills via WhatsApp</span></div>
-  <div class="tally-off" data-tally="offline" hidden>
-    <span class="tally-off-led" aria-hidden="true"></span>
-    <p>Internet connection lost. Orders will sync when connection is restored.</p>
-    <span class="tally-off-n"><span data-queue-count>0</span> queued</span>
-  </div>
-</section>
-
-<!-- ── order board ───────────────────────────────────────────────────── -->
-<main id="main">
-  <section id="screen-board" class="screen is-current">
-    <div class="board-head">
-      <h1 class="board-title">Order trays</h1>
-      <p class="board-say" data-board-say role="status"></p>
-      <div class="board-tools">
-        <button class="btn btn-seal btn-sm" id="new-bill-btn">Stamp new ticket<span class="chev" aria-hidden="true"></span></button>
-        <button class="btn btn-ghost btn-sm" id="simulate-btn">Simulate WhatsApp order</button>
-      </div>
+<main>
+  <section class="board-head">
+    <h1 class="board-title">Orders from WhatsApp</h1>
+    <div class="board-tools">
+      <button class="btn btn-ghost btn-sm" id="simulate-btn">Simulate order<span class="chev" aria-hidden="true"></span></button>
+      <button class="btn btn-ghost btn-sm" id="tray-btn">Tray: 80 mm</button>
     </div>
-    <div class="board" id="board" tabindex="-1"></div>
   </section>
 
-  <section id="screen-bills" class="screen" hidden></section>
-  <section id="screen-products" class="screen" hidden></section>
-  <section id="screen-customers" class="screen" hidden></section>
-  <section id="screen-settings" class="screen" hidden></section>
+  <div class="board" id="board" tabindex="-1"></div>
+
+  <p class="board-foot" data-printed></p>
 </main>
 
-<!-- ── ticket detail drawer ──────────────────────────────────────────── -->
-<div class="drawer-scrim" id="drawer-scrim" hidden></div>
-<aside class="drawer" id="drawer" hidden aria-labelledby="drawer-title" role="dialog" aria-modal="true"></aside>
+<aside class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-labelledby="drawer-title"></aside>
 
-<!-- ── the shop's bill sheet ─────────────────────────────────────────── -->
-<div class="sheet-scrim" id="bill-scrim" hidden></div>
-<section class="billsheet" id="billsheet" hidden role="dialog" aria-modal="true" aria-labelledby="bill-shop"></section>
-
-<!-- ── receipt (print target) ────────────────────────────────────────── -->
+<!-- the receipt is the only thing that ever reaches paper -->
 <div class="receipt" id="receipt" hidden aria-hidden="true"></div>
 
 <div class="toaster" id="toaster" role="status" aria-live="polite"></div>
@@ -112,7 +57,6 @@
 <script src="src/store.js"></script>
 <script src="src/data.js"></script>
 <script src="src/products.js"></script>
-<script src="src/customers.js"></script>
 <script src="src/bills.js"></script>
 <script src="src/orders.js"></script>
 <script src="src/connector.js"></script>
@@ -120,8 +64,6 @@
 <script src="src/notifications.js"></script>
 <script src="src/ui-board.js"></script>
 <script src="src/ui-drawer.js"></script>
-<script src="src/ui-billsheet.js"></script>
-<script src="src/ui-screens.js"></script>
 <script src="src/app.js"></script>
 </body>
 </html>

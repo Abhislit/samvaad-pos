@@ -1,6 +1,7 @@
-/* SAMVAAD POS — the product catalogue and WhatsApp product matching.
-   SAMVAAD cloud keys lines to the shop's own product IDs; this module is the
-   last line of defence when one does not resolve. */
+/* SAMVAAD POS — WhatsApp product matching.
+   SAMVAAD cloud keys lines to the shop's own product IDs. This is the fallback
+   when one does not resolve, and the reason a bill can be trusted: an unmatched
+   line stays unpriced and says so, rather than quietly costing nothing. */
 window.SV = window.SV || {};
 
 (function (SV) {
@@ -17,17 +18,6 @@ window.SV = window.SV || {};
     all() { return SV.store.state.products; },
 
     byId(id) { return SV.store.state.products.find((p) => p.id === id) || null; },
-
-    /* Options for the "product not found" picker, grouped so the operator can
-       find a match in one tap instead of scrolling 28 rows. */
-    options() {
-      const byCat = new Map();
-      SV.store.state.products.forEach((p) => {
-        if (!byCat.has(p.cat)) byCat.set(p.cat, []);
-        byCat.get(p.cat).push(p);
-      });
-      return Array.from(byCat, ([cat, items]) => ({ cat, items }));
-    },
 
     /* Turn one line out of an incoming payload into a priced POS line.
        The cloud's ID wins; a name match is the fallback; anything else stays
@@ -78,35 +68,5 @@ window.SV = window.SV || {};
       };
     },
 
-    /* Operator hand-off for a not-found line. */
-    adopt(orderId, lineIndex, productId) {
-      const p = SV.products.byId(productId);
-      if (!p) return false;
-      const order = SV.orders.byId(orderId);
-      if (!order) return false;
-      const line = order.items[lineIndex];
-      if (!line) return false;
-      SV.store.update((s) => {
-        const target = s.orders.find((o) => o.id === orderId).items[lineIndex];
-        target.productId = p.id;
-        target.name = p.name;
-        target.pack = p.pack;
-        target.unitPrice = p.price;
-        target.gst = p.gst;
-        target.unmatched = false;
-        target.claimed = undefined;
-      });
-      return true;
-    },
-
-    /* Live price and GST edits from the Products screen. */
-    edit(id, patch) {
-      SV.store.update((s) => {
-        const p = s.products.find((x) => x.id === id);
-        if (!p) return;
-        if (patch.price != null) p.price = Math.max(0, Math.round(patch.price));
-        if (patch.gst != null) p.gst = Math.max(0, Math.round(patch.gst));
-      });
-    }
   };
 })(window.SV);

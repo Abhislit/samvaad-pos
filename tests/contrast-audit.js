@@ -100,18 +100,10 @@ const AUDIT = `
   const b = await chromium.launch({ channel: 'chrome', args: ['--no-sandbox', '--disable-dev-shm-usage'] });
   const states = [
     ['board', async () => {}],
-    ['drawer', async (p) => { await p.click('.lane[data-lane="new"] [data-ticket-open]'); }],
-    ['bills', async (p) => { await p.click('.tab[data-nav="bills"]'); }],
-    ['products', async (p) => { await p.click('.tab[data-nav="products"]'); }],
-    ['customers', async (p) => { await p.click('.tab[data-nav="customers"]'); }],
-    ['settings', async (p) => { await p.click('.tab[data-nav="settings"]'); }],
-    ['counterbill', async (p) => {
-      await p.click('#new-bill-btn'); await p.waitForTimeout(200);
-      await p.selectOption('#counter-pick', { index: 2 }); await p.click('[data-counter-add]');
-    }],
-    ['resolve', async (p) => {
-      await p.click('.lane[data-lane="new"] .ticket:has(.row-flag) [data-ticket-open]');
-    }]
+    ['drawer', async (p) => { await p.click('.row [data-open]'); }],
+    ['dropped', async (p) => { await p.click('.row [data-drop]'); }],
+    ['after-print', async (p) => { await p.click('.row [data-print]'); }],
+    ['mobile-nav', async (p) => { await p.click('#demo-btn'); }]
   ];
   const all = [];
   for (const [name, setup] of states) {
@@ -133,6 +125,9 @@ const AUDIT = `
   await p.evaluate(() => document.fonts.ready);
   await p.waitForTimeout(300);
   (await p.evaluate(AUDIT)).forEach((r) => all.push(Object.assign({ state: 'mobile' }, r)));
+  await p.click('.row [data-drop]');
+  await p.waitForTimeout(250);
+  (await p.evaluate(AUDIT)).forEach((r) => all.push(Object.assign({ state: 'mobile-dropped' }, r)));
   await ctx.close();
 
   await b.close();

@@ -1,6 +1,7 @@
-/* SAMVAAD POS — arrival notice.
-   Sound is synthesised, not shipped: the counter needs no asset file, and a
-   thermal printer's chirp is two oscillators and an envelope. */
+/* SAMVAAD POS — the arrival notice.
+   A sound, synthesised rather than shipped, so the counter needs no asset file.
+   And one line of toast, because an order that arrives silently is an order
+   that sits there until someone happens to look. */
 window.SV = window.SV || {};
 
 (function (SV) {
@@ -8,7 +9,7 @@ window.SV = window.SV || {};
 
   let ctx = null;
 
-  /* A 58 mm printer's double chirp. Nothing loads, nothing can 404 at the till. */
+  /* A 58 mm printer's double chirp: two oscillators and an envelope. */
   function chirp() {
     try {
       const AC = window.AudioContext || window.webkitAudioContext;
@@ -45,57 +46,20 @@ window.SV = window.SV || {};
 
     play() { if (SV.notifications.enabled()) chirp(); },
 
-    /* ── toast ──────────────────────────────────────────────────────── */
-    push(order, opts) {
-      const host = SV.$('#toaster');
-      if (!host) return;
-      const lines = SV.bills.linesOf(order.items);
-      const totals = SV.bills.totalsOf(lines, { delivery: order.delivery === 'delivery' ? 2000 : 0 });
-
-      const node = SV.el(
-        '<div class="toast" data-toast>' +
-          '<div>' +
-            '<div class="lot">' + SV.esc(order.id) + '</div>' +
-            '<div class="msg">New WhatsApp order · ' + SV.esc(order.customerName) + ' · ' +
-              SV.money(totals.grand) + '</div>' +
-          '</div>' +
-          '<button class="btn btn-seal btn-sm" data-toast-accept>Accept</button>' +
-        '</div>'
-      );
-
-      if (opts && opts.silent !== true) {
-        node.querySelector('[data-toast-accept]').addEventListener('click', () => {
-          SV.orders.advance(order.id);
-          SV.notifications.dismiss(node);
-        });
-      } else {
-        node.querySelector('[data-toast-accept]').remove();
-      }
-
-      host.appendChild(node);
-      const life = 9000;
-      setTimeout(() => SV.notifications.dismiss(node), life);
-      return node;
-    },
-
-    dismiss(node) {
-      if (!node || !node.isConnected) return;
-      node.classList.add('is-going');
-      setTimeout(() => node.remove(), 220);
-    },
-
+    /* An arrival, then a print. Both are one line, both go away. */
     say(message, tone) {
       const host = SV.$('#toaster');
       if (!host) return;
       const node = SV.el(
-        '<div class="toast" data-toast data-tone="' + (tone === 'bad' ? 'bad' : 'calm') + '">' +
+        '<div class="toast" data-tone="' + (tone === 'bad' ? 'bad' : 'calm') + '">' +
           '<div class="msg">' + SV.esc(message) + '</div>' +
         '</div>'
       );
       host.appendChild(node);
-      setTimeout(() => SV.notifications.dismiss(node), 4200);
-    },
-
-    count: (order) => order.items.reduce((s, l) => s + l.qty, 0)
+      setTimeout(() => {
+        node.classList.add('is-going');
+        setTimeout(() => node.remove(), 220);
+      }, 4200);
+    }
   };
 })(window.SV);

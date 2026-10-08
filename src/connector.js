@@ -19,41 +19,11 @@ window.SV = window.SV || {};
     ENDPOINT,
     name: 'SAMVAAD POS Connector',
 
-    /* ── cloud side ─────────────────────────────────────────────────── */
-    /* FUTURE WIRING — replace the simulated transport with:
-         const ws = new WebSocket(ENDPOINT.ws);
-         ws.onmessage = (ev) => SV.orders.receiveNewOrder(JSON.parse(ev.data));
-       The demo never opens a socket, so nothing here can hang or leak. */
-    transport: 'simulated',
-
-    isOnline() { return SV.store.state.conn.online; },
-
-    lastSyncLabel() {
-      return SV.since(SV.store.state.conn.lastSync);
-    },
-
-    queueCount() { return SV.store.state.conn.queue.length; },
-
-    /* A dropped connection is the normal condition of a shop on a weak line.
-       Work is held in the queue and released when the link returns. */
-    setOnline(online) {
-      const released = [];
-      SV.store.update((s) => {
-        s.conn.online = online;
-        s.conn.lastSync = Date.now();
-        if (online) {
-          s.conn.queue.forEach((entry) => released.push(entry));
-          s.conn.queue = [];
-        }
-      });
-      return released;
-    },
-
     /* ── printer side ───────────────────────────────────────────────── */
     /* Off unless the operator explicitly switches the demo connector on. The
        browser cannot drive a T-10 directly; only a local service could. */
     isAvailable() {
-      return SV.store.state.ui.connectorOn === true && SV.connector.isOnline();
+      return SV.store.state.ui.connectorOn === true;
     },
 
     /* Placeholder for the confirmed local print protocol. Returns a refusal

@@ -59,8 +59,8 @@ sandbox.AudioContext.prototype.createGain = () => ({
 vm.createContext(sandbox);
 
 const root = path.resolve(__dirname, '..');
-['src/dom.js', 'src/store.js', 'src/data.js', 'src/products.js', 'src/customers.js',
- 'src/bills.js', 'src/orders.js', 'src/connector.js', 'src/printer.js', 'src/notifications.js',
+['src/dom.js', 'src/store.js', 'src/data.js', 'src/products.js', 'src/bills.js',
+ 'src/orders.js', 'src/connector.js', 'src/printer.js', 'src/notifications.js',
  'tests/checks.js'].forEach((rel) => {
   vm.runInContext(fs.readFileSync(path.join(root, rel), 'utf8'), sandbox, { filename: rel });
 });

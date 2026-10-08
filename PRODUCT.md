@@ -41,18 +41,31 @@ SAMVAAD closes the duplicate-entry gap between a shop's WhatsApp channel and its
 
 ## Capabilities and Constraints
 
-- Order lifecycle: NEW → ACCEPTED → PREPARING → READY → COMPLETED, plus CANCELLED. Operator advances status explicitly.
-- Incoming WhatsApp orders appear live without a page refresh, with a new-order badge, timestamp, customer name, source marker, total, highlight animation, and an optional sound.
-- Order detail view shows customer, phone, order time, delivery vs pickup, payment method, address when applicable, line items with quantity/price/discount/GST/line total, and free-text notes from WhatsApp.
-- Product matching resolves WhatsApp text to the shop's own product records by product ID. An unmatched item is flagged as not-found and the operator picks the correct product.
-- Bill generation is derived from the order. Products are never re-entered. The operator may change discount, payment method, and customer details.
-- Receipt printing supports 58mm, 80mm (default), and A4 via `@media print`, printing the receipt alone.
-- Counter sales are supported: a shopkeeper can build a bill from scratch for a walk-in customer with no WhatsApp order behind it. A WhatsApp order pre-fills that same flow.
-- Connection status is visible at all times (connected / offline) with last-sync time, and queued work syncs when the connection returns.
-- Demo mode simulates incoming WhatsApp orders on a timer and on demand.
-- Persistence is `localStorage` for the demo; there is no server.
-- Deliberately undecided: the Trucount/connector print protocol, real WebSocket transport, GST filing/invoice numbering compliance, staff accounts and roles, inventory decrement, and loyalty. None are in scope.
-- Do not display a claim that the browser controls the T-10 directly.
+This product is one flow. Everything that does not serve it was removed, not deferred.
+
+- An order arrives from WhatsApp as a structured payload keyed to the shop's own product
+  IDs and appears in the list without a refresh.
+- The order shows its customer, items, prices, GST, total and time, all of it priced by
+  SAMVAAD before it arrives.
+- One action: **Print bill**. It prints the receipt. There is no lifecycle, no approval
+  chain, no second screen to learn.
+- Printed orders sink below the waiting ones and stop offering the button. One line at the
+  bottom carries the day's count and total.
+- A line SAMVAAD could not price stays unpriced and is flagged on its row. It is never
+  quietly worth nothing.
+- Each row drops its line items open in place, so the items are readable without leaving
+  the list. One click opens the whole order.
+- Receipt printing is 58 mm, 80 mm (default) and A4, and only the receipt reaches paper.
+- Persistence is `localStorage`. There is no server.
+- Deliberately out of scope, and absent rather than half-built: the order lifecycle, the
+  Kanban trays, the bill book, the product catalogue screen, the customer register, the
+  settings screen, counter sales, offline queueing, discount and payment-method editing,
+  staff accounts, inventory, loyalty, and GST invoice numbering for filing.
+- A future on-premise **SAMVAAD POS CONNECTOR** will carry the cloud payload to the local
+  PC and may drive the shop's billing machine. Its protocol is not confirmed, so the
+  connector is simulated and never contacted.
+- The shop may own a **TRUCOUNT T-10** with a built-in thermal printer. The browser cannot
+  drive it, and this app never claims it can. Printer mode reports **Browser print**.
 
 ## Brand Commitments
 
@@ -67,11 +80,10 @@ None. No logos, photography, customer testimonials, benchmarks, pricing, or real
 
 ## Product Principles
 
-1. **Never type it twice.** Every downstream artifact inherits the order's data. If a field can be inherited, it is inherited.
-2. **The next action is always obvious.** The operator's current position in the order lifecycle determines what the primary button says.
-3. **Nothing is lost offline.** Connection state is honest and visible; work is queued, never dropped.
-4. **Built for the counter, not the office.** Desktop-first density, large touch targets, and zero decorative surface between the operator and the order.
-5. **Say what is true.** Printer mode reports Browser Print. Unmatched products say unmatched. The demo never pretends to be connected to hardware it cannot reach.
+1. **Never type it twice.** The receipt is built from the order's own priced lines. There is nowhere to re-enter a product, because there is no field for one.
+2. **One thing to do.** An unprinted order has one button on it. Everything else about it is information.
+3. **Built for the counter, not the office.** Desktop-first density, large touch targets, and zero decorative surface between the operator and the order.
+4. **Say what is true.** Printer mode reports Browser print. An unpriced item says unpriced. The demo never pretends to be connected to hardware it cannot reach.
 
 ## Accessibility & Inclusion
 
