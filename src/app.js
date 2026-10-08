@@ -197,6 +197,55 @@ window.SV = window.SV || {};
     );
   }
 
+  /* ── print again ──────────────────────────────────────────────────────
+     A printed ticket keeps its bill number, so a reprint is the same receipt
+     coming out of the machine a second time — not a new bill. */
+  function reprintOrder(id) {
+    const order = SV.orders.byId(id);
+    if (!order || !order.printedAt) return;
+    SV.printer.print(order);
+    SV.notifications.say('Reprinting ' + order.billNo + ' · ' + order.customerName);
+  }
+
+  /* ── print all ────────────────────────────────────────────────────────
+     Every waiting ticket goes out. Each sheet is fed so the operator sees
+     what is being printed, then the whole stack goes to the printer in one
+     job: a batch must never open a dialog per receipt. */
+  let batchRunning = false;
+
+  async function printAll() {
+    if (batchRunning) return;
+    const waiting = SV.orders.all()
+      .filter((o) => !o.printedAt)
+      .sort((a, b) => a.createdAt - b.createdAt);
+    if (!waiting.length) return;
+
+    batchRunning = true;
+    const btn = $('[data-print-all]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Printing…'; }
+
+    /* Bill numbers first, so the sheets on screen carry the numbers they will
+       carry on paper. */
+    const stamped = waiting.map((o) => {
+      SV.orders.markPrinted(o.id);
+      return SV.orders.byId(o.id);
+    });
+
+    try {
+      SV.notifications.ratchet();
+      await SV.printer.feedAll(stamped);
+      SV.printer.handTo(stamped);
+      const total = stamped.reduce((sum, o) => sum + SV.orders.money(o).totals.grand, 0);
+      SV.notifications.say(
+        stamped.length + ' bills printed · ' +
+        SV.money(total) + ' · ' + stamped[0].billNo + '–' + stamped[stamped.length - 1].billNo
+      );
+    } finally {
+      batchRunning = false;
+      render();
+    }
+  }
+
   function toggleDemo() {
     SV.store.update((s) => { s.ui.demo = !s.ui.demo; });
     if (SV.store.state.ui.demo) SV.orders.startDemo();
@@ -220,6 +269,11 @@ window.SV = window.SV || {};
 
       const approveBtn = pick('[data-approve]');
       if (approveBtn) return approve(approveBtn.dataset.approve);
+
+      if (pick('[data-print-all]')) return printAll();
+
+      const reprint = pick('[data-reprint]');
+      if (reprint) return reprintOrder(reprint.dataset.reprint);
 
       const print = pick('[data-print]');
       if (print) return printOrder(print.dataset.print);

@@ -112,6 +112,14 @@ const AUDIT = `
       await p.click('.row [data-print]');
       await p.waitForTimeout(2600);
     }],
+    ['batch', async (p) => {
+      await p.click('[data-print-all]');
+      await p.waitForTimeout(1600);
+    }],
+    ['trays-empty', async (p) => {
+      await p.click('[data-print-all]');
+      await p.waitForTimeout(5200);
+    }],
     ['outlet', async (p) => {
       await p.click('.row [data-approve]');
       await p.waitForTimeout(900);

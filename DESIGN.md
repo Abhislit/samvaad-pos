@@ -121,8 +121,18 @@ and held long enough to read, and no animation runs at all.
   plate, stencil lot number, clock, stencil total, customer name and item count, and one
   arrow-led action: **Approve**, then **Print bill**. `APPROVED` is filled ledger green,
   `PRINTED` is outlined, never filled — spent ink does not shout.
+- **Two trays.** `To print` and `Printed`, stacked under sticky headers with filled count
+  blocks. Not one list with the finished orders sinking to the bottom: an operator needs to see
+  what is done as much as what is not, and reprinting needs a home. `PRINTED` rows carry
+  **Print again**, which keeps the bill number — a reprint is the same receipt a second time,
+  not a new bill.
 - **The outlet.** Fixed, centred under the rail, `pointer-events: none` so it can never trap a
   click. It is removed from the print tree: on paper the receipt is the whole truth.
+- **A batch.** `Print all` feeds every sheet, then hands the stack over in **one** print job —
+  `break-inside: avoid` per sheet, so no receipt is split across a page break. A batch must
+  never open a dialog per receipt. Under reduced motion it shows one sheet for the hold, not
+  every sheet for a quarter of a second: seven sheets at that rate would stand still for seven
+  seconds.
 - **The row never shrinks.** The name's flex item is `1 0 auto`, so when the actions stop
   fitting it is they that wrap — a half-printed customer name is worse than a taller ticket.
   Verified unclipped at 360, 390, 414, 720, 768, 1024, 1280, 1366, 1440 and 1920.

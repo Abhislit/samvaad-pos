@@ -49,8 +49,14 @@ beyond whether a ticket has been stamped yet.
    line by line, and tears off. That sheet is then printed at the tray the shop has loaded —
    58 mm, 80 mm or A4.
 
-Printed orders sink below the waiting ones and stop offering a button. The day's count and
-total sit in one line at the bottom.
+The screen has two sections. **To print** is the queue. **Printed** is what has gone out, and
+each one can be **printed again** — a reprint is the same receipt coming out of the machine a
+second time, so it keeps its bill number rather than minting a new one.
+
+**Print all** clears the queue. Every waiting sheet is fed so you see what is going out, then
+the whole stack goes to the printer in **one** job — a batch never opens a dialog per receipt.
+
+The day's count and total sit in one line at the bottom.
 
 Order source is stamped on every ticket, and an item SAMVAAD could not price is flagged
 **⚠** on the row, because a bill that silently costs nothing is worse than no bill.
@@ -69,6 +75,8 @@ through — that is where the cloud socket will attach.
 | `Tray: 80 mm` | cycles 58 / 80 / A4 |
 | `S` | simulate one order |
 | `M` | mute / unmute the arrival chirp |
+| `Print all N` | clear the queue in one print job |
+| `Print again` | reprint a bill that has already gone out |
 | `Esc` | close the order, or collapse an open row |
 | sound | the arrival chirp, and the platen's ratchet while the receipt feeds |
 | the caret on a row | drop the line items open without leaving the list |

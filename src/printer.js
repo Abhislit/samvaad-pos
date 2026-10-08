@@ -90,7 +90,10 @@ window.SV = window.SV || {};
        The paper comes out of the machine, travels at a platen's constant
        rate, then tears on its perforation. Resolves when the sheet is off,
        so the caller can hand the real receipt to the printer afterwards. */
-    feed(order) {
+    feed(order, opts) {
+      /* A batch asked for everything at once moves at a working pace rather
+         than one sheet at reading pace. */
+      const quick = !!(opts && opts.quick);
       const outlet = SV.$('#outlet');
       const paper = SV.$('#paper');
       const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -104,6 +107,7 @@ window.SV = window.SV || {};
       const full = paper.scrollHeight;
       paper.style.height = '';
       paper.style.setProperty('--feed-h', full + 'px');
+      paper.style.setProperty('--feed-ms', (quick ? FEED_MS * 0.5 : FEED_MS) + 'ms');
 
       /* Forced reflow so the feed animation starts from zero every time. */
       void paper.offsetHeight;
@@ -119,27 +123,44 @@ window.SV = window.SV || {};
       }
 
       return new Promise((done) => {
-        setTimeout(() => outlet.classList.add('is-tearing'), FEED_MS + 120);
+        const pace = quick ? FEED_MS * 0.5 : FEED_MS;
+        setTimeout(() => outlet.classList.add('is-tearing'), pace + 90);
         setTimeout(() => {
           outlet.hidden = true;
           paper.style.height = '';
           paper.classList.remove('is-tearing');
           outlet.classList.remove('is-tearing');
           done();
-        }, FEED_MS + 120 + TEAR_MS);
+        }, pace + 90 + TEAR_MS);
       });
     },
 
-    /* The real thing leaves the machine. Same paper, no animation. */
-    async handTo(order) {
+    /* The real thing leaves the machine. One or many sheets, one print job:
+       a batch must never open a dialog per receipt. */
+    async handTo(orders) {
+      const batch = Array.isArray(orders) ? orders : [orders];
       if (SV.connector.isAvailable()) {
-        const result = await SV.connector.sendToLocalConnector(order);
+        const result = await SV.connector.sendToLocalConnector(batch[0]);
         if (result.sent) return result;
       }
-      SV.$('#receipt').innerHTML = receiptHTML(order);
+      SV.$('#receipt').innerHTML =
+        batch.map((o) => '<div class="r-sheet">' + receiptHTML(o) + '</div>').join('');
       pageStyle();
       window.print();
-      return { printed: true };
+      return { printed: true, count: batch.length };
+    },
+
+    /* Every sheet, fed in turn. Resolves when the stack is through, so the
+       caller can hand the whole batch to the printer once.
+
+       Reduced motion shows one sheet for the hold rather than every sheet for
+       a quarter of a second each: a seven-sheet batch would otherwise stand
+       still for seven seconds, which is worse than any animation is worth. */
+    async feedAll(orders) {
+      if (!orders.length) return;
+      const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (calm) return void (await SV.printer.feed(orders[orders.length - 1], { quick: true }));
+      for (const order of orders) await SV.printer.feed(order, { quick: true });
     },
     /* Exposed so the self-check can assert on the paper without printing it. */
     receiptFor: receiptHTML,

@@ -130,7 +130,9 @@ window.SV = window.SV || {};
         '</button>' +
         flag +
         (printed
-          ? '<span class="row-when row-was">' + e(SV.clock(order.printedAt)) + '</span>'
+          ? '<span class="row-when row-was">' + e(SV.clock(order.printedAt)) + '</span>' +
+            '<button class="btn btn-ghost btn-sm" data-reprint="' + e(order.id) + '">' +
+              'Print again<span class="chev" aria-hidden="true"></span></button>'
           : approved
             ? '<button class="btn btn-seal btn-sm" data-print="' + e(order.id) + '">' +
               'Print bill<span class="chev" aria-hidden="true"></span></button>'
@@ -142,19 +144,19 @@ window.SV = window.SV || {};
   }
 
   SV.board = {
+    /* ── two trays ────────────────────────────────────────────────────
+       To print, and printed. Not one list with the finished orders sinking
+       under the queue: an operator needs to see what is done as much as what
+       is not, and reprinting needs a home. */
     render(host) {
-      /* Waiting first, newest first. Printed orders sink underneath. */
-      const orders = SV.orders.all().slice().sort((a, b) => {
-        if (!!a.printedAt !== !!b.printedAt) return a.printedAt ? 1 : -1;
-        return b.createdAt - a.createdAt;
-      });
-      const waiting = orders.filter((o) => !o.printedAt);
+      const all = SV.orders.all();
+      const byNewest = (a, b) => b.createdAt - a.createdAt;
+      const toPrint = all.filter((o) => !o.printedAt).sort(byNewest);
+      const printed = all.filter((o) => o.printedAt).sort((a, b) => b.printedAt - a.printedAt);
 
-      /* The board is about to be torn down and rebuilt. Remember where every
-         ticket sat so it can be handed back to where it came from. */
       const before = snapshot(host);
 
-      if (!orders.length) {
+      if (!all.length) {
         host.innerHTML = '<div class="board-empty">' +
           '<b>No orders yet</b>' +
           '<p>Orders sent to the shop on WhatsApp appear here on their own. ' +
@@ -162,16 +164,36 @@ window.SV = window.SV || {};
         '</div>';
         return;
       }
-      host.innerHTML = (waiting.length
-        ? ''
-        : '<p class="board-clear"><b>All clear.</b> Every order has been printed.</p>') +
-        orders.map(rowHTML).join('');
 
-      /* Hand the tickets back to where they were and let them travel. */
+      host.innerHTML =
+        '<section class="tray" data-tray="to-print">' +
+          '<header class="tray-head">' +
+            '<h2 class="tray-name">To print</h2>' +
+            '<span class="tray-count" data-ink="jute">' + toPrint.length + '</span>' +
+            (toPrint.length
+              ? '<button class="btn btn-seal btn-sm tray-all" data-print-all>' +
+                'Print all ' + toPrint.length + '<span class="chev" aria-hidden="true"></span></button>'
+              : '') +
+          '</header>' +
+          '<div class="tray-body">' +
+            (toPrint.length
+              ? toPrint.map(rowHTML).join('')
+              : '<p class="tray-empty">Nothing waiting. Every order has been printed.</p>') +
+          '</div>' +
+        '</section>' +
+        '<section class="tray" data-tray="printed">' +
+          '<header class="tray-head">' +
+            '<h2 class="tray-name">Printed</h2>' +
+            '<span class="tray-count" data-ink="graphite">' + printed.length + '</span>' +
+          '</header>' +
+          '<div class="tray-body">' +
+            (printed.length
+              ? printed.map(rowHTML).join('')
+              : '<p class="tray-empty">Nothing printed yet today.</p>') +
+          '</div>' +
+        '</section>';
+
       settle(host, before);
-
-      /* One shot each. The next render — or the animationend on the row —
-         clears them; nothing here survives to be read twice. */
       arrivingId = null;
       printingId = null;
       approvingId = null;

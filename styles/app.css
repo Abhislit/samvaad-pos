@@ -121,19 +121,46 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 }
 .board-tools { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
-.board {
+/* Two trays, stacked. The queue is what the operator works; the printed pile is
+   what they check, and reprinting needs a home, so the finished orders are a
+   section of their own rather than an afterthought under the list. */
+.board { padding: 0.5rem var(--gutter) 0; }
+.tray + .tray { margin-top: 1.5rem; }
+.tray-head {
+  position: sticky; top: var(--rail-h); z-index: 2;
+  display: flex; align-items: center; gap: 0.55rem;
+  padding: 0.55rem 0 0.5rem;
+  margin-bottom: 0.65rem;
+  border-bottom: 1px solid var(--rule);
+  background: linear-gradient(180deg, oklch(94.6% 0.006 84) 70%, transparent);
+}
+.tray-name {
+  font-family: var(--stencil); font-size: var(--t-body); font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+}
+.tray-count {
+  min-width: 1.4rem; height: 1.4rem; padding: 0 0.35rem;
+  display: inline-grid; place-items: center;
+  font-family: var(--stencil); font-weight: 700; font-size: var(--t-label);
+  color: var(--stock); border-radius: var(--radius-cut);
+}
+.tray-count[data-ink="jute"] { background: var(--jute-deep); }
+.tray-count[data-ink="graphite"] { background: var(--graphite); }
+.tray-all { margin-left: auto; }
+.tray-body {
   display: grid; gap: 0.55rem;
   grid-template-columns: repeat(auto-fill, minmax(min(23rem, 100%), 1fr));
-  padding: 0.9rem var(--gutter);
   align-content: start;
 }
-.board-clear {
-  grid-column: 1 / -1; font-size: var(--t-body); color: var(--ink-faint);
-  padding-bottom: 0.4rem;
+.tray-empty {
+  /* --ink-faint measures 4.05:1 on the desk, which is below AA. This is a
+     sentence the operator reads, not a caption, so it takes --ink-soft. */
+  grid-column: 1 / -1; padding: 1.1rem 0.2rem;
+  font-size: var(--t-body); color: var(--ink-soft);
 }
-.board-clear b { color: var(--ink); }
+.tray-empty b { color: var(--ink); }
 .board-empty {
-  grid-column: 1 / -1; padding: 3rem 1rem; text-align: center;
+  padding: 3rem 1rem; text-align: center;
   display: grid; gap: 0.4rem; justify-items: center; color: var(--ink-faint);
 }
 .board-empty b { font-family: var(--stencil); font-size: var(--t-mark); letter-spacing: 0.1em; color: var(--ink); }
@@ -476,7 +503,7 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 @media (max-width: 720px) {
   .rail { flex-wrap: wrap; padding-block: 0.5rem; row-gap: 0.4rem; }
   .rail-say { order: 3; flex-basis: 100%; }
-  .board { grid-template-columns: minmax(0, 1fr); }
+  .tray-body { grid-template-columns: minmax(0, 1fr); }
   .drawer { width: 100vw; }
   .fact { grid-template-columns: minmax(0, 1fr); gap: 0 0; }
   .fact dd { margin-bottom: 0.25rem; }
@@ -590,3 +617,12 @@ body[data-paper="a4"] .paper { width: 150mm; max-width: 92vw; font-size: var(--t
 /* The ticket flinches once, at contact. */
 .row.is-approving { animation: flinch 0.16s ease-out both; }
 @keyframes flinch { 0% { transform: scale(1); } 40% { transform: scale(0.988); } 100% { transform: none; } }
+
+/* ── batch ─────────────────────────────────────────────────────────────
+   One print job carries every receipt, one sheet each, none split across a
+   page break. */
+#receipt .r-sheet { break-inside: avoid; page-break-inside: avoid; }
+#receipt .r-sheet + .r-sheet {
+  margin-top: 8mm; padding-top: 6mm;
+  border-top: 1px dashed var(--print-ink);
+}
