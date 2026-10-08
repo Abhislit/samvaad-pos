@@ -166,26 +166,14 @@ window.SV = window.SV || {};
       }
 
       host.innerHTML =
-        '<section class="tray" data-tray="to-print">' +
-          '<header class="tray-head">' +
-            '<h2 class="tray-name">To print</h2>' +
-            '<span class="tray-count" data-ink="jute">' + toPrint.length + '</span>' +
-            (toPrint.length
-              ? '<button class="btn btn-seal btn-sm tray-all" data-print-all>' +
-                'Print all ' + toPrint.length + '<span class="chev" aria-hidden="true"></span></button>'
-              : '') +
-          '</header>' +
+        '<section class="tray" data-tray="to-print" aria-label="To print">' +
           '<div class="tray-body">' +
             (toPrint.length
               ? toPrint.map(rowHTML).join('')
               : '<p class="tray-empty">Nothing waiting. Every order has been printed.</p>') +
           '</div>' +
         '</section>' +
-        '<section class="tray" data-tray="printed">' +
-          '<header class="tray-head">' +
-            '<h2 class="tray-name">Printed</h2>' +
-            '<span class="tray-count" data-ink="graphite">' + printed.length + '</span>' +
-          '</header>' +
+        '<section class="tray" data-tray="printed" aria-label="Printed">' +
           '<div class="tray-body">' +
             (printed.length
               ? printed.map(rowHTML).join('')

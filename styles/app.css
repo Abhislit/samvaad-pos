@@ -121,32 +121,57 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 }
 .board-tools { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
+/* One bar, pinned under the rail. Two sticky headers meant the top of the
+   screen told you nothing when you were half way down a long printed pile, so
+   the section names live up here instead: where you are, how much is in each,
+   and one click back to the queue. */
+.section-bar {
+  position: sticky; top: var(--rail-h); z-index: 3;
+  display: flex; align-items: center; gap: 0.35rem;
+  width: max-content; max-width: 100%;
+  margin: 0 var(--gutter);
+  padding: 0.3rem 0.3rem 0.3rem 0.35rem;
+  border: 1px solid var(--rule); border-radius: var(--radius-cut);
+  background: var(--stock);
+  box-shadow: 0 1px 0 var(--rule), var(--shadow-lift);
+}
+.section-tab {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  padding: 0.4rem 0.6rem;
+  font-family: var(--stencil); font-size: var(--t-label); font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-soft); background: none;
+  border: 1px solid transparent; border-radius: 2px;
+}
+.section-tab:hover { color: var(--ink); background: var(--desk-hair); }
+.section-tab.is-current {
+  color: var(--stock); background: var(--graphite);
+  border-color: var(--graphite-deep);
+}
+.section-n {
+  min-width: 1.3rem; height: 1.3rem; padding: 0 0.3rem;
+  display: inline-grid; place-items: center;
+  font-family: var(--stencil); font-weight: 700; font-size: var(--t-label);
+  letter-spacing: 0; color: var(--stock); background: var(--jute-deep);
+  border-radius: 2px;
+}
+.section-tab.is-current .section-n { background: var(--stock); color: var(--graphite); }
+.section-all { margin-left: 0.2rem; }
+
 /* Two trays, stacked. The queue is what the operator works; the printed pile is
    what they check, and reprinting needs a home, so the finished orders are a
    section of their own rather than an afterthought under the list. */
 .board { padding: 0.5rem var(--gutter) 0; }
 .tray + .tray { margin-top: 1.5rem; }
-.tray-head {
-  position: sticky; top: var(--rail-h); z-index: 2;
-  display: flex; align-items: center; gap: 0.55rem;
-  padding: 0.55rem 0 0.5rem;
-  margin-bottom: 0.65rem;
-  border-bottom: 1px solid var(--rule);
-  background: linear-gradient(180deg, oklch(94.6% 0.006 84) 70%, transparent);
+.tray {
+  /* The bar covers the top of a tray when it scrolls into place, so a jump has
+     to land flush under it rather than underneath. --section-bar-h is measured
+     at render, not guessed: the bar wraps to two rows on a narrow phone. */
+  scroll-margin-top: calc(var(--rail-h) + var(--section-bar-h, 3rem));
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--rule);
 }
-.tray-name {
-  font-family: var(--stencil); font-size: var(--t-body); font-weight: 700;
-  letter-spacing: 0.16em; text-transform: uppercase;
-}
-.tray-count {
-  min-width: 1.4rem; height: 1.4rem; padding: 0 0.35rem;
-  display: inline-grid; place-items: center;
-  font-family: var(--stencil); font-weight: 700; font-size: var(--t-label);
-  color: var(--stock); border-radius: var(--radius-cut);
-}
-.tray-count[data-ink="jute"] { background: var(--jute-deep); }
-.tray-count[data-ink="graphite"] { background: var(--graphite); }
-.tray-all { margin-left: auto; }
+.tray[data-tray="to-print"] { border-top: 0; padding-top: 0; }
 .tray-body {
   display: grid; gap: 0.55rem;
   grid-template-columns: repeat(auto-fill, minmax(min(23rem, 100%), 1fr));
@@ -166,9 +191,11 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 .board-empty b { font-family: var(--stencil); font-size: var(--t-mark); letter-spacing: 0.1em; color: var(--ink); }
 .board-empty p { font-size: var(--t-body); max-width: 28rem; }
 .board-foot {
-  padding: 0.5rem var(--gutter) 1.5rem; font-size: var(--t-micro); color: var(--ink-faint);
+  /* --ink-faint measures 4.05:1 on the desk, under AA. The day's tally is the
+     number the owner reads to know whether they have made anything yet. */
+  padding: 0.5rem var(--gutter) 1.5rem; font-size: var(--t-micro); color: var(--ink-soft);
 }
-.board-foot b { font-family: var(--stencil); font-weight: 700; font-size: var(--t-body); color: var(--ink-soft); }
+.board-foot b { font-family: var(--stencil); font-weight: 700; font-size: var(--t-body); color: var(--ink); }
 
 /* ── the lot ticket ────────────────────────────────────────────────── */
 .row {

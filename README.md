@@ -49,7 +49,9 @@ beyond whether a ticket has been stamped yet.
    line by line, and tears off. That sheet is then printed at the tray the shop has loaded —
    58 mm, 80 mm or A4.
 
-The screen has two sections. **To print** is the queue. **Printed** is what has gone out, and
+The screen has two sections, named in a **bar that stays on top of the list** while you scroll,
+so you always know which one you are looking at and can jump back to the queue from the bottom
+of a long printed pile. **To print** is the queue. **Printed** is what has gone out, and
 each one can be **printed again** — a reprint is the same receipt coming out of the machine a
 second time, so it keeps its bill number rather than minting a new one.
 
@@ -76,6 +78,7 @@ through — that is where the cloud socket will attach.
 | `S` | simulate one order |
 | `M` | mute / unmute the arrival chirp |
 | `Print all N` | clear the queue in one print job |
+| Section bar | jump between **To print** and **Printed** |
 | `Print again` | reprint a bill that has already gone out |
 | `Esc` | close the order, or collapse an open row |
 | sound | the arrival chirp, and the platen's ratchet while the receipt feeds |

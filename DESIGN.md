@@ -121,8 +121,14 @@ and held long enough to read, and no animation runs at all.
   plate, stencil lot number, clock, stencil total, customer name and item count, and one
   arrow-led action: **Approve**, then **Print bill**. `APPROVED` is filled ledger green,
   `PRINTED` is outlined, never filled — spent ink does not shout.
-- **Two trays.** `To print` and `Printed`, stacked under sticky headers with filled count
-  blocks. Not one list with the finished orders sinking to the bottom: an operator needs to see
+- **One bar on top, two sections under it.** `To print` and `Printed`, named in a single bar
+  pinned under the rail. Two sticky headers was the first attempt and it was worse: the top of
+  the screen told you nothing once you were half way down a printed pile. One bar carries the
+  current section, both counts, and the jump back. It tracks the reader as they scroll, and at
+  the foot of a short page the last section wins, because a page too short to scroll cannot
+  bring a section up under the bar. The jump offset is the bar's **measured** height, read
+  after its content is in — guessed, it landed a section behind and the tab disagreed with the
+  screen. Not one list with the finished orders sinking to the bottom: an operator needs to see
   what is done as much as what is not, and reprinting needs a home. `PRINTED` rows carry
   **Print again**, which keeps the bill number — a reprint is the same receipt a second time,
   not a new bill.

@@ -8,12 +8,18 @@ window.SV = window.SV || {};
 
   const clone = (v) => JSON.parse(JSON.stringify(v));
   const $ = SV.$;
+  const $$ = (sel, root) => (root || document).querySelectorAll(sel);
 
   /* ── seed ────────────────────────────────────────────────────────────
      A shop mid-morning: some orders waiting, some already printed. */
   function seed() {
     const d = SV.data;
-    const now = Date.now();
+    /* The seed is a shop part way through the day. If the real clock is in the
+       small hours, `mins` ago spills the printed half into yesterday and the
+       day's line reads "nothing printed yet today" directly under a screen full
+       of printed tickets. Anchor to 11:40 today unless the real clock is later. */
+    const anchor = SV.todayStart() + 11 * 3600e3 + 40 * 60e3;
+    const now = Date.now() < anchor ? anchor : Date.now();
     const state = {
       schema: 1,
       shop: clone(d.shop),
@@ -108,10 +114,57 @@ window.SV = window.SV || {};
       : 'Nothing printed yet today';
   }
 
+  /* ── the section bar ─────────────────────────────────────────────────
+     One bar, pinned under the rail. It says which section you are in, how
+     much is in each, and takes you back to the queue from the bottom of a
+     long printed pile. */
+  function renderSections() {
+    const bar = $('#section-bar');
+    const toPrint = SV.store.state.orders.filter((o) => !o.printedAt).length;
+    const printed = SV.store.state.orders.filter((o) => o.printedAt).length;
+    bar.innerHTML =
+      '<button class="section-tab" data-jump="to-print" aria-current="true">' +
+        'To print<span class="section-n">' + toPrint + '</span></button>' +
+      '<button class="section-tab" data-jump="printed">' +
+        'Printed<span class="section-n">' + printed + '</span></button>' +
+      (toPrint
+        ? '<button class="btn btn-seal btn-sm section-all" data-print-all>' +
+          'Print all ' + toPrint + '<span class="chev" aria-hidden="true"></span></button>'
+        : '');
+    /* Measured after the content is in, not assumed: the bar wraps to two rows
+       on a narrow phone, and the jump offset has to agree with the bar the
+       reader is actually looking at. */
+    document.documentElement.style.setProperty('--section-bar-h', bar.offsetHeight + 'px');
+  }
+
+  /* Which section the reader is actually in: the last one whose top has passed
+     the bar. Two sections, so scroll maths beats an observer. */
+  function syncSection() {
+    const bar = $('#section-bar');
+    const line = $('#section-bar').getBoundingClientRect().bottom;
+    const trays = $$('.tray');
+    let current = trays.length ? trays[0].dataset.tray : 'to-print';
+    trays.forEach((tray) => { if (tray.getBoundingClientRect().top <= line + 1) current = tray.dataset.tray; });
+    /* At the foot of the page the last section is whatever is on screen, whatever
+       the maths says: a short page cannot scroll a tray up under the bar, so
+       without this a jump to Printed on a busy desk would leave the tab on
+       To print while the printed pile filled the screen. */
+    const atFoot = Math.ceil(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 1;
+    if (atFoot && trays.length) current = trays[trays.length - 1].dataset.tray;
+    $$('.section-tab').forEach((tab) => {
+      const on = tab.dataset.jump === current;
+      tab.classList.toggle('is-current', on);
+      if (on) tab.setAttribute('aria-current', 'true');
+      else tab.removeAttribute('aria-current');
+    });
+  }
+
   function render() {
     SV.board.render($('#board'));
     renderRail();
     renderFoot();
+    renderSections();
+    syncSection();
   }
 
   /* ── the flow ──────────────────────────────────────────────────────── */
@@ -270,6 +323,13 @@ window.SV = window.SV || {};
       const approveBtn = pick('[data-approve]');
       if (approveBtn) return approve(approveBtn.dataset.approve);
 
+      const jump = pick('[data-jump]');
+      if (jump) {
+        const tray = SV.$('.tray[data-tray="' + jump.dataset.jump + '"]');
+        if (tray) tray.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+
       if (pick('[data-print-all]')) return printAll();
 
       const reprint = pick('[data-reprint]');
@@ -324,6 +384,9 @@ window.SV = window.SV || {};
     wire();
     SV.store.subscribe(render);
     render();
+    /* The bar follows the reader as the printed pile scrolls past. */
+    window.addEventListener('scroll', syncSection, { passive: true });
+    window.addEventListener('resize', syncSection);
   }
 
   document.addEventListener('DOMContentLoaded', boot);
