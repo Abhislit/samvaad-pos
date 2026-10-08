@@ -107,6 +107,10 @@ window.SV = window.SV || {};
     modeLabel() { return SV.connector.isAvailable() ? 'Local connector' : 'Browser print'; },
 
     /* Render the receipt into the print target, then print. */
+    /* The receipt target stays `hidden` for the whole session. print.css's
+       `#receipt` is an ID selector, so it outranks `[hidden]`'s attribute
+       selector and reveals the receipt for print only — no unhide, and so no
+       chance of leaving an unstyled receipt lying at the bottom of the page. */
     async printBill(bill) {
       if (SV.connector.isAvailable()) {
         const result = await SV.connector.sendToLocalConnector(bill);
@@ -114,12 +118,26 @@ window.SV = window.SV || {};
       }
       const host = SV.$('#receipt');
       host.innerHTML = receiptHTML(bill);
-      host.hidden = false;
       pageStyle();
-      const done = () => window.removeEventListener('afterprint', done);
-      window.addEventListener('afterprint', done, { once: true });
       window.print();
       return { sent: false, printed: true };
+    },
+
+    /* A preview the operator can see on screen, properly styled — the markup
+       above is print-only by design. */
+    preview(bill) {
+      const sheet = SV.$('#billsheet');
+      if (!sheet) return;
+      let pre = SV.$('#bill-preview');
+      if (!pre) {
+        pre = document.createElement('div');
+        pre.id = 'bill-preview';
+        pre.className = 'bill-preview';
+        const scroll = SV.$('.billsheet-scroll');
+        if (scroll) scroll.appendChild(pre);
+      }
+      pre.innerHTML = '<span class="bill-preview-h">How this will print</span>' + receiptHTML(bill);
+      pre.hidden = false;
     },
 
     /* Same markup on screen, for previewing before the operator commits paper. */

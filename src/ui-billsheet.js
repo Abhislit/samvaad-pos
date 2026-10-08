@@ -185,7 +185,7 @@ window.SV = window.SV || {};
     show() {
       SV.$('#billsheet').hidden = false;
       SV.$('#bill-scrim').hidden = false;
-      render(working);
+      SV.billsheet.refresh();
       const first = SV.$('#billsheet input');
       if (first) first.focus();
     },
@@ -196,7 +196,13 @@ window.SV = window.SV || {};
       SV.$('#bill-scrim').hidden = true;
     },
 
-    refresh() { if (working) render(working); },
+    /* Any change to the bill also changes how it will print, so the preview
+       follows the money rather than going stale under the operator. */
+    refresh() {
+      if (!working) return;
+      render(working);
+      SV.printer.preview(working);
+    },
 
     /* Field edits recompute on the spot; nothing here touches the order. */
     onField(target) {

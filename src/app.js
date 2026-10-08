@@ -338,7 +338,18 @@ window.SV = window.SV || {};
       const print = pick('[data-bill-print]');
       if (print) {
         const bill = SV.billsheet.save();
-        return bill && SV.printer.printBill(bill);
+        if (!bill) return;
+        /* Printing ends the job: the bill is saved, the paper is out, and the
+           operator is put back on the board. Leaving the sheet up would wall
+           them out of the queue behind a modal they did not ask for. */
+        return SV.printer.printBill(bill).then((result) => {
+          SV.billsheet.close();
+          if (result && result.printed) {
+            SV.notifications.say('Bill ' + bill.billNo + ' printed · ' + SV.money(bill.totals.grand) +
+              '. Saved to the bill book.');
+          }
+          SV.board.flash(bill.orderId);
+        });
       }
 
       if (pick('[data-bill-save]')) return SV.billsheet.save();
