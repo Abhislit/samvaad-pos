@@ -125,10 +125,15 @@ and held long enough to read, and no animation runs at all.
   title and the tools, so the whole screen has one band of controls instead of two. The header
   itself pins under the rail on a desk. It stops pinning on a phone: there it wraps to three
   lines, and 148px of a 844px screen is a worse trade than making the tabs one flick up the way.
-- **Printed opens a window.** The printed pile is reference material. `window.open` with a fixed
-  name, so a second click focuses the window already open instead of stacking another, and a
-  `storage` listener so it follows the counter — press Print all and the list grows as you watch.
-  A window showing seven bills while the till printed five more would be worse than no window. Two sticky headers was the first attempt and it was worse: the top of
+- **Two slides in one frame, not two pages.** To print and printed share the board: the one you
+  are reading is in the flow, the other is taken out of it and moved aside, so the board is as
+  tall as the section you are on rather than the taller of the two. Both travel — one in, one
+  out, cross-fading — and both are keyed, because every other movement here is keyed and a
+  transition needs a committed start value this browser will not give us. The slide you are not
+  on is `aria-hidden`, not merely faded: it is in the DOM either way.
+
+  It was a window first. A window meant the counter could be gone when you wanted the printed
+  list, two renders of one list to keep in step, and a second copy of the app to keep correct. Two sticky headers was the first attempt and it was worse: the top of
   the screen told you nothing once you were half way down a printed pile. One bar carries the
   current section, both counts, and the jump back. It tracks the reader as they scroll, and at
   the foot of a short page the last section wins, because a page too short to scroll cannot

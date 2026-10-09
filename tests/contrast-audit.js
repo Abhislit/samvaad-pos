@@ -134,18 +134,24 @@ const AUDIT = `
      a page an operator reads all day; its empty state is the one nobody looks
      at and the one that goes wrong. */
   const pages = [
-    ['index.html', states],
-    ['printed.html', [
-      ['printed-list', async () => {}],
-      ['printed-empty', async (p) => {
-        /* Drain it the honest way: print everything at the counter first. */
+    ['index.html', states.concat([
+      ['slide-printed', async (p) => {
+        await p.click('#section-bar [data-view="printed"]');
+        await p.waitForTimeout(800);
+      }],
+      ['slide-printed-empty', async (p) => {
         await p.evaluate(() => SV.store.update((s) => {
           s.orders.forEach((o) => { o.printedAt = null; o.billNo = null; });
         }));
-        await p.waitForTimeout(200);
+        await p.click('#section-bar [data-view="printed"]');
+        await p.waitForTimeout(800);
       }],
-      ['printed-drawer', async (p) => { await p.click('.row [data-open]'); }]
-    ]]
+      ['slide-printed-drawer', async (p) => {
+        await p.click('#section-bar [data-view="printed"]');
+        await p.waitForTimeout(800);
+        await p.click('.tray[data-tray="printed"] .row [data-open]');
+      }]
+    ])]
   ];
 
   for (const [page, pageStates] of pages) {

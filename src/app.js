@@ -35,50 +35,28 @@ window.SV = window.SV || {};
       : 'Nothing printed yet today';
   }
 
-  /* ── the section bar ─────────────────────────────────────────────────
-     One bar, pinned under the rail. It says which section you are in, how
-     much is in each, and takes you back to the queue from the bottom of a
-     long printed pile. */
+  /* ── the two slides ──────────────────────────────────────────────────
+     To print and printed, side by side under the tabs. One slides in, the
+     other slides out: the counter is not left behind in another window, and
+     neither is it buried under a long printed pile. */
+  let view = 'to-print';
+
   function renderSections() {
     const bar = $('#section-bar');
     const toPrint = SV.store.state.orders.filter((o) => !o.printedAt).length;
     const printed = SV.store.state.orders.filter((o) => o.printedAt).length;
+    const tab = (key, label, n) =>
+      '<button class="section-tab" role="tab" data-view="' + key + '" id="tab-' + key + '"' +
+        ' aria-controls="slide-' + key + '" aria-selected="' + (view === key) + '">' +
+        label + '<span class="section-n">' + n + '</span></button>';
+
     bar.innerHTML =
-      '<button class="section-tab" data-jump="to-print" aria-current="true">' +
-        'To print<span class="section-n">' + toPrint + '</span></button>' +
-      '<button class="section-tab" data-window="printed.html">' +
-        'Printed<span class="section-n">' + printed + '</span>' +
-        '<span class="tab-go" aria-hidden="true"></span></button>' +
+      tab('to-print', 'To print', toPrint) +
+      tab('printed', 'Printed', printed) +
       (toPrint
         ? '<button class="btn btn-seal btn-sm section-all" data-print-all>' +
           'Print all ' + toPrint + '<span class="chev" aria-hidden="true"></span></button>'
         : '');
-    /* Measured after the content is in, not assumed: the bar wraps to two rows
-       on a narrow phone, and the jump offset has to agree with the bar the
-       reader is actually looking at. */
-    document.documentElement.style.setProperty('--section-bar-h', bar.offsetHeight + 'px');
-  }
-
-  /* Which section the reader is actually in: the last one whose top has passed
-     the bar. Two sections, so scroll maths beats an observer. */
-  function syncSection() {
-    const bar = $('#section-bar');
-    const line = $('#section-bar').getBoundingClientRect().bottom;
-    const trays = $$('.tray');
-    let current = trays.length ? trays[0].dataset.tray : 'to-print';
-    trays.forEach((tray) => { if (tray.getBoundingClientRect().top <= line + 1) current = tray.dataset.tray; });
-    /* At the foot of the page the last section is whatever is on screen, whatever
-       the maths says: a short page cannot scroll a tray up under the bar, so
-       without this a jump to Printed on a busy desk would leave the tab on
-       To print while the printed pile filled the screen. */
-    const atFoot = Math.ceil(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 1;
-    if (atFoot && trays.length) current = trays[trays.length - 1].dataset.tray;
-    $$('.section-tab').forEach((tab) => {
-      const on = tab.dataset.jump === current;
-      tab.classList.toggle('is-current', on);
-      if (on) tab.setAttribute('aria-current', 'true');
-      else tab.removeAttribute('aria-current');
-    });
   }
 
   function render() {
@@ -86,7 +64,43 @@ window.SV = window.SV || {};
     renderRail();
     renderFoot();
     renderSections();
-    syncSection();
+    /* The slide you are not looking at must be hidden from assistive tech too,
+       not just faded out — it is in the DOM either way. Set here rather than
+       only on a switch, so the very first paint is already honest. */
+    $$('.tray').forEach((tray) => tray.setAttribute('aria-hidden', String(tray.dataset.tray !== view)));
+  }
+
+  /* Which way a slide comes from: printed sits to the right of the queue. */
+  const FROM = { 'to-print': '-2.5rem', printed: '2.5rem' };
+
+  function show(next) {
+    if (next === view) return;
+    view = next;
+    $('#board').setAttribute('data-slide', view);
+    render();
+
+    /* Both trays travel, keyed rather than transitioned. Every other movement
+       in this app is a keyframe — the arrival, the slide, the stamp — and a
+       transition needs a committed start value that headless Chrome will not
+       give us, so the same mechanism is used here for the same reason.
+
+       The class has to be on before the browser paints the rebuilt board, which
+       it is: render() writes innerHTML, this runs immediately after, and the
+       next frame is the first one that shows. */
+    if (!calm().matches) {
+      const incoming = SV.$('.tray[data-tray="' + next + '"]');
+      const outgoing = SV.$('.tray[data-tray="' + (next === 'printed' ? 'to-print' : 'printed') + '"]');
+      if (outgoing) outgoing.classList.add('is-sliding-out');
+      if (incoming) {
+        incoming.classList.add('is-sliding-in');
+        incoming.addEventListener('animationend', (ev) => {
+          if (ev.target !== incoming || ev.animationName !== 'slide-in') return;
+          incoming.classList.remove('is-sliding-in');
+        });
+      }
+    }
+
+    window.scrollTo({ top: 0, behavior: calm().matches ? 'auto' : 'smooth' });
   }
 
   /* ── the flow ──────────────────────────────────────────────────────── */
@@ -245,24 +259,12 @@ window.SV = window.SV || {};
       const approveBtn = pick('[data-approve]');
       if (approveBtn) return approve(approveBtn.dataset.approve);
 
-      const jump = pick('[data-jump]');
-      if (jump) {
-        const tray = SV.$('.tray[data-tray="' + jump.dataset.jump + '"]');
-        if (tray) tray.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        return;
-      }
-
-      /* Printed opens its own window: the printed pile is reference material,
-         and a shop that wants it on a second screen or beside the till should
-         not have to lose the counter to go and look at it. Named, so a second
-         click focuses the window already open instead of stacking another. */
-      const win = pick('[data-window]');
-      if (win) {
-        const opened = window.open(win.dataset.window, 'samvaad-printed',
-          'width=900,height=1000,noopener=no');
-        if (!opened) SV.notifications.say('Your browser blocked the printed window.');
-        return;
-      }
+      /* Scoped to the bar on purpose. The board carries its own view attribute
+         for the slide, and an unscoped closest() here matched the board for
+         every click inside it — which swallowed Print again and sent the
+         operator back to the queue instead of reprinting. */
+      const tab = pick('#section-bar [data-view]');
+      if (tab) return show(tab.dataset.view);
 
       if (pick('[data-print-all]')) return printAll();
 
@@ -316,11 +318,9 @@ window.SV = window.SV || {};
     SV.store.init(seed);
     document.body.setAttribute('data-paper', SV.store.state.ui.paper);
     wire();
+    $('#board').setAttribute('data-slide', view);
     SV.store.subscribe(render);
     render();
-    /* The bar follows the reader as the printed pile scrolls past. */
-    window.addEventListener('scroll', syncSection, { passive: true });
-    window.addEventListener('resize', syncSection);
   }
 
   document.addEventListener('DOMContentLoaded', boot);

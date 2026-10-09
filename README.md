@@ -50,12 +50,13 @@ beyond whether a ticket has been stamped yet.
    58 mm, 80 mm or A4.
 
 The header row names two sections. **To print** is the queue you work. **Printed** is what has
-gone out, and **clicking it opens its own window** — the printed pile is reference material, and
-a shop that wants it on a second screen beside the till should not have to lose the counter to go
-and look at it. The window follows the counter: press **Print all** and the list grows as you
-watch. Each printed bill can be **printed again** from either place — a reprint is the same
-receipt coming out of the machine a second time, so it keeps its bill number rather than minting
-a new one.
+gone out, and **clicking it slides to it** — the same window, the other section. One slides in,
+the other goes, and you are still standing at the counter. Each printed bill can be **printed
+again** from there — a reprint is the same receipt coming out of the machine a second time, so it
+keeps its bill number rather than minting a new one.
+
+Only one section is on screen at a time, and the board is exactly as tall as what you are
+reading, so a long printed pile never pushes the queue down the page.
 
 On a desk the header stays pinned while you scroll. On a phone it wraps to three lines, and a
 148px header on an 844px screen is a fifth of the shop gone before the first ticket, so there it
@@ -84,7 +85,7 @@ through — that is where the cloud socket will attach.
 | `S` | simulate one order |
 | `M` | mute / unmute the arrival chirp |
 | `Print all N` | clear the queue in one print job |
-| **Printed** | open the printed bills in their own window |
+| **Printed** | slide to the printed bills |
 | `Print again` | reprint a bill that has already gone out |
 | `Esc` | close the order, or collapse an open row |
 | sound | the arrival chirp, and the platen's ratchet while the receipt feeds |
