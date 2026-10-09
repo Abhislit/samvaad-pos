@@ -40,6 +40,8 @@ window.SV = window.SV || {};
      other slides out: the counter is not left behind in another window, and
      neither is it buried under a long printed pile. */
   let view = 'to-print';
+  const lastCounts = { toPrint: -1, printed: -1 };
+  const tickUntil = { toPrint: 0, printed: 0 };
 
   function renderSections() {
     const bar = $('#section-bar');
@@ -57,6 +59,22 @@ window.SV = window.SV || {};
         ? '<button class="btn btn-seal btn-sm section-all" data-print-all>' +
           'Print all ' + toPrint + '<span class="chev" aria-hidden="true"></span></button>'
         : '');
+
+    /* Tick only a count that actually changed. The bar rebuilds on every store
+       update, so animating unconditionally would celebrate nothing. The tick
+       window survives an immediate duplicate render: an arrival writes once
+       and the order event renders again with the same counts. */
+    const now = Date.now();
+    const tick = (key, next, lastKey) => {
+      if (next !== lastCounts[lastKey]) {
+        lastCounts[lastKey] = next;
+        tickUntil[lastKey] = now + 260;
+      }
+      const n = bar.querySelector('[data-view="' + key + '"] .section-n');
+      if (n && now < tickUntil[lastKey] && !calm().matches) n.classList.add('is-ticking');
+    };
+    tick('to-print', toPrint, 'toPrint');
+    tick('printed', printed, 'printed');
   }
 
   function render() {
@@ -69,9 +87,6 @@ window.SV = window.SV || {};
        only on a switch, so the very first paint is already honest. */
     $$('.tray').forEach((tray) => tray.setAttribute('aria-hidden', String(tray.dataset.tray !== view)));
   }
-
-  /* Which way a slide comes from: printed sits to the right of the queue. */
-  const FROM = { 'to-print': '-2.5rem', printed: '2.5rem' };
 
   function show(next) {
     if (next === view) return;

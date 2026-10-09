@@ -174,6 +174,11 @@ Printing first and animating second puts the press on a ticket that has already 
 drawer closes up front so the pass is never hidden behind it. `HEAD_MS` in `app.js` and the
 `head` keyframe in `app.css` are the same 460ms in two files, and they must move together.
 
+**Feedback stays small and state-bound.** The selected tab is filled graphite through
+`aria-selected`, not a leftover class, and a changed tray count ticks once with a
+transform-only scale that cannot move the header. Section tabs also press and release; the
+slide duration is the `--slide-ms` token, so the view change retimes in one place.
+
 Under `prefers-reduced-motion` the board is not measured at all: `snapshot()` returns empty,
 so no transform is ever written, no arrival class is rendered, and `printOrder` skips the
 delay and prints immediately. The state still changes; only the movement is gone.

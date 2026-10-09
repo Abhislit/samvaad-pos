@@ -150,20 +150,31 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
   letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--ink-soft); background: none;
   border: 1px solid transparent; border-radius: 2px;
+  transition: transform 0.12s var(--ease-platen), background-color 0.12s, color 0.12s;
 }
 .section-tab:hover { color: var(--ink); background: var(--desk-hair); }
-.section-tab.is-current {
+.section-tab:active { transform: scale(0.97); }
+.section-tab[aria-selected="true"] {
   color: var(--stock); background: var(--graphite);
-  border-color: var(--graphite-deep);
+  border-color: var(--graphite);
 }
 .section-n {
-  min-width: 1.3rem; height: 1.3rem; padding: 0 0.3rem;
+  min-width: 1.3rem; height: 1.3rem; padding: 0 0.35rem;
   display: inline-grid; place-items: center;
   font-family: var(--stencil); font-weight: 700; font-size: var(--t-label);
   letter-spacing: 0; color: var(--stock); background: var(--jute-deep);
   border-radius: 2px;
 }
-.section-tab.is-current .section-n { background: var(--stock); color: var(--graphite); }
+.section-tab[aria-selected="true"] .section-n { background: var(--stock); color: var(--graphite); }
+
+/* One short tick when a tray count changes. Transform only, so the number
+   never shifts the header while it acknowledges the new count. */
+.section-n.is-ticking { animation: tick var(--tick-ms) var(--ease-platen) both; }
+@keyframes tick {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
 .section-all { margin-left: 0.2rem; }
 
 
@@ -186,12 +197,12 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 
 /* One slides in, the other goes. Both keyed, both one-shot, both dropped when
    they finish — the class only exists for the length of the movement. */
-.tray.is-sliding-in { animation: slide-in var(--slide-ms, 420ms) cubic-bezier(0.22, 1, 0.36, 1) both; }
+.tray.is-sliding-in { animation: slide-in var(--slide-ms) cubic-bezier(0.22, 1, 0.36, 1) both; }
 .tray.is-sliding-out {
   /* The inactive state is hidden; this has to win so the tray can be seen
      leaving. Placed after it for that reason, not by accident. */
   opacity: 1; visibility: visible;
-  animation: slide-out var(--slide-ms, 420ms) cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: slide-out var(--slide-ms) cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @keyframes slide-in {
   from { opacity: 0; transform: translateX(var(--slide-from, 2.5rem)); }

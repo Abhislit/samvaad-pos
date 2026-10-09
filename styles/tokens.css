@@ -134,6 +134,13 @@
      overshoots because it is a physical thing, so the curve does too. */
   --stamp-ms: 520ms;
 
+  /* A changed tray count gets one short tick: fast state feedback, not motion
+     for its own sake. */
+  --tick-ms: 220ms;
+
+  /* The slide between the two trays. Keyed like the rest of the machine. */
+  --slide-ms: 420ms;
+
   /* Stock fibre. Laid lines across, chain lines down — the grain is what stops
      a ticket reading as a white rectangle. */
   --fibre:
